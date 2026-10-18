@@ -1,0 +1,56 @@
+package io.github.neronguyenvn.nerochat.contract.chat
+
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
+
+@OptIn(ExperimentalSerializationApi::class)
+@Serializable
+@JsonClassDiscriminator("type")
+sealed class OutgoingWsMessage {
+
+    @Serializable
+    @SerialName(NEW_MESSAGE)
+    data class NewMessage(
+        val message: ChatMessageDto,
+    ) : OutgoingWsMessage()
+
+    @Serializable
+    @SerialName(MESSAGE_DELETED)
+    data class MessageDeleted(
+        val roomId: String,
+        val messageId: String,
+    ) : OutgoingWsMessage()
+
+    @Serializable
+    @SerialName(PARTICIPANT_JOINED)
+    data class ParticipantJoined(
+        val roomId: String,
+        val newUsers: List<ChatParticipantDto>,
+        val addedBy: ChatParticipantDto? = null,
+    ) : OutgoingWsMessage()
+
+    @Serializable
+    @SerialName(PARTICIPANT_LEFT)
+    data class ParticipantLeft(
+        val roomId: String,
+        val leftUser: ChatParticipantDto,
+        val kickedBy: ChatParticipantDto? = null,
+    ) : OutgoingWsMessage()
+
+    @Serializable
+    @SerialName(ERROR)
+    data class Error(
+        val code: String,
+        val message: String,
+    ) : OutgoingWsMessage()
+
+    companion object {
+        const val NEW_MESSAGE = "new_message"
+        const val MESSAGE_DELETED = "message_deleted"
+        const val PARTICIPANT_JOINED = "participant_joined"
+        const val PARTICIPANT_LEFT = "participant_left"
+        const val ERROR = "error"
+    }
+}
