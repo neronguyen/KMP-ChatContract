@@ -10,6 +10,7 @@ kotlin {
 
 dependencies {
     api(project(":contract-core"))
+    api(project(":validation-auth"))
     api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))

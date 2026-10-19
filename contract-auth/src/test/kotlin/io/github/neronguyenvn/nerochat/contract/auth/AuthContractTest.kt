@@ -4,6 +4,7 @@ import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class AuthContractTest {
 
@@ -78,5 +79,44 @@ class AuthContractTest {
             AuthServerError.ValidationFailed -> "validation failed"
         }
         assertEquals("unauthorized", changePasswordMessage)
+    }
+
+    @Test
+    fun `RegisterRequest serializes and validates correctly`() {
+        val req = RegisterRequest("user@example.com", "User", "password123")
+        val jsonStr = json.encodeToString(req)
+        val deserialized = json.decodeFromString<RegisterRequest>(jsonStr)
+        assertEquals(req, deserialized)
+        assertTrue(req.validate().isEmpty())
+
+        val invalid = RegisterRequest("", "", "")
+        assertEquals(3, invalid.validate().size)
+    }
+
+    @Test
+    fun `LoginRequest serializes and validates correctly`() {
+        val req = LoginRequest("user@example.com", "password123")
+        val jsonStr = json.encodeToString(req)
+        val deserialized = json.decodeFromString<LoginRequest>(jsonStr)
+        assertEquals(req, deserialized)
+        assertTrue(req.validate().isEmpty())
+
+        val invalid = LoginRequest("bad-email", "short")
+        assertEquals(2, invalid.validate().size)
+    }
+
+    @Test
+    fun `EmailRequest, RefreshTokenRequest, ResetPasswordRequest, ChangePasswordRequest validate correctly`() {
+        assertTrue(EmailRequest("user@example.com").validate().isEmpty())
+        assertEquals(1, EmailRequest("").validate().size)
+
+        assertTrue(RefreshTokenRequest("refresh-token").validate().isEmpty())
+        assertEquals(1, RefreshTokenRequest("").validate().size)
+
+        assertTrue(ResetPasswordRequest("token-123", "password123").validate().isEmpty())
+        assertEquals(2, ResetPasswordRequest("", "pass").validate().size)
+
+        assertTrue(ChangePasswordRequest("oldPass123", "newPass123").validate().isEmpty())
+        assertEquals(2, ChangePasswordRequest("", "").validate().size)
     }
 }

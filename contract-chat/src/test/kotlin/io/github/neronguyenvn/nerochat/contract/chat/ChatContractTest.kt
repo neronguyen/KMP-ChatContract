@@ -114,4 +114,49 @@ class ChatContractTest {
         }
         assertEquals("not sender", result)
     }
+
+    @Test
+    fun `CreateDirectChatRoomRequest serializes and validates correctly`() {
+        val validUuid = "123e4567-e89b-12d3-a456-426614174000"
+        val req = CreateDirectChatRoomRequest(targetUserId = validUuid, message = "Hello")
+        val jsonStr = json.encodeToString(req)
+        val deserialized = json.decodeFromString<CreateDirectChatRoomRequest>(jsonStr)
+        assertEquals(req, deserialized)
+        assertTrue(req.validate().isEmpty())
+
+        val invalid = CreateDirectChatRoomRequest(targetUserId = "not-a-uuid", message = "")
+        assertEquals(2, invalid.validate().size)
+    }
+
+    @Test
+    fun `CreateGroupChatRoomRequest serializes and validates correctly`() {
+        val uuid1 = "123e4567-e89b-12d3-a456-426614174001"
+        val uuid2 = "123e4567-e89b-12d3-a456-426614174002"
+
+        // Name is optional
+        val reqWithoutName = CreateGroupChatRoomRequest(participantIds = listOf(uuid1, uuid2))
+        val jsonStr = json.encodeToString(reqWithoutName)
+        val deserialized = json.decodeFromString<CreateGroupChatRoomRequest>(jsonStr)
+        assertEquals(reqWithoutName, deserialized)
+        assertTrue(reqWithoutName.validate().isEmpty())
+
+        val reqWithName = CreateGroupChatRoomRequest(name = "Team", participantIds = listOf(uuid1, uuid2))
+        assertTrue(reqWithName.validate().isEmpty())
+
+        val invalid = CreateGroupChatRoomRequest(participantIds = listOf(uuid1))
+        assertEquals(1, invalid.validate().size)
+    }
+
+    @Test
+    fun `AddChatParticipantRequest serializes and validates correctly`() {
+        val uuid1 = "123e4567-e89b-12d3-a456-426614174001"
+        val req = AddChatParticipantRequest(userIds = listOf(uuid1))
+        val jsonStr = json.encodeToString(req)
+        val deserialized = json.decodeFromString<AddChatParticipantRequest>(jsonStr)
+        assertEquals(req, deserialized)
+        assertTrue(req.validate().isEmpty())
+
+        val invalid = AddChatParticipantRequest(userIds = emptyList())
+        assertEquals(1, invalid.validate().size)
+    }
 }
