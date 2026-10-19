@@ -1,5 +1,6 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
+import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -75,5 +76,42 @@ class ChatContractTest {
         val serializedError = json.encodeToString<OutgoingWsMessage>(error)
         assertTrue(serializedError.contains("\"type\":\"error\""))
         assertEquals(error, json.decodeFromString<OutgoingWsMessage>(serializedError))
+
+        val correlatedError = OutgoingWsMessage.Error(
+            code = ChatServerError.ChatRoomNotFound.code,
+            message = "Room not found",
+            roomId = "room-456",
+            messageId = "msg-123",
+        )
+        val serializedCorrelated = json.encodeToString<OutgoingWsMessage>(correlatedError)
+        assertEquals(
+            correlatedError,
+            json.decodeFromString<OutgoingWsMessage>(serializedCorrelated)
+        )
+    }
+
+    @Test
+    fun `ChatServerError lookup and exhaustive sub-interfaces match correctly`() {
+        assertEquals(
+            ChatServerError.ChatRoomNotFound,
+            ChatServerError.fromCode("CHAT_ROOM_NOT_FOUND")
+        )
+        assertEquals(ChatServerError.Forbidden, ChatServerError.fromCode("FORBIDDEN"))
+        assertEquals(
+            ChatServerError.ValidationFailed,
+            ChatServerError.fromCode("VALIDATION_FAILED")
+        )
+        assertEquals(ChatServerError.Unauthorized, ChatServerError.fromCode("UNAUTHORIZED"))
+        assertEquals(ChatServerError.BadRequest, ChatServerError.fromCode("BAD_REQUEST"))
+        assertEquals(null, ChatServerError.fromCode("UNKNOWN_CODE"))
+
+        val deleteError: ChatServerError.DeleteMessage = ChatServerError.Forbidden
+        val result = when (deleteError) {
+            ChatServerError.MessageNotFound -> "not found"
+            ChatServerError.Forbidden -> "not sender"
+            ChatServerError.Unauthorized -> "unauthorized"
+            ChatServerError.BadRequest -> "bad request"
+        }
+        assertEquals("not sender", result)
     }
 }

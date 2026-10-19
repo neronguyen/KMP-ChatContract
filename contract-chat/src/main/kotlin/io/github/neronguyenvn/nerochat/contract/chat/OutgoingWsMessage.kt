@@ -44,6 +44,8 @@ sealed class OutgoingWsMessage {
     data class Error(
         val code: String,
         val message: String,
+        val roomId: String? = null,
+        val messageId: String? = null,
     ) : OutgoingWsMessage()
 
     companion object {

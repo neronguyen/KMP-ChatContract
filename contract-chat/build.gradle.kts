@@ -9,6 +9,7 @@ kotlin {
 }
 
 dependencies {
+    api(project(":contract-core"))
     api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
