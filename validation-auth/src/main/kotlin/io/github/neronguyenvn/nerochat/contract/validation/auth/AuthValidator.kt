@@ -7,23 +7,39 @@ import io.github.neronguyenvn.nerochat.contract.validation.ValidationPatterns
  */
 object AuthValidator {
 
+    /**
+     * Returns `EmptyEmail` for null or blank input, `InvalidEmail` if
+     * [ValidationPatterns.isValidEmail] rejects it, or `null` if valid.
+     */
     fun validateEmail(email: String?): AuthValidationError.Email? {
         if (email.isNullOrBlank()) return AuthValidationError.EmptyEmail
         if (!ValidationPatterns.isValidEmail(email)) return AuthValidationError.InvalidEmail
         return null
     }
 
+    /**
+     * Returns `EmptyDisplayName` for null or blank input, or `null` otherwise.
+     */
     fun validateDisplayName(displayName: String?): AuthValidationError.EmptyDisplayName? {
         if (displayName.isNullOrBlank()) return AuthValidationError.EmptyDisplayName
         return null
     }
 
+    /**
+     * Returns `EmptyPassword` for null or blank input, `InvalidPassword` if
+     * [ValidationPatterns.isValidPassword] rejects it, or `null` if valid.
+     */
     fun validatePassword(password: String?): AuthValidationError.Password? {
         if (password.isNullOrBlank()) return AuthValidationError.EmptyPassword
         if (!ValidationPatterns.isValidPassword(password)) return AuthValidationError.InvalidPassword
         return null
     }
 
+    /**
+     * Checks email format, a nonblank display name, and [ValidationPatterns.isValidPassword].
+     * Returns at most one error per field in email, display name, password order, or an empty list.
+     * Null and blank inputs produce the corresponding empty-field errors.
+     */
     fun validateRegister(
         email: String?,
         displayName: String?,
@@ -48,6 +64,11 @@ object AuthValidator {
         return errors
     }
 
+    /**
+     * Checks email format and [ValidationPatterns.isValidPassword] for login inputs.
+     * Returns at most one error per field in email, password order, or an empty list.
+     * Null and blank inputs produce the corresponding empty-field errors.
+     */
     fun validateLogin(
         email: String?,
         password: String?,
@@ -67,14 +88,25 @@ object AuthValidator {
         return errors
     }
 
+    /**
+     * Returns the error from [validateEmail] as a single-element list, or an empty list if valid.
+     */
     fun validateEmailRequest(email: String?): List<AuthValidationError.Email> =
         listOfNotNull(validateEmail(email))
 
+    /**
+     * Returns a list containing `EmptyRefreshToken` for a null or blank token, or an empty list otherwise.
+     */
     fun validateRefreshToken(refreshToken: String?): List<AuthValidationError.RefreshToken> {
         if (refreshToken.isNullOrBlank()) return listOf(AuthValidationError.EmptyRefreshToken)
         return emptyList()
     }
 
+    /**
+     * Checks that [token] is nonblank and [newPassword] satisfies [ValidationPatterns.isValidPassword].
+     * Returns at most one error per field in token, password order, or an empty list.
+     * Null and blank inputs produce the corresponding empty-field errors.
+     */
     fun validateResetPassword(
         token: String?,
         newPassword: String?,
@@ -91,6 +123,11 @@ object AuthValidator {
         return errors
     }
 
+    /**
+     * Checks that [oldPassword] is nonblank and [newPassword] satisfies [ValidationPatterns.isValidPassword].
+     * Returns at most one error per field in old-password, new-password order, or an empty list.
+     * Null and blank inputs produce the corresponding empty-field errors.
+     */
     fun validateChangePassword(
         oldPassword: String?,
         newPassword: String?,

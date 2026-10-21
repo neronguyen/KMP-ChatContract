@@ -9,6 +9,9 @@ import kotlinx.serialization.Serializable
 data class AddChatParticipantRequest(
     val userIds: List<String>,
 ) : Validatable<ChatValidationError.AddParticipants> {
+    /**
+     * Returns the errors from [ChatValidator.validateAddParticipants], or an empty list if valid.
+     */
     override fun validate(): List<ChatValidationError.AddParticipants> =
         ChatValidator.validateAddParticipants(userIds = userIds)
 }

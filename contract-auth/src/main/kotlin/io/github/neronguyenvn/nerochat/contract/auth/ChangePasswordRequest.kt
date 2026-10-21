@@ -10,6 +10,9 @@ data class ChangePasswordRequest(
     val oldPassword: String,
     val newPassword: String,
 ) : Validatable<AuthValidationError.ChangePassword> {
+    /**
+     * Returns the errors from [AuthValidator.validateChangePassword], or an empty list if valid.
+     */
     override fun validate(): List<AuthValidationError.ChangePassword> =
         AuthValidator.validateChangePassword(oldPassword = oldPassword, newPassword = newPassword)
 }

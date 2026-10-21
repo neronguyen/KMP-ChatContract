@@ -7,6 +7,12 @@ import io.github.neronguyenvn.nerochat.contract.validation.ValidationPatterns
  */
 object ChatValidator {
 
+    /**
+     * Returns the first error for a null or blank email, invalid email format, or the user's own email,
+     * or `null` if valid. Format validation uses the untrimmed input.
+     *
+     * @param currentUserEmail when nonnull, rejects a match after trimming both emails and ignoring case.
+     */
     fun validateSearchEmail(
         email: String?,
         currentUserEmail: String? = null,
@@ -19,6 +25,11 @@ object ChatValidator {
         return null
     }
 
+    /**
+     * Checks for a nonblank UUID recipient and a nonblank first message.
+     * Returns at most one error per field in recipient, message order, or an empty list.
+     * Null and blank inputs produce the corresponding missing-recipient or empty-message errors.
+     */
     fun validateDirectRoom(
         targetUserId: String?,
         message: String?,
@@ -36,6 +47,13 @@ object ChatValidator {
         return errors
     }
 
+    /**
+     * Returns a list containing `TooFewGroupParticipants` for a null list or fewer than two entries;
+     * otherwise contains `InvalidGroupParticipantId` if any entry fails [ValidationPatterns.isValidUuid].
+     * Returns an empty list if valid. Duplicate IDs count as separate entries.
+     *
+     * @param name accepted but not validated or used to determine the result.
+     */
     fun validateGroupRoom(
         participantIds: List<String>?,
         @Suppress("UNUSED_PARAMETER") name: String? = null,
@@ -54,6 +72,11 @@ object ChatValidator {
         return errors
     }
 
+    /**
+     * Returns a list containing `EmptyParticipantIds` for a null or empty list, or one `InvalidParticipantId`
+     * if any entry fails [ValidationPatterns.isValidUuid]. Returns an empty list if valid.
+     * Duplicate IDs are accepted.
+     */
     fun validateAddParticipants(
         userIds: List<String>?,
     ): List<ChatValidationError.AddParticipants> {

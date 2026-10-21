@@ -98,6 +98,9 @@ sealed interface ChatServerError : ServerError {
             MessageSendFailed,
         )
 
+        /**
+         * Returns the error whose code exactly matches [code], including case, or `null` if unknown.
+         */
         fun fromCode(code: String): ChatServerError? = entries.find { it.code == code }
     }
 }

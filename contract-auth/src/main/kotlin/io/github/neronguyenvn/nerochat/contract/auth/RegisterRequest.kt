@@ -11,6 +11,9 @@ data class RegisterRequest(
     val displayName: String,
     val password: String,
 ) : Validatable<AuthValidationError.Register> {
+    /**
+     * Returns the errors from [AuthValidator.validateRegister], or an empty list if valid.
+     */
     override fun validate(): List<AuthValidationError.Register> =
         AuthValidator.validateRegister(email = email, displayName = displayName, password = password)
 }

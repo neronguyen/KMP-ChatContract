@@ -16,5 +16,8 @@ interface ValidationError {
  * or before service execution.
  */
 interface Validatable<out E : ValidationError> {
+    /**
+     * Returns the validation errors for this payload, or an empty list if validation succeeds.
+     */
     fun validate(): List<E>
 }

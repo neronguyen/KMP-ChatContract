@@ -10,6 +10,9 @@ data class ResetPasswordRequest(
     val token: String,
     val newPassword: String,
 ) : Validatable<AuthValidationError.ResetPassword> {
+    /**
+     * Returns the errors from [AuthValidator.validateResetPassword], or an empty list if valid.
+     */
     override fun validate(): List<AuthValidationError.ResetPassword> =
         AuthValidator.validateResetPassword(token = token, newPassword = newPassword)
 }

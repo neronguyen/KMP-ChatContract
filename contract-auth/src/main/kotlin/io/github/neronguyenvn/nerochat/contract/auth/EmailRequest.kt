@@ -9,6 +9,9 @@ import kotlinx.serialization.Serializable
 data class EmailRequest(
     val email: String,
 ) : Validatable<AuthValidationError.Email> {
+    /**
+     * Returns the error from [AuthValidator.validateEmailRequest], or an empty list if valid.
+     */
     override fun validate(): List<AuthValidationError.Email> =
         AuthValidator.validateEmailRequest(email = email)
 }

@@ -10,6 +10,9 @@ data class CreateGroupChatRoomRequest(
     val participantIds: List<String>,
     val name: String? = null,
 ) : Validatable<ChatValidationError.CreateGroupRoom> {
+    /**
+     * Returns the errors from [ChatValidator.validateGroupRoom], or an empty list if valid; [name] is not validated.
+     */
     override fun validate(): List<ChatValidationError.CreateGroupRoom> =
         ChatValidator.validateGroupRoom(participantIds = participantIds, name = name)
 }
