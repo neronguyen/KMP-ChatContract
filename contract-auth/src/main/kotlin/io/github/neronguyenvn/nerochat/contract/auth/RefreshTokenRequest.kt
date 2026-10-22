@@ -14,4 +14,7 @@ data class RefreshTokenRequest(
      */
     override fun validate(): List<AuthValidationError.RefreshToken> =
         AuthValidator.validateRefreshToken(refreshToken = refreshToken)
+
+    override fun toString(): String =
+        "RefreshTokenRequest(refreshToken=[REDACTED])"
 }

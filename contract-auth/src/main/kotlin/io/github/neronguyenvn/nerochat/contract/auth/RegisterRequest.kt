@@ -16,4 +16,7 @@ data class RegisterRequest(
      */
     override fun validate(): List<AuthValidationError.Register> =
         AuthValidator.validateRegister(email = email, displayName = displayName, password = password)
+
+    override fun toString(): String =
+        "RegisterRequest(email=$email, displayName=$displayName, password=[REDACTED])"
 }

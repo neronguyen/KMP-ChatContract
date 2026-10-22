@@ -119,4 +119,47 @@ class AuthContractTest {
         assertTrue(ChangePasswordRequest("oldPass123", "newPass123").validate().isEmpty())
         assertEquals(2, ChangePasswordRequest("", "").validate().size)
     }
+
+    @Test
+    fun `sensitive auth DTOs redact passwords and tokens in toString`() {
+        val authUser = AuthenticatedUserDto(
+            user = UserDto("u1", "u1@example.com", "User 1", true),
+            accessToken = "secret-access-token",
+            refreshToken = "secret-refresh-token",
+        )
+        assertEquals(
+            "AuthenticatedUserDto(user=UserDto(id=u1, email=u1@example.com, displayName=User 1, isEmailVerified=true), accessToken=[REDACTED], refreshToken=[REDACTED])",
+            authUser.toString()
+        )
+
+        val reg = RegisterRequest("reg@example.com", "Reg User", "secret-password")
+        assertEquals(
+            "RegisterRequest(email=reg@example.com, displayName=Reg User, password=[REDACTED])",
+            reg.toString()
+        )
+
+        val login = LoginRequest("login@example.com", "secret-password")
+        assertEquals(
+            "LoginRequest(email=login@example.com, password=[REDACTED])",
+            login.toString()
+        )
+
+        val reset = ResetPasswordRequest("secret-token", "secret-new-password")
+        assertEquals(
+            "ResetPasswordRequest(token=[REDACTED], newPassword=[REDACTED])",
+            reset.toString()
+        )
+
+        val change = ChangePasswordRequest("secret-old", "secret-new")
+        assertEquals(
+            "ChangePasswordRequest(oldPassword=[REDACTED], newPassword=[REDACTED])",
+            change.toString()
+        )
+
+        val refresh = RefreshTokenRequest("secret-refresh-token")
+        assertEquals(
+            "RefreshTokenRequest(refreshToken=[REDACTED])",
+            refresh.toString()
+        )
+    }
 }

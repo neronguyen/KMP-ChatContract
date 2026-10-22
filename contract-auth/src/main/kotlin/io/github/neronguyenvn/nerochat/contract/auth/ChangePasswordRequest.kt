@@ -15,4 +15,7 @@ data class ChangePasswordRequest(
      */
     override fun validate(): List<AuthValidationError.ChangePassword> =
         AuthValidator.validateChangePassword(oldPassword = oldPassword, newPassword = newPassword)
+
+    override fun toString(): String =
+        "ChangePasswordRequest(oldPassword=[REDACTED], newPassword=[REDACTED])"
 }

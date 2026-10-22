@@ -15,4 +15,7 @@ data class LoginRequest(
      */
     override fun validate(): List<AuthValidationError.Login> =
         AuthValidator.validateLogin(email = email, password = password)
+
+    override fun toString(): String =
+        "LoginRequest(email=$email, password=[REDACTED])"
 }

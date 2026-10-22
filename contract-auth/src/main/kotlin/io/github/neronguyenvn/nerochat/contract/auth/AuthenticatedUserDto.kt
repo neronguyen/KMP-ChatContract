@@ -7,4 +7,7 @@ data class AuthenticatedUserDto(
     val user: UserDto,
     val accessToken: String,
     val refreshToken: String,
-)
+) {
+    override fun toString(): String =
+        "AuthenticatedUserDto(user=$user, accessToken=[REDACTED], refreshToken=[REDACTED])"
+}

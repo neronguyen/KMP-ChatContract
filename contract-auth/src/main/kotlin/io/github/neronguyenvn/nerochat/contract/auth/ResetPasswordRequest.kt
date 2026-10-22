@@ -15,4 +15,7 @@ data class ResetPasswordRequest(
      */
     override fun validate(): List<AuthValidationError.ResetPassword> =
         AuthValidator.validateResetPassword(token = token, newPassword = newPassword)
+
+    override fun toString(): String =
+        "ResetPasswordRequest(token=[REDACTED], newPassword=[REDACTED])"
 }
