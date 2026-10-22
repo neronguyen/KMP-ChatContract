@@ -8,20 +8,20 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class OutgoingWsMessage {
+sealed class WsServerEvent {
 
     @Serializable
     @SerialName(NEW_MESSAGE)
     data class NewMessage(
         val message: ChatMessageDto,
-    ) : OutgoingWsMessage()
+    ) : WsServerEvent()
 
     @Serializable
     @SerialName(MESSAGE_DELETED)
     data class MessageDeleted(
         val roomId: String,
         val messageId: String,
-    ) : OutgoingWsMessage()
+    ) : WsServerEvent()
 
     @Serializable
     @SerialName(PARTICIPANT_JOINED)
@@ -29,7 +29,7 @@ sealed class OutgoingWsMessage {
         val roomId: String,
         val newUsers: List<ChatParticipantDto>,
         val addedBy: ChatParticipantDto? = null,
-    ) : OutgoingWsMessage()
+    ) : WsServerEvent()
 
     @Serializable
     @SerialName(PARTICIPANT_LEFT)
@@ -37,7 +37,7 @@ sealed class OutgoingWsMessage {
         val roomId: String,
         val leftUser: ChatParticipantDto,
         val kickedBy: ChatParticipantDto? = null,
-    ) : OutgoingWsMessage()
+    ) : WsServerEvent()
 
     @Serializable
     @SerialName(ERROR)
@@ -46,7 +46,7 @@ sealed class OutgoingWsMessage {
         val message: String,
         val roomId: String? = null,
         val messageId: String? = null,
-    ) : OutgoingWsMessage()
+    ) : WsServerEvent()
 
     companion object {
         const val NEW_MESSAGE = "new_message"

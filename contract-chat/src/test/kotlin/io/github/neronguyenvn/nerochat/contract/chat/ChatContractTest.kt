@@ -40,22 +40,22 @@ class ChatContractTest {
     }
 
     @Test
-    fun `IncomingWsMessage polymorphic serialization and deserialization`() {
-        val message = IncomingWsMessage.NewMessage(
+    fun `WsClientMessage polymorphic serialization and deserialization`() {
+        val message = WsClientMessage.NewMessage(
             roomId = "room-123",
             content = "Hello world",
             messageId = "msg-abc",
         )
 
-        val serialized = json.encodeToString<IncomingWsMessage>(message)
+        val serialized = json.encodeToString<WsClientMessage>(message)
         assertTrue(serialized.contains("\"type\":\"new_message\""))
 
-        val deserialized = json.decodeFromString<IncomingWsMessage>(serialized)
+        val deserialized = json.decodeFromString<WsClientMessage>(serialized)
         assertEquals(message, deserialized)
     }
 
     @Test
-    fun `OutgoingWsMessage polymorphic serialization and deserialization`() {
+    fun `WsServerEvent polymorphic serialization and deserialization`() {
         val now = Clock.System.now()
         val chatMessage = ChatMessageDto(
             id = "msg-123",
@@ -64,29 +64,29 @@ class ChatContractTest {
             content = "Hi there",
             createdAt = now,
         )
-        val message = OutgoingWsMessage.NewMessage(message = chatMessage)
+        val message = WsServerEvent.NewMessage(message = chatMessage)
 
-        val serialized = json.encodeToString<OutgoingWsMessage>(message)
+        val serialized = json.encodeToString<WsServerEvent>(message)
         assertTrue(serialized.contains("\"type\":\"new_message\""))
 
-        val deserialized = json.decodeFromString<OutgoingWsMessage>(serialized)
+        val deserialized = json.decodeFromString<WsServerEvent>(serialized)
         assertEquals(message, deserialized)
 
-        val error = OutgoingWsMessage.Error(code = "UNAUTHORIZED", message = "Not allowed")
-        val serializedError = json.encodeToString<OutgoingWsMessage>(error)
+        val error = WsServerEvent.Error(code = "UNAUTHORIZED", message = "Not allowed")
+        val serializedError = json.encodeToString<WsServerEvent>(error)
         assertTrue(serializedError.contains("\"type\":\"error\""))
-        assertEquals(error, json.decodeFromString<OutgoingWsMessage>(serializedError))
+        assertEquals(error, json.decodeFromString<WsServerEvent>(serializedError))
 
-        val correlatedError = OutgoingWsMessage.Error(
+        val correlatedError = WsServerEvent.Error(
             code = ChatServerError.ChatRoomNotFound.code,
             message = "Room not found",
             roomId = "room-456",
             messageId = "msg-123",
         )
-        val serializedCorrelated = json.encodeToString<OutgoingWsMessage>(correlatedError)
+        val serializedCorrelated = json.encodeToString<WsServerEvent>(correlatedError)
         assertEquals(
             correlatedError,
-            json.decodeFromString<OutgoingWsMessage>(serializedCorrelated)
+            json.decodeFromString<WsServerEvent>(serializedCorrelated)
         )
     }
 
