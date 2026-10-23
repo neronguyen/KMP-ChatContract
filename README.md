@@ -7,8 +7,8 @@ NeroChat (shared between the Spring Boot backend and Android/Kotlin clients).
 
 - `:contract-auth`: Authentication DTOs (`UserDto`, `AuthenticatedUserDto`).
 - `:contract-chat`: Chat DTOs (`ChatRoomDto`, `ChatParticipantDto`, `ChatMessageDto`,
-  `ChatMessageSliceDto`, `ChatRoomType`) and WebSocket contracts (`IncomingWsMessage`,
-  `OutgoingWsMessage`).
+  `ChatMessageSliceDto`, `ChatRoomType`) and WebSocket contracts (`WsClientMessage`,
+  `WsServerEvent`).
 
 ## Usage via Gradle Composite Build
 
