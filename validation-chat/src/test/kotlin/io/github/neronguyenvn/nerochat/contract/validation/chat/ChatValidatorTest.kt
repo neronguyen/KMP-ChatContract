@@ -48,9 +48,8 @@ class ChatValidatorTest {
         val uuid1 = "123e4567-e89b-12d3-a456-426614174001"
         val uuid2 = "123e4567-e89b-12d3-a456-426614174002"
 
-        // Name is optional, participantIds >= 2
-        assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2), null).isEmpty())
-        assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2), "Core Team").isEmpty())
+        // participantIds >= 2
+        assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2)).isEmpty())
 
         val tooFew = ChatValidator.validateGroupRoom(listOf(uuid1))
         assertEquals(1, tooFew.size)

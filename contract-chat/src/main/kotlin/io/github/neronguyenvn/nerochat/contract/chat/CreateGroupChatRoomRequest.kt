@@ -14,5 +14,5 @@ data class CreateGroupChatRoomRequest(
      * Returns the errors from [ChatValidator.validateGroupRoom], or an empty list if valid; [name] is not validated.
      */
     override fun validate(): List<ChatValidationError.CreateGroupRoom> =
-        ChatValidator.validateGroupRoom(participantIds = participantIds, name = name)
+        ChatValidator.validateGroupRoom(participantIds = participantIds)
 }

@@ -51,12 +51,9 @@ object ChatValidator {
      * Returns a list containing `TooFewGroupParticipants` for a null list or fewer than two entries;
      * otherwise contains `InvalidGroupParticipantId` if any entry fails [ValidationPatterns.isValidUuid].
      * Returns an empty list if valid. Duplicate IDs count as separate entries.
-     *
-     * @param name accepted but not validated or used to determine the result.
      */
     fun validateGroupRoom(
         participantIds: List<String>?,
-        @Suppress("UNUSED_PARAMETER") name: String? = null,
     ): List<ChatValidationError.CreateGroupRoom> {
         val errors = mutableListOf<ChatValidationError.CreateGroupRoom>()
         if (participantIds.isNullOrEmpty() || participantIds.size < 2) {
