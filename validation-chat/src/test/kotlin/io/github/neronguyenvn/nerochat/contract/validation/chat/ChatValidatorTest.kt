@@ -10,10 +10,19 @@ class ChatValidatorTest {
     @Test
     fun testValidateSearchEmail() {
         assertNull(ChatValidator.validateSearchEmail("user@example.com", "me@example.com"))
+        assertNull(ChatValidator.validateSearchEmail("user@example.com"))
 
         assertEquals(
             ChatValidationError.EmptySearchEmail,
+            ChatValidator.validateSearchEmail(null, "me@example.com")
+        )
+        assertEquals(
+            ChatValidationError.EmptySearchEmail,
             ChatValidator.validateSearchEmail("", "me@example.com")
+        )
+        assertEquals(
+            ChatValidationError.EmptySearchEmail,
+            ChatValidator.validateSearchEmail("   ", "me@example.com")
         )
         assertEquals(
             ChatValidationError.InvalidSearchEmail,
@@ -23,6 +32,14 @@ class ChatValidatorTest {
             ChatValidationError.SelfParticipantNotAllowed,
             ChatValidator.validateSearchEmail("me@example.com", "me@example.com")
         )
+        assertEquals(
+            ChatValidationError.SelfParticipantNotAllowed,
+            ChatValidator.validateSearchEmail("ME@example.com", "me@example.com")
+        )
+        assertEquals(
+            ChatValidationError.SelfParticipantNotAllowed,
+            ChatValidator.validateSearchEmail("me@example.com", "  ME@EXAMPLE.com  ")
+        )
     }
 
     @Test
@@ -30,17 +47,30 @@ class ChatValidatorTest {
         val validUuid = "123e4567-e89b-12d3-a456-426614174000"
         assertTrue(ChatValidator.validateDirectRoom(validUuid, "Hello").isEmpty())
 
-        val missingRecipient = ChatValidator.validateDirectRoom("", "Hello")
-        assertEquals(1, missingRecipient.size)
-        assertTrue(missingRecipient.contains(ChatValidationError.MissingDirectRecipient))
+        val missingRecipientNull = ChatValidator.validateDirectRoom(null, "Hello")
+        assertEquals(1, missingRecipientNull.size)
+        assertTrue(missingRecipientNull.contains(ChatValidationError.MissingDirectRecipient))
+
+        val missingRecipientBlank = ChatValidator.validateDirectRoom("   ", "Hello")
+        assertEquals(1, missingRecipientBlank.size)
+        assertTrue(missingRecipientBlank.contains(ChatValidationError.MissingDirectRecipient))
 
         val invalidRecipient = ChatValidator.validateDirectRoom("bad-uuid", "Hello")
         assertEquals(1, invalidRecipient.size)
         assertTrue(invalidRecipient.contains(ChatValidationError.InvalidTargetUserId))
 
-        val emptyMessage = ChatValidator.validateDirectRoom(validUuid, "   ")
-        assertEquals(1, emptyMessage.size)
-        assertTrue(emptyMessage.contains(ChatValidationError.EmptyFirstMessage))
+        val emptyMessageNull = ChatValidator.validateDirectRoom(validUuid, null)
+        assertEquals(1, emptyMessageNull.size)
+        assertTrue(emptyMessageNull.contains(ChatValidationError.EmptyFirstMessage))
+
+        val emptyMessageBlank = ChatValidator.validateDirectRoom(validUuid, "   ")
+        assertEquals(1, emptyMessageBlank.size)
+        assertTrue(emptyMessageBlank.contains(ChatValidationError.EmptyFirstMessage))
+
+        val bothEmpty = ChatValidator.validateDirectRoom(null, "")
+        assertEquals(2, bothEmpty.size)
+        assertTrue(bothEmpty.contains(ChatValidationError.MissingDirectRecipient))
+        assertTrue(bothEmpty.contains(ChatValidationError.EmptyFirstMessage))
     }
 
     @Test
@@ -50,6 +80,9 @@ class ChatValidatorTest {
 
         // participantIds >= 2
         assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2)).isEmpty())
+
+        // Duplicate IDs count as separate entries and are accepted if valid UUIDs
+        assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid1)).isEmpty())
 
         val nullList = ChatValidator.validateGroupRoom(null)
         assertEquals(1, nullList.size)
@@ -72,6 +105,13 @@ class ChatValidatorTest {
     fun testValidateAddParticipants() {
         val uuid1 = "123e4567-e89b-12d3-a456-426614174001"
         assertTrue(ChatValidator.validateAddParticipants(listOf(uuid1)).isEmpty())
+
+        // Duplicate IDs are accepted
+        assertTrue(ChatValidator.validateAddParticipants(listOf(uuid1, uuid1)).isEmpty())
+
+        val nullList = ChatValidator.validateAddParticipants(null)
+        assertEquals(1, nullList.size)
+        assertTrue(nullList.contains(ChatValidationError.EmptyParticipantIds))
 
         val empty = ChatValidator.validateAddParticipants(emptyList())
         assertEquals(1, empty.size)
