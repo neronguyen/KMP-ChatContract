@@ -46,11 +46,16 @@ class ValidationPatternsTest {
     fun testPasswordValidation() {
         assertTrue(ValidationPatterns.isValidPassword("password123"))
         assertTrue(ValidationPatterns.isValidPassword("VerySecure99"))
+        assertTrue(ValidationPatterns.isValidPassword("Passw0rd!@#$"))
+        // 5 ASCII chars + 5 supplementary characters (emojis) = 10 code points (15 UTF-16 code units)
+        assertTrue(ValidationPatterns.isValidPassword("pass1🔒🔒🔒🔒🔒"))
 
         assertFalse(ValidationPatterns.isValidPassword(null))
         assertFalse(ValidationPatterns.isValidPassword(""))
         assertFalse(ValidationPatterns.isValidPassword("pass1")) // < 10 chars
         assertFalse(ValidationPatterns.isValidPassword("abcdefghij")) // no digit
         assertFalse(ValidationPatterns.isValidPassword("1234567890")) // no letter
+        // 5 ASCII chars + 4 supplementary characters (emojis) = 9 code points, even though UTF-16 length is 13
+        assertFalse(ValidationPatterns.isValidPassword("pass1🔒🔒🔒🔒"))
     }
 }

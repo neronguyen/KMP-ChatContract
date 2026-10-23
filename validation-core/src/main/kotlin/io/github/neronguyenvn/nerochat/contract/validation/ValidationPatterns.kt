@@ -44,13 +44,13 @@ object ValidationPatterns {
     }
 
     /**
-     * Returns whether [password] has at least [MIN_PASSWORD_LENGTH] UTF-16 code units
+     * Returns whether [password] has at least [MIN_PASSWORD_LENGTH] Unicode code points
      * and contains a letter and a digit, as recognized by [Char.isLetter] and [Char.isDigit].
      * Null and blank inputs return `false`; whitespace is preserved and counts toward the length.
      */
     fun isValidPassword(password: String?): Boolean {
         if (password.isNullOrBlank()) return false
-        if (password.length < MIN_PASSWORD_LENGTH) return false
+        if (password.codePointCount(0, password.length) < MIN_PASSWORD_LENGTH) return false
         return password.any { it.isLetter() } && password.any { it.isDigit() }
     }
 }
