@@ -51,6 +51,14 @@ class ChatValidatorTest {
         // participantIds >= 2
         assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2)).isEmpty())
 
+        val nullList = ChatValidator.validateGroupRoom(null)
+        assertEquals(1, nullList.size)
+        assertTrue(nullList.contains(ChatValidationError.TooFewGroupParticipants))
+
+        val emptyList = ChatValidator.validateGroupRoom(emptyList())
+        assertEquals(1, emptyList.size)
+        assertTrue(emptyList.contains(ChatValidationError.TooFewGroupParticipants))
+
         val tooFew = ChatValidator.validateGroupRoom(listOf(uuid1))
         assertEquals(1, tooFew.size)
         assertTrue(tooFew.contains(ChatValidationError.TooFewGroupParticipants))

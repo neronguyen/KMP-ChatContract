@@ -55,18 +55,15 @@ object ChatValidator {
     fun validateGroupRoom(
         participantIds: List<String>?,
     ): List<ChatValidationError.CreateGroupRoom> {
-        val errors = mutableListOf<ChatValidationError.CreateGroupRoom>()
-        if (participantIds.isNullOrEmpty() || participantIds.size < 2) {
-            errors.add(ChatValidationError.TooFewGroupParticipants)
-        } else {
-            for (id in participantIds) {
-                if (!ValidationPatterns.isValidUuid(id)) {
-                    errors.add(ChatValidationError.InvalidGroupParticipantId)
-                    break
-                }
+        if (participantIds == null || participantIds.size < 2) {
+            return listOf(ChatValidationError.TooFewGroupParticipants)
+        }
+        for (id in participantIds) {
+            if (!ValidationPatterns.isValidUuid(id)) {
+                return listOf(ChatValidationError.InvalidGroupParticipantId)
             }
         }
-        return errors
+        return emptyList()
     }
 
     /**
@@ -77,17 +74,14 @@ object ChatValidator {
     fun validateAddParticipants(
         userIds: List<String>?,
     ): List<ChatValidationError.AddParticipants> {
-        val errors = mutableListOf<ChatValidationError.AddParticipants>()
         if (userIds.isNullOrEmpty()) {
-            errors.add(ChatValidationError.EmptyParticipantIds)
-        } else {
-            for (id in userIds) {
-                if (!ValidationPatterns.isValidUuid(id)) {
-                    errors.add(ChatValidationError.InvalidParticipantId)
-                    break
-                }
+            return listOf(ChatValidationError.EmptyParticipantIds)
+        }
+        for (id in userIds) {
+            if (!ValidationPatterns.isValidUuid(id)) {
+                return listOf(ChatValidationError.InvalidParticipantId)
             }
         }
-        return errors
+        return emptyList()
     }
 }
