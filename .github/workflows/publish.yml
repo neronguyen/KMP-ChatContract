@@ -1,8 +1,6 @@
 name: Publish Contract Packages
 
 on:
-  release:
-    types: [published]
   push:
     tags:
       - 'v*'
@@ -40,14 +38,11 @@ jobs:
         id: get_version
         env:
           INPUT_VERSION: ${{ github.event.inputs.version }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           if [ -n "$INPUT_VERSION" ]; then
             VERSION="$INPUT_VERSION"
           elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
-          elif [ -n "$RELEASE_TAG" ]; then
-            VERSION="${RELEASE_TAG#v}"
           else
             VERSION="0.1.0"
           fi
