@@ -21,6 +21,13 @@ class ValidationPatternsTest {
         assertFalse(ValidationPatterns.isValidEmail("user@domain."))
         assertFalse(ValidationPatterns.isValidEmail("user@domain..com"))
         assertFalse(ValidationPatterns.isValidEmail("user name@example.com"))
+        assertFalse(ValidationPatterns.isValidEmail("user..name@example.com"))
+        assertFalse(ValidationPatterns.isValidEmail("user@-example.com"))
+        assertFalse(ValidationPatterns.isValidEmail("user@example.-com"))
+        assertFalse(ValidationPatterns.isValidEmail(".user@example.com"))
+        assertFalse(ValidationPatterns.isValidEmail("user.@example.com"))
+        assertFalse(ValidationPatterns.isValidEmail("user@münchen.de"))
+        assertTrue(ValidationPatterns.isValidEmail("user@xn--mnchen-3ya.de"))
     }
 
     @Test
