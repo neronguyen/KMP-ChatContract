@@ -51,7 +51,7 @@ sealed interface AuthValidationError : ValidationError {
         override val message: String = "Password must not be blank"
     }
 
-    data object InvalidPassword : Password, Register, Login {
+    data object InvalidPassword : Password, Register {
         override val field: String = "password"
         override val message: String =
             "Password must be at least 10 characters and contain at least 1 digit and 1 letter"

@@ -46,10 +46,17 @@ class AuthValidatorTest {
         val valid = AuthValidator.validateLogin("user@example.com", "password123")
         assertTrue(valid.isEmpty())
 
-        val invalid = AuthValidator.validateLogin("invalid-email", "pass")
-        assertEquals(2, invalid.size)
-        assertTrue(invalid.contains(AuthValidationError.InvalidEmail))
-        assertTrue(invalid.contains(AuthValidationError.InvalidPassword))
+        val validShortPassword = AuthValidator.validateLogin("user@example.com", "pass")
+        assertTrue(validShortPassword.isEmpty())
+
+        val invalidEmail = AuthValidator.validateLogin("invalid-email", "pass")
+        assertEquals(1, invalidEmail.size)
+        assertTrue(invalidEmail.contains(AuthValidationError.InvalidEmail))
+
+        val emptyFields = AuthValidator.validateLogin("", "")
+        assertEquals(2, emptyFields.size)
+        assertTrue(emptyFields.contains(AuthValidationError.EmptyEmail))
+        assertTrue(emptyFields.contains(AuthValidationError.EmptyPassword))
     }
 
     @Test

@@ -101,8 +101,11 @@ class AuthContractTest {
         assertEquals(req, deserialized)
         assertTrue(req.validate().isEmpty())
 
+        val shortPasswordReq = LoginRequest("user@example.com", "short")
+        assertTrue(shortPasswordReq.validate().isEmpty())
+
         val invalid = LoginRequest("bad-email", "short")
-        assertEquals(2, invalid.validate().size)
+        assertEquals(1, invalid.validate().size)
     }
 
     @Test

@@ -65,7 +65,7 @@ object AuthValidator {
     }
 
     /**
-     * Checks email format and [ValidationPatterns.isValidPassword] for login inputs.
+     * Checks email format and non-blank password for login inputs.
      * Returns at most one error per field in email, password order, or an empty list.
      * Null and blank inputs produce the corresponding empty-field errors.
      */
@@ -82,8 +82,6 @@ object AuthValidator {
 
         if (password.isNullOrBlank()) {
             errors.add(AuthValidationError.EmptyPassword)
-        } else if (!ValidationPatterns.isValidPassword(password)) {
-            errors.add(AuthValidationError.InvalidPassword)
         }
         return errors
     }
