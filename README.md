@@ -1,4 +1,4 @@
-# KMP-NeroChatContract
+# KMP-ChatContract
 
 Pure-Kotlin multi-module contract repository containing shared DTOs and WebSocket message models for
 NeroChat (shared between the Spring Boot backend and Android/Kotlin clients).
@@ -15,7 +15,7 @@ NeroChat (shared between the Spring Boot backend and Android/Kotlin clients).
 In your `settings.gradle.kts`:
 
 ```kotlin
-val contractRepoDir = file("../KMP-NeroChatContract")
+val contractRepoDir = file("../KMP-ChatContract")
 if (contractRepoDir.exists()) {
     includeBuild(contractRepoDir) {
         dependencySubstitution {
