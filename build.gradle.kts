@@ -17,6 +17,10 @@ version = contractVersion
 subprojects {
     group = rootProject.group
     version = rootProject.version
+    val parentName = project.parent?.name
+    if (!parentName.isNullOrBlank()) {
+        group = "io.github.neronguyenvn.nerochat.$parentName"
+    }
 
     repositories {
         mavenCentral()

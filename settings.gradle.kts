@@ -14,9 +14,9 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "KMP-ChatContract"
 
-include("contract-core")
-include("contract-auth")
-include("contract-chat")
-include("validation-core")
-include("validation-auth")
-include("validation-chat")
+include("contract:common")
+include("contract:auth")
+include("contract:chat")
+include("validation:common")
+include("validation:auth")
+include("validation:chat")
