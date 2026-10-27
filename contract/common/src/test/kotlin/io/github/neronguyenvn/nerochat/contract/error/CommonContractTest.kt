@@ -33,7 +33,6 @@ class CommonContractTest {
             CommonServerError.BadRequest,
             CommonServerError.ValidationFailed,
             CommonServerError.Unauthorized,
-            CommonServerError.Forbidden,
             CommonServerError.RateLimitExceeded,
             CommonServerError.InternalServerError,
         )

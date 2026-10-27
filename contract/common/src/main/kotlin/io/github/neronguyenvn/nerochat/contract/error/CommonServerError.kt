@@ -10,7 +10,6 @@ sealed interface CommonServerError : ServerError {
     @Serializable data object BadRequest : CommonServerError
     @Serializable data object ValidationFailed : CommonServerError
     @Serializable data object Unauthorized : CommonServerError
-    @Serializable data object Forbidden : CommonServerError
     @Serializable data object RateLimitExceeded : CommonServerError
     @Serializable data object InternalServerError : CommonServerError
 }
