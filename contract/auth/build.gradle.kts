@@ -11,7 +11,7 @@ kotlin {
 dependencies {
     api(projects.contract.common)
     api(projects.validation.auth)
-    api(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
 }

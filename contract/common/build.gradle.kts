@@ -10,7 +10,7 @@ kotlin {
 
 dependencies {
     api(projects.validation.common)
-    api(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
 }
