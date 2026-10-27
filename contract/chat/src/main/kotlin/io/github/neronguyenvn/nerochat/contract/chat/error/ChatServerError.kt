@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface ChatServerError : ServerError {
     // Per-endpoint & WebSocket error contracts
-    @Serializable sealed interface GetRooms : ChatServerError
     @Serializable sealed interface GetParticipant : ChatServerError
     @Serializable sealed interface GetRoom : ChatServerError
     @Serializable sealed interface GetMessages : ChatServerError
@@ -21,25 +20,8 @@ sealed interface ChatServerError : ServerError {
     @Serializable data object MessageNotFound : DeleteMessage
     @Serializable data object InvalidChatRoomSize : CreateRoom
     @Serializable data object ParticipantAlreadyInRoom : AddParticipants
-    @Serializable data object Forbidden : GetMessages, AddParticipants, DeleteMessage
-    @Serializable data object ValidationFailed : CreateRoom, AddParticipants
-    @Serializable
-    data object Unauthorized :
-        GetRooms,
-        GetParticipant,
-        GetRoom,
-        GetMessages,
-        CreateRoom,
-        AddParticipants,
-        LeaveRoom,
-        DeleteMessage
-    @Serializable
-    data object BadRequest :
-        GetRoom,
-        GetMessages,
-        AddParticipants,
-        LeaveRoom,
-        DeleteMessage
+    @Serializable data object ParticipantNotInRoom : GetMessages, AddParticipants
+    @Serializable data object NotMessageSender : DeleteMessage
     @Serializable data object DuplicateMessageId : WebSocket
     @Serializable data object InvalidJson : WebSocket
     @Serializable data object InvalidPayload : WebSocket

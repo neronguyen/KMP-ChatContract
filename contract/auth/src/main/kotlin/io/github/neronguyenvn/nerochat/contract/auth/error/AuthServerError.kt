@@ -7,12 +7,10 @@ import kotlinx.serialization.Serializable
 sealed interface AuthServerError : ServerError {
     // Per-endpoint error contracts
     @Serializable sealed interface Register : AuthServerError
-    @Serializable sealed interface ResendVerification : AuthServerError
     @Serializable sealed interface Login : AuthServerError
     @Serializable sealed interface RefreshToken : AuthServerError
     @Serializable sealed interface Logout : AuthServerError
     @Serializable sealed interface VerifyEmail : AuthServerError
-    @Serializable sealed interface ForgotPassword : AuthServerError
     @Serializable sealed interface ResetPassword : AuthServerError
     @Serializable sealed interface ChangePassword : AuthServerError
 
@@ -23,23 +21,4 @@ sealed interface AuthServerError : ServerError {
     @Serializable data object UserNotFound : RefreshToken, ChangePassword
     @Serializable data object WrongPassword : ChangePassword
     @Serializable data object SamePassword : ResetPassword, ChangePassword
-    @Serializable data object Unauthorized : ChangePassword
-    @Serializable
-    data object RateLimitExceeded :
-        Register,
-        ResendVerification,
-        Login,
-        RefreshToken,
-        ForgotPassword,
-        ResetPassword
-    @Serializable
-    data object ValidationFailed :
-        Register,
-        ResendVerification,
-        Login,
-        RefreshToken,
-        Logout,
-        ForgotPassword,
-        ResetPassword,
-        ChangePassword
 }

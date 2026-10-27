@@ -102,21 +102,25 @@ class ChatContractTest {
         assertEquals(ChatServerError.ChatRoomNotFound, deserialized.error)
 
         val deleteResponse = ApiErrorResponse<ChatServerError.DeleteMessage>(
-            error = ChatServerError.Forbidden,
+            error = ChatServerError.NotMessageSender,
             message = "Cannot delete message",
         )
         val serializedDelete = json.encodeToString(deleteResponse)
         val deserializedDelete = json.decodeFromString<ApiErrorResponse<ChatServerError.DeleteMessage>>(serializedDelete)
-        assertEquals(ChatServerError.Forbidden, deserializedDelete.error)
+        assertEquals(ChatServerError.NotMessageSender, deserializedDelete.error)
 
         val deleteError: ChatServerError.DeleteMessage = deserializedDelete.error
         val result = when (deleteError) {
             ChatServerError.MessageNotFound -> "not found"
-            ChatServerError.Forbidden -> "not sender"
-            ChatServerError.Unauthorized -> "unauthorized"
-            ChatServerError.BadRequest -> "bad request"
+            ChatServerError.NotMessageSender -> "not sender"
         }
         assertEquals("not sender", result)
+
+        val getMessagesError: ChatServerError.GetMessages = ChatServerError.ParticipantNotInRoom
+        val msgResult = when (getMessagesError) {
+            ChatServerError.ParticipantNotInRoom -> "not in room"
+        }
+        assertEquals("not in room", msgResult)
     }
 
     @Test

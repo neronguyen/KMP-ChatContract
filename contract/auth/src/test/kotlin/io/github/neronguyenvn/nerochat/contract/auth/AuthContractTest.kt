@@ -52,31 +52,27 @@ class AuthContractTest {
         assertEquals(AuthServerError.InvalidCredentials, deserialized.error)
 
         val loginResponse = ApiErrorResponse<AuthServerError.Login>(
-            error = AuthServerError.RateLimitExceeded,
-            message = "Too many attempts",
+            error = AuthServerError.InvalidCredentials,
+            message = "Invalid credentials",
         )
         val serializedLogin = json.encodeToString(loginResponse)
         val deserializedLogin = json.decodeFromString<ApiErrorResponse<AuthServerError.Login>>(serializedLogin)
-        assertEquals(AuthServerError.RateLimitExceeded, deserializedLogin.error)
+        assertEquals(AuthServerError.InvalidCredentials, deserializedLogin.error)
 
         val loginError: AuthServerError.Login = deserializedLogin.error
         val message = when (loginError) {
             AuthServerError.InvalidCredentials -> "bad creds"
             AuthServerError.EmailNotVerified -> "unverified"
-            AuthServerError.RateLimitExceeded -> "rate limited"
-            AuthServerError.ValidationFailed -> "invalid input"
         }
-        assertEquals("rate limited", message)
+        assertEquals("bad creds", message)
 
-        val changePasswordError: AuthServerError.ChangePassword = AuthServerError.Unauthorized
+        val changePasswordError: AuthServerError.ChangePassword = AuthServerError.WrongPassword
         val changePasswordMessage = when (changePasswordError) {
-            AuthServerError.Unauthorized -> "unauthorized"
             AuthServerError.WrongPassword -> "wrong password"
             AuthServerError.SamePassword -> "same password"
             AuthServerError.UserNotFound -> "user not found"
-            AuthServerError.ValidationFailed -> "validation failed"
         }
-        assertEquals("unauthorized", changePasswordMessage)
+        assertEquals("wrong password", changePasswordMessage)
     }
 
     @Test
