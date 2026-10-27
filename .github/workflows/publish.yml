@@ -64,3 +64,25 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           VERSION: ${{ steps.get_version.outputs.version }}
         run: ./gradlew publish "-Pversion=$VERSION"
+
+  cleanup:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package-name:
+          - common
+          - auth
+          - chat
+    steps:
+      - name: Prune older versions of ${{ matrix.package-name }} (keep current + previous)
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.package-name }}
+          package-type: 'maven'
+          min-versions-to-keep: 2
+          delete-only-untagged-versions: 'false'
+          token: ${{ secrets.GITHUB_TOKEN }}
