@@ -34,6 +34,7 @@ class CommonContractTest {
             CommonServerError.ValidationFailed,
             CommonServerError.Unauthorized,
             CommonServerError.Forbidden,
+            CommonServerError.RateLimitExceeded,
             CommonServerError.InternalServerError,
         )
 
