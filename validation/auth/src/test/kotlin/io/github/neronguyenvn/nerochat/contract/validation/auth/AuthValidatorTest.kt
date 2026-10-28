@@ -2,9 +2,23 @@ package io.github.neronguyenvn.nerochat.contract.validation.auth
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AuthValidatorTest {
+
+    @Test
+    fun testValidateDisplayName() {
+        assertNull(AuthValidator.validateDisplayName("User"))
+        assertNull(AuthValidator.validateDisplayName("John Doe"))
+
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName(null))
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName(""))
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName("   "))
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName(" User"))
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName("User "))
+        assertEquals(AuthValidationError.EmptyDisplayName, AuthValidator.validateDisplayName("  John Doe  "))
+    }
 
     @Test
     fun testValidateRegisterSuccess() {
@@ -27,6 +41,17 @@ class AuthValidatorTest {
         assertTrue(errors.contains(AuthValidationError.EmptyEmail))
         assertTrue(errors.contains(AuthValidationError.EmptyDisplayName))
         assertTrue(errors.contains(AuthValidationError.EmptyPassword))
+    }
+
+    @Test
+    fun testValidateRegisterUntrimmedDisplayName() {
+        val errors = AuthValidator.validateRegister(
+            email = "user@example.com",
+            displayName = " User ",
+            password = "password123",
+        )
+        assertEquals(1, errors.size)
+        assertTrue(errors.contains(AuthValidationError.EmptyDisplayName))
     }
 
     @Test

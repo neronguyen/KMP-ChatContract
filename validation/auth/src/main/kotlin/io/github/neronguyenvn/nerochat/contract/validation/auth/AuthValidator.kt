@@ -18,10 +18,10 @@ object AuthValidator {
     }
 
     /**
-     * Returns `EmptyDisplayName` for null or blank input, or `null` otherwise.
+     * Returns `EmptyDisplayName` for null, blank, or untrimmed input, or `null` if valid.
      */
     fun validateDisplayName(displayName: String?): AuthValidationError.EmptyDisplayName? {
-        if (displayName.isNullOrBlank()) return AuthValidationError.EmptyDisplayName
+        if (displayName.isNullOrBlank() || displayName != displayName.trim()) return AuthValidationError.EmptyDisplayName
         return null
     }
 
@@ -52,8 +52,8 @@ object AuthValidator {
             errors.add(AuthValidationError.InvalidEmail)
         }
 
-        if (displayName.isNullOrBlank()) {
-            errors.add(AuthValidationError.EmptyDisplayName)
+        validateDisplayName(displayName)?.let {
+            errors.add(it)
         }
 
         if (password.isNullOrBlank()) {
