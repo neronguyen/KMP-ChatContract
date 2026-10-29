@@ -4,22 +4,6 @@ import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
 import io.github.neronguyenvn.nerochat.contract.error.ServerError
 
-// Base auth error interface for broad matching across any auth error
-sealed interface AuthServerError : ServerError {
-    companion object : ErrorContract<AuthServerError>(
-        listOf(
-            AuthErrors.UserAlreadyExists,
-            AuthErrors.InvalidCredentials,
-            AuthErrors.EmailNotVerified,
-            AuthErrors.InvalidToken,
-            AuthErrors.UserNotFound,
-            AuthErrors.WrongPassword,
-            AuthErrors.SamePassword,
-        )
-    )
-}
-
-// Top-level per-endpoint contracts
 sealed interface RegisterError : ServerError {
     companion object : ErrorContract<RegisterError>(listOf(AuthErrors.UserAlreadyExists))
 }
@@ -69,37 +53,36 @@ sealed interface ChangePasswordError : ServerError {
     )
 }
 
-// Error Catalog
 object AuthErrors {
-    data object UserAlreadyExists : RegisterError, AuthServerError {
+    data object UserAlreadyExists : RegisterError {
         override val code = ErrorCode("AuthServerError.UserAlreadyExists")
     }
 
-    data object InvalidCredentials : LoginError, AuthServerError {
+    data object InvalidCredentials : LoginError {
         override val code = ErrorCode("AuthServerError.InvalidCredentials")
     }
 
-    data object EmailNotVerified : LoginError, AuthServerError {
+    data object EmailNotVerified : LoginError {
         override val code = ErrorCode("AuthServerError.EmailNotVerified")
     }
 
-    data object InvalidToken : RefreshTokenError, LogoutError, VerifyEmailError, ResetPasswordError, AuthServerError {
+    data object InvalidToken : RefreshTokenError, LogoutError, VerifyEmailError, ResetPasswordError {
         override val code = ErrorCode("AuthServerError.InvalidToken")
     }
 
-    data object UserNotFound : RefreshTokenError, ChangePasswordError, AuthServerError {
+    data object UserNotFound : RefreshTokenError, ChangePasswordError {
         override val code = ErrorCode("AuthServerError.UserNotFound")
     }
 
-    data object WrongPassword : ChangePasswordError, AuthServerError {
+    data object WrongPassword : ChangePasswordError {
         override val code = ErrorCode("AuthServerError.WrongPassword")
     }
 
-    data object SamePassword : ResetPasswordError, ChangePasswordError, AuthServerError {
+    data object SamePassword : ResetPasswordError, ChangePasswordError {
         override val code = ErrorCode("AuthServerError.SamePassword")
     }
 
-    val all: List<AuthServerError> = listOf(
+    val all: List<ServerError> = listOf(
         UserAlreadyExists,
         InvalidCredentials,
         EmailNotVerified,

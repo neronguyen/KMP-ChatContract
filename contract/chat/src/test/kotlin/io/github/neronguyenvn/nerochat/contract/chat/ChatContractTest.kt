@@ -1,17 +1,14 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
 import io.github.neronguyenvn.nerochat.contract.chat.error.ChatErrors
-import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import io.github.neronguyenvn.nerochat.contract.chat.error.DeleteMessageError
 import io.github.neronguyenvn.nerochat.contract.chat.error.GetMessagesError
+import io.github.neronguyenvn.nerochat.contract.chat.error.GetRoomError
 import io.github.neronguyenvn.nerochat.contract.chat.error.WebSocketError
-import io.github.neronguyenvn.nerochat.contract.error.ApiErrorResponse
-import io.github.neronguyenvn.nerochat.contract.error.ApiFailure
-import io.github.neronguyenvn.nerochat.contract.error.toFailure
+import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -103,8 +100,8 @@ class ChatContractTest {
     }
 
     @Test
-    fun `ChatServerError serializes correctly and exhaustive sub-interfaces match correctly`() {
-        val errorResponse = ApiErrorResponse(
+    fun `Chat error DTOs serialize correctly and exhaustive sub-interfaces match correctly`() {
+        val errorResponse = ApiErrorDto(
             error = ChatErrors.ChatRoomNotFound,
             message = "Room not found",
         )
@@ -113,11 +110,11 @@ class ChatContractTest {
             serialized.contains("\"error\":\"ChatServerError.ChatRoomNotFound\""),
             "Expected api error to contain string 'error':'ChatServerError.ChatRoomNotFound' but was: $serialized"
         )
-        val deserialized = json.decodeFromString<ApiErrorResponse>(serialized)
+        val deserialized = json.decodeFromString<ApiErrorDto>(serialized)
         assertEquals(ChatErrors.ChatRoomNotFound.code, deserialized.error)
-        assertEquals(ChatErrors.ChatRoomNotFound, ChatServerError.fromCode(deserialized.error))
+        assertEquals(ChatErrors.ChatRoomNotFound, GetRoomError.fromCode(deserialized.error))
 
-        val deleteResponse = ApiErrorResponse(
+        val deleteResponse = ApiErrorDto(
             error = ChatErrors.NotMessageSender,
             message = "Cannot delete message",
         )
@@ -126,7 +123,7 @@ class ChatContractTest {
             serializedDelete.contains("\"error\":\"ChatServerError.NotMessageSender\""),
             "Expected delete error to contain string 'error':'ChatServerError.NotMessageSender' but was: $serializedDelete"
         )
-        val deserializedDelete = json.decodeFromString<ApiErrorResponse>(serializedDelete)
+        val deserializedDelete = json.decodeFromString<ApiErrorDto>(serializedDelete)
         assertEquals(ChatErrors.NotMessageSender.code, deserializedDelete.error)
 
         val deleteError: DeleteMessageError? = DeleteMessageError.fromCode(deserializedDelete.error)
@@ -143,12 +140,6 @@ class ChatContractTest {
             null -> "unknown"
         }
         assertEquals("not in room", msgResult)
-
-        // Test classification via toFailure
-        val failure = deserializedDelete.toFailure(DeleteMessageError, 403)
-        assertIs<ApiFailure.Business<DeleteMessageError>>(failure)
-        assertEquals(ChatErrors.NotMessageSender, failure.error)
-        assertEquals("Cannot delete message", failure.details.message)
     }
 
     @Test

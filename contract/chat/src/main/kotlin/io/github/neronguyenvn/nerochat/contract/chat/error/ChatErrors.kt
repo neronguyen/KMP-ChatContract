@@ -4,26 +4,6 @@ import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
 import io.github.neronguyenvn.nerochat.contract.error.ServerError
 
-// Base chat error interface for broad matching across any chat error
-sealed interface ChatServerError : ServerError {
-    companion object : ErrorContract<ChatServerError>(
-        listOf(
-            ChatErrors.ChatParticipantNotFound,
-            ChatErrors.ChatRoomNotFound,
-            ChatErrors.MessageNotFound,
-            ChatErrors.InvalidChatRoomSize,
-            ChatErrors.ParticipantAlreadyInRoom,
-            ChatErrors.ParticipantNotInRoom,
-            ChatErrors.NotMessageSender,
-            ChatErrors.DuplicateMessageId,
-            ChatErrors.InvalidJson,
-            ChatErrors.InvalidPayload,
-            ChatErrors.MessageSendFailed,
-        )
-    )
-}
-
-// Top-level per-endpoint contracts
 sealed interface GetParticipantError : ServerError {
     companion object : ErrorContract<GetParticipantError>(listOf(ChatErrors.ChatParticipantNotFound))
 }
@@ -86,53 +66,52 @@ sealed interface WebSocketError : ServerError {
     )
 }
 
-// Error Catalog
 object ChatErrors {
-    data object ChatParticipantNotFound : GetParticipantError, CreateRoomError, AddParticipantsError, LeaveRoomError, ChatServerError {
+    data object ChatParticipantNotFound : GetParticipantError, CreateRoomError, AddParticipantsError, LeaveRoomError {
         override val code = ErrorCode("ChatServerError.ChatParticipantNotFound")
     }
 
-    data object ChatRoomNotFound : GetRoomError, AddParticipantsError, LeaveRoomError, WebSocketError, ChatServerError {
+    data object ChatRoomNotFound : GetRoomError, AddParticipantsError, LeaveRoomError, WebSocketError {
         override val code = ErrorCode("ChatServerError.ChatRoomNotFound")
     }
 
-    data object MessageNotFound : DeleteMessageError, ChatServerError {
+    data object MessageNotFound : DeleteMessageError {
         override val code = ErrorCode("ChatServerError.MessageNotFound")
     }
 
-    data object InvalidChatRoomSize : CreateRoomError, ChatServerError {
+    data object InvalidChatRoomSize : CreateRoomError {
         override val code = ErrorCode("ChatServerError.InvalidChatRoomSize")
     }
 
-    data object ParticipantAlreadyInRoom : AddParticipantsError, ChatServerError {
+    data object ParticipantAlreadyInRoom : AddParticipantsError {
         override val code = ErrorCode("ChatServerError.ParticipantAlreadyInRoom")
     }
 
-    data object ParticipantNotInRoom : GetMessagesError, AddParticipantsError, ChatServerError {
+    data object ParticipantNotInRoom : GetMessagesError, AddParticipantsError {
         override val code = ErrorCode("ChatServerError.ParticipantNotInRoom")
     }
 
-    data object NotMessageSender : DeleteMessageError, ChatServerError {
+    data object NotMessageSender : DeleteMessageError {
         override val code = ErrorCode("ChatServerError.NotMessageSender")
     }
 
-    data object DuplicateMessageId : WebSocketError, ChatServerError {
+    data object DuplicateMessageId : WebSocketError {
         override val code = ErrorCode("ChatServerError.DuplicateMessageId")
     }
 
-    data object InvalidJson : WebSocketError, ChatServerError {
+    data object InvalidJson : WebSocketError {
         override val code = ErrorCode("ChatServerError.InvalidJson")
     }
 
-    data object InvalidPayload : WebSocketError, ChatServerError {
+    data object InvalidPayload : WebSocketError {
         override val code = ErrorCode("ChatServerError.InvalidPayload")
     }
 
-    data object MessageSendFailed : WebSocketError, ChatServerError {
+    data object MessageSendFailed : WebSocketError {
         override val code = ErrorCode("ChatServerError.MessageSendFailed")
     }
 
-    val all: List<ChatServerError> = listOf(
+    val all: List<ServerError> = listOf(
         ChatParticipantNotFound,
         ChatRoomNotFound,
         MessageNotFound,

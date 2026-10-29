@@ -16,9 +16,9 @@ class CommonContractCompletenessTest {
             )
         }
 
-        val entries = CommonErrors.entries.toSet()
+        val entries = CommonServerError.entries.toSet()
         val declaredSubclasses = subclasses.mapNotNull { it.objectInstance }.toSet()
-        assertEquals(declaredSubclasses, entries, "CommonErrors entries must match CommonServerError sealed subclasses")
+        assertEquals(declaredSubclasses, entries, "CommonServerError entries must match its sealed subclasses")
     }
 
     @Test
@@ -27,7 +27,7 @@ class CommonContractCompletenessTest {
         assertNotNull(stream, "Golden snapshot file /common-error-codes-golden.txt must exist")
         val goldenCodes = stream.bufferedReader().readLines().filter { it.isNotBlank() }
 
-        val actualCodes = CommonErrors.entries.map { it.code.value }.sorted()
+        val actualCodes = CommonServerError.entries.map { it.code.value }.sorted()
         assertEquals(goldenCodes, actualCodes, "Common error codes must match golden snapshot")
     }
 }

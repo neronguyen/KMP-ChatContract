@@ -1,17 +1,13 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
 import io.github.neronguyenvn.nerochat.contract.auth.error.AuthErrors
-import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
 import io.github.neronguyenvn.nerochat.contract.auth.error.ChangePasswordError
 import io.github.neronguyenvn.nerochat.contract.auth.error.LoginError
 import io.github.neronguyenvn.nerochat.contract.auth.error.RegisterError
-import io.github.neronguyenvn.nerochat.contract.error.ApiErrorResponse
-import io.github.neronguyenvn.nerochat.contract.error.ApiFailure
-import io.github.neronguyenvn.nerochat.contract.error.toFailure
+import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class AuthContractTest {
@@ -49,8 +45,8 @@ class AuthContractTest {
     }
 
     @Test
-    fun `AuthServerError serializes and exhaustive endpoint contracts match correctly`() {
-        val errorResponse = ApiErrorResponse(
+    fun `Auth error DTOs serialize and exhaustive endpoint contracts match correctly`() {
+        val errorResponse = ApiErrorDto(
             error = AuthErrors.InvalidCredentials,
             message = "Invalid email or password",
         )
@@ -59,11 +55,11 @@ class AuthContractTest {
             serialized.contains("\"error\":\"AuthServerError.InvalidCredentials\""),
             "Expected wire format to contain 'error':'AuthServerError.InvalidCredentials' but was: $serialized"
         )
-        val deserialized = json.decodeFromString<ApiErrorResponse>(serialized)
+        val deserialized = json.decodeFromString<ApiErrorDto>(serialized)
         assertEquals(AuthErrors.InvalidCredentials.code, deserialized.error)
-        assertEquals(AuthErrors.InvalidCredentials, AuthServerError.fromCode(deserialized.error))
+        assertEquals(AuthErrors.InvalidCredentials, LoginError.fromCode(deserialized.error))
 
-        val loginResponse = ApiErrorResponse(
+        val loginResponse = ApiErrorDto(
             error = AuthErrors.InvalidCredentials,
             message = "Invalid credentials",
         )
@@ -72,7 +68,7 @@ class AuthContractTest {
             serializedLogin.contains("\"error\":\"AuthServerError.InvalidCredentials\""),
             "Expected wire format to contain 'error':'AuthServerError.InvalidCredentials' but was: $serializedLogin"
         )
-        val deserializedLogin = json.decodeFromString<ApiErrorResponse>(serializedLogin)
+        val deserializedLogin = json.decodeFromString<ApiErrorDto>(serializedLogin)
         assertEquals(AuthErrors.InvalidCredentials.code, deserializedLogin.error)
 
         val loginError: LoginError? = LoginError.fromCode(deserializedLogin.error)
@@ -91,12 +87,6 @@ class AuthContractTest {
             null -> "unknown"
         }
         assertEquals("wrong password", changePasswordMessage)
-
-        // Test classification via toFailure
-        val failure = deserializedLogin.toFailure(LoginError, 401)
-        assertIs<ApiFailure.Business<LoginError>>(failure)
-        assertEquals(AuthErrors.InvalidCredentials, failure.error)
-        assertEquals("Invalid credentials", failure.details.message)
     }
 
     @Test

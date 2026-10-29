@@ -1,7 +1,6 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
 import io.github.neronguyenvn.nerochat.contract.auth.error.AuthErrors
-import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
 import io.github.neronguyenvn.nerochat.contract.auth.error.ChangePasswordError
 import io.github.neronguyenvn.nerochat.contract.auth.error.LoginError
 import io.github.neronguyenvn.nerochat.contract.auth.error.LogoutError
@@ -9,8 +8,9 @@ import io.github.neronguyenvn.nerochat.contract.auth.error.RefreshTokenError
 import io.github.neronguyenvn.nerochat.contract.auth.error.RegisterError
 import io.github.neronguyenvn.nerochat.contract.auth.error.ResetPasswordError
 import io.github.neronguyenvn.nerochat.contract.auth.error.VerifyEmailError
-import io.github.neronguyenvn.nerochat.contract.error.CommonErrors
+import io.github.neronguyenvn.nerochat.contract.error.CommonServerError
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
+import io.github.neronguyenvn.nerochat.contract.error.ServerError
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -27,7 +27,6 @@ class AuthContractCompletenessTest {
         VerifyEmailError::class to VerifyEmailError,
         ResetPasswordError::class to ResetPasswordError,
         ChangePasswordError::class to ChangePasswordError,
-        AuthServerError::class to AuthServerError,
     )
 
     @Test
@@ -51,8 +50,21 @@ class AuthContractCompletenessTest {
     }
 
     @Test
+    fun `AuthErrors catalog contains all declared objects and matches union of endpoint contracts`() {
+        val declaredObjects = AuthErrors::class.nestedClasses
+            .mapNotNull { it.objectInstance as? ServerError }
+            .toSet()
+
+        val catalogEntries = AuthErrors.all.toSet()
+        assertEquals(declaredObjects, catalogEntries, "AuthErrors.all must contain all nested ServerError objects in AuthErrors")
+
+        val contractUnion = allContracts.flatMap { it.second.entries }.toSet()
+        assertEquals(catalogEntries, contractUnion, "AuthErrors.all must match the union of all endpoint contract entries")
+    }
+
+    @Test
     fun `no auth errors overlap with common errors`() {
-        val commonCodes = CommonErrors.entries.map { it.code }.toSet()
+        val commonCodes = CommonServerError.entries.map { it.code }.toSet()
         val authCodes = AuthErrors.all.map { it.code }.toSet()
         val overlap = commonCodes.intersect(authCodes)
         assertTrue(overlap.isEmpty(), "Auth errors must not overlap with CommonServerError codes: $overlap")

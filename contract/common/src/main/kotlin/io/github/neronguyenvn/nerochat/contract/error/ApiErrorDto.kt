@@ -3,7 +3,7 @@ package io.github.neronguyenvn.nerochat.contract.error
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiErrorResponse(
+data class ApiErrorDto(
     val error: ErrorCode,
     val message: String,
     val fieldErrors: Map<String, String> = emptyMap(),

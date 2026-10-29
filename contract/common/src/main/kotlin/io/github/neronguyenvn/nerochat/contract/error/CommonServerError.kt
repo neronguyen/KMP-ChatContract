@@ -19,12 +19,14 @@ sealed interface CommonServerError : ServerError {
     data object InternalServerError : CommonServerError {
         override val code = ErrorCode("CommonServerError.InternalServerError")
     }
-}
 
-object CommonErrors : ErrorContract<CommonServerError>(listOf(
-    CommonServerError.BadRequest,
-    CommonServerError.ValidationFailed,
-    CommonServerError.Unauthorized,
-    CommonServerError.RateLimitExceeded,
-    CommonServerError.InternalServerError,
-))
+    companion object : ErrorContract<CommonServerError>(
+        listOf(
+            BadRequest,
+            ValidationFailed,
+            Unauthorized,
+            RateLimitExceeded,
+            InternalServerError,
+        )
+    )
+}
