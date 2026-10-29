@@ -1,13 +1,6 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
-import io.github.neronguyenvn.nerochat.contract.auth.error.AuthErrors
-import io.github.neronguyenvn.nerochat.contract.auth.error.ChangePasswordError
-import io.github.neronguyenvn.nerochat.contract.auth.error.LoginError
-import io.github.neronguyenvn.nerochat.contract.auth.error.LogoutError
-import io.github.neronguyenvn.nerochat.contract.auth.error.RefreshTokenError
-import io.github.neronguyenvn.nerochat.contract.auth.error.RegisterError
-import io.github.neronguyenvn.nerochat.contract.auth.error.ResetPasswordError
-import io.github.neronguyenvn.nerochat.contract.auth.error.VerifyEmailError
+import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
 import io.github.neronguyenvn.nerochat.contract.error.CommonServerError
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
 import io.github.neronguyenvn.nerochat.contract.error.ServerError
@@ -20,13 +13,13 @@ import kotlin.test.assertTrue
 class AuthContractCompletenessTest {
 
     private val allContracts: List<Pair<KClass<*>, ErrorContract<*>>> = listOf(
-        RegisterError::class to RegisterError,
-        LoginError::class to LoginError,
-        RefreshTokenError::class to RefreshTokenError,
-        LogoutError::class to LogoutError,
-        VerifyEmailError::class to VerifyEmailError,
-        ResetPasswordError::class to ResetPasswordError,
-        ChangePasswordError::class to ChangePasswordError,
+        AuthServerError.Register::class to AuthServerError.Register,
+        AuthServerError.Login::class to AuthServerError.Login,
+        AuthServerError.RefreshToken::class to AuthServerError.RefreshToken,
+        AuthServerError.Logout::class to AuthServerError.Logout,
+        AuthServerError.VerifyEmail::class to AuthServerError.VerifyEmail,
+        AuthServerError.ResetPassword::class to AuthServerError.ResetPassword,
+        AuthServerError.ChangePassword::class to AuthServerError.ChangePassword,
     )
 
     @Test
@@ -50,22 +43,19 @@ class AuthContractCompletenessTest {
     }
 
     @Test
-    fun `AuthErrors catalog contains all declared objects and matches union of endpoint contracts`() {
-        val declaredObjects = AuthErrors::class.nestedClasses
+    fun `AuthServerError namespace contains all declared error objects and matches union of endpoint contracts`() {
+        val declaredObjects = AuthServerError::class.nestedClasses
             .mapNotNull { it.objectInstance as? ServerError }
             .toSet()
 
-        val catalogEntries = AuthErrors.all.toSet()
-        assertEquals(declaredObjects, catalogEntries, "AuthErrors.all must contain all nested ServerError objects in AuthErrors")
-
         val contractUnion = allContracts.flatMap { it.second.entries }.toSet()
-        assertEquals(catalogEntries, contractUnion, "AuthErrors.all must match the union of all endpoint contract entries")
+        assertEquals(declaredObjects, contractUnion, "All nested ServerError objects must match the union of all endpoint contracts")
     }
 
     @Test
     fun `no auth errors overlap with common errors`() {
         val commonCodes = CommonServerError.entries.map { it.code }.toSet()
-        val authCodes = AuthErrors.all.map { it.code }.toSet()
+        val authCodes = allContracts.flatMap { it.second.entries }.map { it.code }.toSet()
         val overlap = commonCodes.intersect(authCodes)
         assertTrue(overlap.isEmpty(), "Auth errors must not overlap with CommonServerError codes: $overlap")
     }
@@ -76,7 +66,10 @@ class AuthContractCompletenessTest {
         assertNotNull(stream, "Golden snapshot file /auth-error-codes-golden.txt must exist")
         val goldenCodes = stream.bufferedReader().readLines().filter { it.isNotBlank() }
 
-        val actualCodes = AuthErrors.all.map { it.code.value }.sorted()
+        val actualCodes = allContracts.flatMap { it.second.entries }
+            .map { it.code.value }
+            .distinct()
+            .sorted()
         assertEquals(goldenCodes, actualCodes, "Auth error codes must match golden snapshot")
     }
 }

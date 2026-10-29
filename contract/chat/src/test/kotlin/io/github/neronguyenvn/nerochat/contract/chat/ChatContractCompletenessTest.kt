@@ -1,15 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
-import io.github.neronguyenvn.nerochat.contract.auth.error.AuthErrors
-import io.github.neronguyenvn.nerochat.contract.chat.error.AddParticipantsError
-import io.github.neronguyenvn.nerochat.contract.chat.error.ChatErrors
-import io.github.neronguyenvn.nerochat.contract.chat.error.CreateRoomError
-import io.github.neronguyenvn.nerochat.contract.chat.error.DeleteMessageError
-import io.github.neronguyenvn.nerochat.contract.chat.error.GetMessagesError
-import io.github.neronguyenvn.nerochat.contract.chat.error.GetParticipantError
-import io.github.neronguyenvn.nerochat.contract.chat.error.GetRoomError
-import io.github.neronguyenvn.nerochat.contract.chat.error.LeaveRoomError
-import io.github.neronguyenvn.nerochat.contract.chat.error.WebSocketError
+import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
+import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import io.github.neronguyenvn.nerochat.contract.error.CommonServerError
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
 import io.github.neronguyenvn.nerochat.contract.error.ServerError
@@ -22,14 +14,14 @@ import kotlin.test.assertTrue
 class ChatContractCompletenessTest {
 
     private val allContracts: List<Pair<KClass<*>, ErrorContract<*>>> = listOf(
-        GetParticipantError::class to GetParticipantError,
-        GetRoomError::class to GetRoomError,
-        GetMessagesError::class to GetMessagesError,
-        CreateRoomError::class to CreateRoomError,
-        AddParticipantsError::class to AddParticipantsError,
-        LeaveRoomError::class to LeaveRoomError,
-        DeleteMessageError::class to DeleteMessageError,
-        WebSocketError::class to WebSocketError,
+        ChatServerError.GetParticipant::class to ChatServerError.GetParticipant,
+        ChatServerError.GetRoom::class to ChatServerError.GetRoom,
+        ChatServerError.GetMessages::class to ChatServerError.GetMessages,
+        ChatServerError.CreateRoom::class to ChatServerError.CreateRoom,
+        ChatServerError.AddParticipants::class to ChatServerError.AddParticipants,
+        ChatServerError.LeaveRoom::class to ChatServerError.LeaveRoom,
+        ChatServerError.DeleteMessage::class to ChatServerError.DeleteMessage,
+        ChatServerError.WebSocket::class to ChatServerError.WebSocket,
     )
 
     @Test
@@ -53,29 +45,32 @@ class ChatContractCompletenessTest {
     }
 
     @Test
-    fun `ChatErrors catalog contains all declared objects and matches union of endpoint contracts`() {
-        val declaredObjects = ChatErrors::class.nestedClasses
+    fun `ChatServerError namespace contains all declared error objects and matches union of endpoint contracts`() {
+        val declaredObjects = ChatServerError::class.nestedClasses
             .mapNotNull { it.objectInstance as? ServerError }
             .toSet()
 
-        val catalogEntries = ChatErrors.all.toSet()
-        assertEquals(declaredObjects, catalogEntries, "ChatErrors.all must contain all nested ServerError objects in ChatErrors")
-
         val contractUnion = allContracts.flatMap { it.second.entries }.toSet()
-        assertEquals(catalogEntries, contractUnion, "ChatErrors.all must match the union of all endpoint contract entries")
+        assertEquals(declaredObjects, contractUnion, "All nested ServerError objects must match the union of all endpoint contracts")
     }
 
     @Test
     fun `no chat errors overlap with common errors`() {
         val commonCodes = CommonServerError.entries.map { it.code }.toSet()
-        val chatCodes = ChatErrors.all.map { it.code }.toSet()
+        val chatCodes = allContracts.flatMap { it.second.entries }.map { it.code }.toSet()
         val overlap = commonCodes.intersect(chatCodes)
         assertTrue(overlap.isEmpty(), "Chat errors must not overlap with CommonServerError codes: $overlap")
     }
 
     @Test
     fun `global error codes across all catalogs are unique`() {
-        val allCodes = (CommonServerError.entries + AuthErrors.all + ChatErrors.all).map { it.code.value }
+        val authCodes = AuthServerError::class.nestedClasses
+            .mapNotNull { (it.objectInstance as? ServerError)?.code?.value }
+        val chatCodes = ChatServerError::class.nestedClasses
+            .mapNotNull { (it.objectInstance as? ServerError)?.code?.value }
+        val commonCodes = CommonServerError.entries.map { it.code.value }
+
+        val allCodes = commonCodes + authCodes + chatCodes
         assertEquals(allCodes.size, allCodes.distinct().size, "All error codes must be globally unique")
         assertEquals(23, allCodes.size, "Expected exactly 23 error codes across the entire system")
     }
@@ -86,10 +81,13 @@ class ChatContractCompletenessTest {
         assertNotNull(stream, "Golden snapshot file /error-codes-golden.txt must exist")
         val goldenCodes = stream.bufferedReader().readLines().filter { it.isNotBlank() }
 
-        val actualCodes = (CommonServerError.entries + AuthErrors.all + ChatErrors.all)
-            .map { it.code.value }
-            .sorted()
+        val authCodes = AuthServerError::class.nestedClasses
+            .mapNotNull { (it.objectInstance as? ServerError)?.code?.value }
+        val chatCodes = ChatServerError::class.nestedClasses
+            .mapNotNull { (it.objectInstance as? ServerError)?.code?.value }
+        val commonCodes = CommonServerError.entries.map { it.code.value }
 
+        val actualCodes = (commonCodes + authCodes + chatCodes).sorted()
         assertEquals(goldenCodes, actualCodes, "Global error codes must match golden snapshot")
     }
 }

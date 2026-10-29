@@ -1,10 +1,6 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
-import io.github.neronguyenvn.nerochat.contract.chat.error.ChatErrors
-import io.github.neronguyenvn.nerochat.contract.chat.error.DeleteMessageError
-import io.github.neronguyenvn.nerochat.contract.chat.error.GetMessagesError
-import io.github.neronguyenvn.nerochat.contract.chat.error.GetRoomError
-import io.github.neronguyenvn.nerochat.contract.chat.error.WebSocketError
+import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
@@ -77,7 +73,7 @@ class ChatContractTest {
         val deserialized = json.decodeFromString<WsServerEvent>(serialized)
         assertEquals(message, deserialized)
 
-        val error = WsServerEvent.Error(error = ChatErrors.ChatRoomNotFound, message = "Not allowed")
+        val error = WsServerEvent.Error(error = ChatServerError.ChatRoomNotFound, message = "Not allowed")
         val serializedError = json.encodeToString<WsServerEvent>(error)
         assertTrue(serializedError.contains("\"type\":\"error\""))
         assertTrue(
@@ -87,7 +83,7 @@ class ChatContractTest {
         assertEquals(error, json.decodeFromString<WsServerEvent>(serializedError))
 
         val correlatedError = WsServerEvent.Error(
-            error = ChatErrors.ChatRoomNotFound,
+            error = ChatServerError.ChatRoomNotFound,
             message = "Room not found",
             roomId = "room-456",
             messageId = "msg-123",
@@ -102,7 +98,7 @@ class ChatContractTest {
     @Test
     fun `Chat error DTOs serialize correctly and exhaustive sub-interfaces match correctly`() {
         val errorResponse = ApiErrorDto(
-            error = ChatErrors.ChatRoomNotFound,
+            error = ChatServerError.ChatRoomNotFound,
             message = "Room not found",
         )
         val serialized = json.encodeToString(errorResponse)
@@ -111,11 +107,11 @@ class ChatContractTest {
             "Expected api error to contain string 'error':'ChatServerError.ChatRoomNotFound' but was: $serialized"
         )
         val deserialized = json.decodeFromString<ApiErrorDto>(serialized)
-        assertEquals(ChatErrors.ChatRoomNotFound.code, deserialized.error)
-        assertEquals(ChatErrors.ChatRoomNotFound, GetRoomError.fromCode(deserialized.error))
+        assertEquals(ChatServerError.ChatRoomNotFound.code, deserialized.error)
+        assertEquals(ChatServerError.ChatRoomNotFound, ChatServerError.GetRoom.fromCode(deserialized.error))
 
         val deleteResponse = ApiErrorDto(
-            error = ChatErrors.NotMessageSender,
+            error = ChatServerError.NotMessageSender,
             message = "Cannot delete message",
         )
         val serializedDelete = json.encodeToString(deleteResponse)
@@ -124,19 +120,21 @@ class ChatContractTest {
             "Expected delete error to contain string 'error':'ChatServerError.NotMessageSender' but was: $serializedDelete"
         )
         val deserializedDelete = json.decodeFromString<ApiErrorDto>(serializedDelete)
-        assertEquals(ChatErrors.NotMessageSender.code, deserializedDelete.error)
+        assertEquals(ChatServerError.NotMessageSender.code, deserializedDelete.error)
 
-        val deleteError: DeleteMessageError? = DeleteMessageError.fromCode(deserializedDelete.error)
+        val deleteError: ChatServerError.DeleteMessage? =
+            ChatServerError.DeleteMessage.fromCode(deserializedDelete.error)
         val result = when (deleteError) {
-            ChatErrors.MessageNotFound -> "not found"
-            ChatErrors.NotMessageSender -> "not sender"
+            ChatServerError.MessageNotFound -> "not found"
+            ChatServerError.NotMessageSender -> "not sender"
             null -> "unknown"
         }
         assertEquals("not sender", result)
 
-        val getMessagesError: GetMessagesError? = GetMessagesError.fromCode(ChatErrors.ParticipantNotInRoom.code)
+        val getMessagesError: ChatServerError.GetMessages? =
+            ChatServerError.GetMessages.fromCode(ChatServerError.ParticipantNotInRoom.code)
         val msgResult = when (getMessagesError) {
-            ChatErrors.ParticipantNotInRoom -> "not in room"
+            ChatServerError.ParticipantNotInRoom -> "not in room"
             null -> "unknown"
         }
         assertEquals("not in room", msgResult)

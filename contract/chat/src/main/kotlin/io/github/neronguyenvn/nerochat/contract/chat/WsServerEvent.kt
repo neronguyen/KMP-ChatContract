@@ -1,6 +1,6 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
-import io.github.neronguyenvn.nerochat.contract.chat.error.WebSocketError
+import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -50,7 +50,7 @@ sealed class WsServerEvent {
         val messageId: String? = null,
     ) : WsServerEvent() {
         constructor(
-            error: WebSocketError,
+            error: ChatServerError.WebSocket,
             message: String,
             roomId: String? = null,
             messageId: String? = null,
