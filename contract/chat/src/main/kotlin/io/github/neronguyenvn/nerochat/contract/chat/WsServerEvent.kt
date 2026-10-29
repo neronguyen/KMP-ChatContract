@@ -1,6 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
-import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
+import io.github.neronguyenvn.nerochat.contract.chat.error.WebSocketError
+import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,11 +44,23 @@ sealed class WsServerEvent {
     @Serializable
     @SerialName(ERROR)
     data class Error(
-        val error: ChatServerError.WebSocket,
+        val error: ErrorCode,
         val message: String,
         val roomId: String? = null,
         val messageId: String? = null,
-    ) : WsServerEvent()
+    ) : WsServerEvent() {
+        constructor(
+            error: WebSocketError,
+            message: String,
+            roomId: String? = null,
+            messageId: String? = null,
+        ) : this(
+            error = error.code,
+            message = message,
+            roomId = roomId,
+            messageId = messageId,
+        )
+    }
 
     companion object {
         const val NEW_MESSAGE = "new_message"

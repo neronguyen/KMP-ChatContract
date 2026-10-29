@@ -1,10 +1,17 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
+import io.github.neronguyenvn.nerochat.contract.auth.error.AuthErrors
 import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
+import io.github.neronguyenvn.nerochat.contract.auth.error.ChangePasswordError
+import io.github.neronguyenvn.nerochat.contract.auth.error.LoginError
+import io.github.neronguyenvn.nerochat.contract.auth.error.RegisterError
 import io.github.neronguyenvn.nerochat.contract.error.ApiErrorResponse
+import io.github.neronguyenvn.nerochat.contract.error.ApiFailure
+import io.github.neronguyenvn.nerochat.contract.error.toFailure
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class AuthContractTest {
@@ -42,37 +49,54 @@ class AuthContractTest {
     }
 
     @Test
-    fun `AuthServerError serializes polymorphically and exhaustive endpoint sub-interfaces match correctly`() {
-        val errorResponse = ApiErrorResponse<AuthServerError>(
-            error = AuthServerError.InvalidCredentials,
+    fun `AuthServerError serializes and exhaustive endpoint contracts match correctly`() {
+        val errorResponse = ApiErrorResponse(
+            error = AuthErrors.InvalidCredentials,
             message = "Invalid email or password",
         )
         val serialized = json.encodeToString(errorResponse)
-        val deserialized = json.decodeFromString<ApiErrorResponse<AuthServerError>>(serialized)
-        assertEquals(AuthServerError.InvalidCredentials, deserialized.error)
+        assertTrue(
+            serialized.contains("\"error\":\"AuthServerError.InvalidCredentials\""),
+            "Expected wire format to contain 'error':'AuthServerError.InvalidCredentials' but was: $serialized"
+        )
+        val deserialized = json.decodeFromString<ApiErrorResponse>(serialized)
+        assertEquals(AuthErrors.InvalidCredentials.code, deserialized.error)
+        assertEquals(AuthErrors.InvalidCredentials, AuthServerError.fromCode(deserialized.error))
 
-        val loginResponse = ApiErrorResponse<AuthServerError.Login>(
-            error = AuthServerError.InvalidCredentials,
+        val loginResponse = ApiErrorResponse(
+            error = AuthErrors.InvalidCredentials,
             message = "Invalid credentials",
         )
         val serializedLogin = json.encodeToString(loginResponse)
-        val deserializedLogin = json.decodeFromString<ApiErrorResponse<AuthServerError.Login>>(serializedLogin)
-        assertEquals(AuthServerError.InvalidCredentials, deserializedLogin.error)
+        assertTrue(
+            serializedLogin.contains("\"error\":\"AuthServerError.InvalidCredentials\""),
+            "Expected wire format to contain 'error':'AuthServerError.InvalidCredentials' but was: $serializedLogin"
+        )
+        val deserializedLogin = json.decodeFromString<ApiErrorResponse>(serializedLogin)
+        assertEquals(AuthErrors.InvalidCredentials.code, deserializedLogin.error)
 
-        val loginError: AuthServerError.Login = deserializedLogin.error
+        val loginError: LoginError? = LoginError.fromCode(deserializedLogin.error)
         val message = when (loginError) {
-            AuthServerError.InvalidCredentials -> "bad creds"
-            AuthServerError.EmailNotVerified -> "unverified"
+            AuthErrors.InvalidCredentials -> "bad creds"
+            AuthErrors.EmailNotVerified -> "unverified"
+            null -> "unknown"
         }
         assertEquals("bad creds", message)
 
-        val changePasswordError: AuthServerError.ChangePassword = AuthServerError.WrongPassword
+        val changePasswordError: ChangePasswordError? = ChangePasswordError.fromCode(AuthErrors.WrongPassword.code)
         val changePasswordMessage = when (changePasswordError) {
-            AuthServerError.WrongPassword -> "wrong password"
-            AuthServerError.SamePassword -> "same password"
-            AuthServerError.UserNotFound -> "user not found"
+            AuthErrors.WrongPassword -> "wrong password"
+            AuthErrors.SamePassword -> "same password"
+            AuthErrors.UserNotFound -> "user not found"
+            null -> "unknown"
         }
         assertEquals("wrong password", changePasswordMessage)
+
+        // Test classification via toFailure
+        val failure = deserializedLogin.toFailure(LoginError, 401)
+        assertIs<ApiFailure.Business<LoginError>>(failure)
+        assertEquals(AuthErrors.InvalidCredentials, failure.error)
+        assertEquals("Invalid credentials", failure.details.message)
     }
 
     @Test

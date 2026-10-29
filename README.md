@@ -6,9 +6,30 @@ NeroChat (shared between the Spring Boot backend and Android/Kotlin clients).
 ## Modules
 
 ### Contract
-- `:contract:common`: Shared error models (`ServerError`, `CommonServerError`, `ApiErrorResponse`).
-- `:contract:auth`: Authentication DTOs (`UserDto`, `AuthenticatedUserDto`) and error models (`AuthServerError`).
-- `:contract:chat`: Chat DTOs (`ChatRoomDto`, `ChatParticipantDto`, `ChatMessageDto`, `ChatMessageSliceDto`, `ChatRoomType`), error models (`ChatServerError`), and WebSocket contracts (`WsClientMessage`, `WsServerEvent`).
+- `:contract:common`: Shared error models (`ErrorCode`, `ServerError`, `ErrorContract`, `CommonServerError`, `CommonErrors`, `ApiErrorResponse`, `ApiFailure`).
+- `:contract:auth`: Authentication DTOs (`UserDto`, `AuthenticatedUserDto`) and per-endpoint error contracts (`AuthErrors`, `RegisterError`, `LoginError`, `RefreshTokenError`, `LogoutError`, `VerifyEmailError`, `ResetPasswordError`, `ChangePasswordError`, `AuthServerError`).
+- `:contract:chat`: Chat DTOs (`ChatRoomDto`, `ChatParticipantDto`, `ChatMessageDto`, `ChatMessageSliceDto`, `ChatRoomType`), per-endpoint error contracts (`ChatErrors`, `GetParticipantError`, `GetRoomError`, `GetMessagesError`, `CreateRoomError`, `AddParticipantsError`, `LeaveRoomError`, `DeleteMessageError`, `WebSocketError`, `ChatServerError`), and WebSocket contracts (`WsClientMessage`, `WsServerEvent`).
+
+### Error Handling Architecture
+
+The library defines a flat-wire, type-safe, reflection-free error contract system:
+
+1. **Wire DTO**: `ApiErrorResponse` wraps a flat `@Serializable @JvmInline value class ErrorCode(val value: String)`.
+2. **Per-Endpoint Contracts**: Each endpoint defines a top-level sealed interface (`RegisterError`, `LoginError`, etc.) with a companion `ErrorContract` cataloging its entries.
+3. **Client Classification**: Clients safely decode into `ApiErrorResponse` and classify via `response.toFailure(contract, status)` into `ApiFailure` (`Business`, `Common`, `Unknown`, `Network`):
+   ```kotlin
+   val response = json.decodeFromString<ApiErrorResponse>(jsonBody)
+   when (val failure = response.toFailure(LoginError, statusCode)) {
+       is ApiFailure.Business -> when (failure.error) {
+           AuthErrors.InvalidCredentials -> showCredentialsError()
+           AuthErrors.EmailNotVerified -> showVerificationRequired()
+       }
+       is ApiFailure.Common -> handleCommonError(failure.error)
+       is ApiFailure.Unknown -> handleUnknownCode(failure.code)
+       is ApiFailure.Network -> handleNetworkError(failure.cause)
+   }
+   ```
+4. **Backend Enforcement**: Backend services return sealed results per endpoint contract (e.g. `Either<RegisterError, T>`), mapped directly to HTTP responses via `error.code`, while cross-cutting exceptions map to `CommonServerError` in `@ControllerAdvice`.
 
 ### Validation
 - `:validation:common`: Shared validators (`EmailValidator`, `UuidValidator`, `ValidationError`).

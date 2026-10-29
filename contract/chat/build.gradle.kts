@@ -13,7 +13,9 @@ dependencies {
     api(projects.validation.chat)
     implementation(libs.kotlinx.serialization.json)
 
+    testImplementation(projects.contract.auth)
     testImplementation(kotlin("test"))
+    testImplementation(kotlin("reflect"))
 }
 
 tasks.test {
