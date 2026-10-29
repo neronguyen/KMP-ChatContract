@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonClassDiscriminator("type")
+@JsonClassDiscriminator(WsClientMessage.CLASS_DISCRIMINATOR)
 sealed class WsClientMessage {
 
     @Serializable
@@ -19,6 +19,7 @@ sealed class WsClientMessage {
     ) : WsClientMessage()
 
     companion object {
+        const val CLASS_DISCRIMINATOR = "type"
         const val NEW_MESSAGE = "new_message"
     }
 }

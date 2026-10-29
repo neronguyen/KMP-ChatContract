@@ -1,6 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
 import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
+import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,7 +9,7 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonClassDiscriminator("type")
+@JsonClassDiscriminator(WsServerEvent.CLASS_DISCRIMINATOR)
 sealed class WsServerEvent {
 
     @Serializable
@@ -43,13 +44,26 @@ sealed class WsServerEvent {
     @Serializable
     @SerialName(ERROR)
     data class Error(
-        val error: ChatServerError.WebSocket,
+        val error: ErrorCode,
         val message: String,
         val roomId: String? = null,
         val messageId: String? = null,
-    ) : WsServerEvent()
+    ) : WsServerEvent() {
+        constructor(
+            error: ChatServerError.WebSocket,
+            message: String,
+            roomId: String? = null,
+            messageId: String? = null,
+        ) : this(
+            error = error.code,
+            message = message,
+            roomId = roomId,
+            messageId = messageId,
+        )
+    }
 
     companion object {
+        const val CLASS_DISCRIMINATOR = "type"
         const val NEW_MESSAGE = "new_message"
         const val MESSAGE_DELETED = "message_deleted"
         const val PARTICIPANT_JOINED = "participant_joined"

@@ -1,7 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
 import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
-import io.github.neronguyenvn.nerochat.contract.error.ApiErrorResponse
+import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -76,6 +76,10 @@ class ChatContractTest {
         val error = WsServerEvent.Error(error = ChatServerError.ChatRoomNotFound, message = "Not allowed")
         val serializedError = json.encodeToString<WsServerEvent>(error)
         assertTrue(serializedError.contains("\"type\":\"error\""))
+        assertTrue(
+            serializedError.contains("\"error\":\"ChatServerError.ChatRoomNotFound\""),
+            "Expected ws error to contain string 'error':'ChatServerError.ChatRoomNotFound' but was: $serializedError"
+        )
         assertEquals(error, json.decodeFromString<WsServerEvent>(serializedError))
 
         val correlatedError = WsServerEvent.Error(
@@ -92,33 +96,46 @@ class ChatContractTest {
     }
 
     @Test
-    fun `ChatServerError serializes polymorphically and exhaustive sub-interfaces match correctly`() {
-        val errorResponse = ApiErrorResponse<ChatServerError>(
+    fun `Chat error DTOs serialize correctly and exhaustive sub-interfaces match correctly`() {
+        val errorResponse = ApiErrorDto(
             error = ChatServerError.ChatRoomNotFound,
             message = "Room not found",
         )
         val serialized = json.encodeToString(errorResponse)
-        val deserialized = json.decodeFromString<ApiErrorResponse<ChatServerError>>(serialized)
-        assertEquals(ChatServerError.ChatRoomNotFound, deserialized.error)
+        assertTrue(
+            serialized.contains("\"error\":\"ChatServerError.ChatRoomNotFound\""),
+            "Expected api error to contain string 'error':'ChatServerError.ChatRoomNotFound' but was: $serialized"
+        )
+        val deserialized = json.decodeFromString<ApiErrorDto>(serialized)
+        assertEquals(ChatServerError.ChatRoomNotFound.code, deserialized.error)
+        assertEquals(ChatServerError.ChatRoomNotFound, ChatServerError.GetRoom.fromCode(deserialized.error))
 
-        val deleteResponse = ApiErrorResponse<ChatServerError.DeleteMessage>(
+        val deleteResponse = ApiErrorDto(
             error = ChatServerError.NotMessageSender,
             message = "Cannot delete message",
         )
         val serializedDelete = json.encodeToString(deleteResponse)
-        val deserializedDelete = json.decodeFromString<ApiErrorResponse<ChatServerError.DeleteMessage>>(serializedDelete)
-        assertEquals(ChatServerError.NotMessageSender, deserializedDelete.error)
+        assertTrue(
+            serializedDelete.contains("\"error\":\"ChatServerError.NotMessageSender\""),
+            "Expected delete error to contain string 'error':'ChatServerError.NotMessageSender' but was: $serializedDelete"
+        )
+        val deserializedDelete = json.decodeFromString<ApiErrorDto>(serializedDelete)
+        assertEquals(ChatServerError.NotMessageSender.code, deserializedDelete.error)
 
-        val deleteError: ChatServerError.DeleteMessage = deserializedDelete.error
+        val deleteError: ChatServerError.DeleteMessage? =
+            ChatServerError.DeleteMessage.fromCode(deserializedDelete.error)
         val result = when (deleteError) {
             ChatServerError.MessageNotFound -> "not found"
             ChatServerError.NotMessageSender -> "not sender"
+            null -> "unknown"
         }
         assertEquals("not sender", result)
 
-        val getMessagesError: ChatServerError.GetMessages = ChatServerError.ParticipantNotInRoom
+        val getMessagesError: ChatServerError.GetMessages? =
+            ChatServerError.GetMessages.fromCode(ChatServerError.ParticipantNotInRoom.code)
         val msgResult = when (getMessagesError) {
             ChatServerError.ParticipantNotInRoom -> "not in room"
+            null -> "unknown"
         }
         assertEquals("not in room", msgResult)
     }

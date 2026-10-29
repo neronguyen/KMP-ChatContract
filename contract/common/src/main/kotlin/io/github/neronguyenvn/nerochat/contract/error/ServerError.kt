@@ -1,6 +1,8 @@
 package io.github.neronguyenvn.nerochat.contract.error
 
 /**
- * Base contract interface implemented by all feature server error hierarchies.
+ * Base contract interface implemented by all server error hierarchies.
  */
-interface ServerError
+interface ServerError {
+    val code: ErrorCode
+}

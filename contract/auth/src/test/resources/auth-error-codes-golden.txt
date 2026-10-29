@@ -1,0 +1,7 @@
+AuthServerError.EmailNotVerified
+AuthServerError.InvalidCredentials
+AuthServerError.InvalidToken
+AuthServerError.SamePassword
+AuthServerError.UserAlreadyExists
+AuthServerError.UserNotFound
+AuthServerError.WrongPassword
