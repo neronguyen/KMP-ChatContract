@@ -20,7 +20,7 @@ object ChatValidator {
     ): ChatValidationError.SearchParticipant? {
         if (email.isNullOrBlank()) return ChatValidationError.EmptySearchEmail
         if (!EmailValidator.isValidEmail(email)) return ChatValidationError.InvalidSearchEmail
-        if (currentUserEmail != null && email.trim().equals(currentUserEmail.trim(), ignoreCase = true)) {
+        if (currentUserEmail != null && EmailValidator.normalize(email) == EmailValidator.normalize(currentUserEmail)) {
             return ChatValidationError.SelfParticipantNotAllowed
         }
         return null

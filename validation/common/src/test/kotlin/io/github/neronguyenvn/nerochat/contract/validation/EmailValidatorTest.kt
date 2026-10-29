@@ -1,10 +1,18 @@
 package io.github.neronguyenvn.nerochat.contract.validation
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class EmailValidatorTest {
+
+    @Test
+    fun testNormalize() {
+        assertEquals("user@example.com", EmailValidator.normalize("  user@example.com  "))
+        assertEquals("user@example.com", EmailValidator.normalize("USER@EXAMPLE.COM"))
+        assertEquals("user@example.com", EmailValidator.normalize("  User@Example.Com  "))
+    }
 
     @Test
     fun testValidEmails() {

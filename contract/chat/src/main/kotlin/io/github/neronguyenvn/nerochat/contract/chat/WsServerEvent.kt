@@ -9,7 +9,7 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonClassDiscriminator("type")
+@JsonClassDiscriminator(WsServerEvent.CLASS_DISCRIMINATOR)
 sealed class WsServerEvent {
 
     @Serializable
@@ -63,6 +63,7 @@ sealed class WsServerEvent {
     }
 
     companion object {
+        const val CLASS_DISCRIMINATOR = "type"
         const val NEW_MESSAGE = "new_message"
         const val MESSAGE_DELETED = "message_deleted"
         const val PARTICIPANT_JOINED = "participant_joined"

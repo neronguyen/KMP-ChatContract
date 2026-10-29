@@ -1,7 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.validation
 
 /**
- * Shared ASCII-only email validation rule across client and backend.
+ * Shared ASCII-only email validation and normalization rule across client and backend.
  */
 object EmailValidator {
 
@@ -13,6 +13,11 @@ object EmailValidator {
      */
     val EMAIL_REGEX =
         Regex("^[A-Za-z0-9+_-]+(\\.[A-Za-z0-9+_-]+)*@[A-Za-z0-9][A-Za-z0-9-]*(\\.[A-Za-z0-9][A-Za-z0-9-]*)+$")
+
+    /**
+     * Canonicalizes [email] by trimming leading/trailing whitespace and converting to lowercase.
+     */
+    fun normalize(email: String): String = email.trim().lowercase()
 
     /**
      * Returns whether [email] matches [EMAIL_REGEX] in full, without trimming whitespace.
