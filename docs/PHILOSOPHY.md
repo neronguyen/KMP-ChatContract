@@ -2,51 +2,78 @@
 
 *Durable "why." Change rarely, and only deliberately.*
 
+---
+
 ## 1. Core Claim
 
-> **Chat is a personal lab for learning how client–server communication systems really work — by building them,
-verifying them, and explaining them.**
+> **Chat is a personal systems lab for mastering how client–server communication really works — by building it,
+verifying it deterministically, and explaining it publicly.**
 
-It is not a product. Success is understanding, not users.
+It is not a commercial product. Success is measured by architectural clarity, deterministic verification, and the
+engineering artifacts produced (production-grade codebase, public case studies, and resume proof-of-work) — not user
+count.
 
-## 2. The Loop
+---
 
-I work with AI as a fast pair-programmer, but I maintain full ownership through this loop:
+## 2. The Ownership Loop
 
-1. **Build (Core over Plumbing)**: I master the critical paths — data flow, contracts, and state lifecycles. AI handles
-   boilerplate and peripheral configs (`OpenApi`, generators), but the architectural intent remains mine.
-2. **Verify (From Manual to Automated)**: Never trust generated code blindly. Verify by seeing real messages flow, then
-   turn those manual checks into automated end-to-end tests so agents can verify their own work.
-3. **Synthesize (Block by Block)**: To truly own what I build, I distill it in layers — starting with mental models
-   (Philosophy, Architecture, Sequence Flows), then scaling up to full articles. Writing is how I verify that I actually
-   understand the system.
+I collaborate with AI agents as high-speed executors, but I retain 100% architectural ownership through a strict
+three-stage loop:
 
-## 3. Decision Filter
+1. **Build (Core over Plumbing)**: I own the critical paths — system boundaries, wire contracts, concurrency, and state
+   lifecycles. AI agents generate peripheral plumbing, boilerplate, and code from strict schemas (OpenAPI / Protobuf /
+   Kotlin contracts).
+2. **Verify (Deterministic Harness over Manual Checks)**: Generated code is an unverified hypothesis. Every critical
+   flow must transition from observable runtime behavior into an automated, headless verification harness (CLI levers,
+   contract tests, E2E pipelines) so agents can self-verify without human babysitting.
+3. **Synthesize (Code to Public Artifact)**: Understanding is incomplete until explained. Every major architectural
+   milestone must be distilled into mental models, sequence diagrams, and deep-dive technical articles that prove
+   mastery to the broader engineering community.
 
-> **Does this deepen my understanding of how systems communicate, and can I verify and explain it?**
+---
 
-- Build the mechanics directly; avoid black-box SDKs that hide the lesson.
-- Keep the client–server contract explicit, typed, and compile-safe.
-- Build for compounding knowledge, not one-off gimmicks.
-- UI polish and feature cloning do not pass.
+## 3. Decision Filter & Boundary Rules
+
+> **Does this deepen my mastery of distributed client–server mechanics, and can I deterministically verify and explain
+it?**
+
+- **Expose the Mechanics (Abstraction Ceiling)**: Use foundational transport and storage primitives (e.g., Spring Boot,
+  OkHttp/Ktor, raw WebSockets/gRPC, PostgreSQL, Room). Strictly ban black-box BaaS or chat SDKs (Firebase, Sendbird,
+  Pusher, Supabase Realtime) that hide connection lifecycles, backpressure, or state synchronization.
+- **Schema as Single Source of Truth**: Client–server contracts must be explicit, versioned, and compile-safe. Never
+  hand-write duplicate DTOs across Android and Spring Boot; all wire models must derive from a unified contract
+  definition.
+- **Compound Engineering Value**: Prioritize problems that teach transferable systems engineering (idempotency,
+  offline-first sync, cursor pagination, reconnection backoff, automated agent harnesses).
+- **Reject Cosmetic Bloat**: UI polish, animations, and clone features that do not stress-test the architecture or
+  contribute to the core technical narrative do not pass.
+
+---
 
 ## 4. Technology Is a Vehicle
 
-Platforms and frameworks are replaceable (Android → KMP, one backend → another).
-Changing them is valid when the change itself is the lesson.
+Frameworks and runtimes are replaceable vehicles (Android → KMP, Spring Boot → Ktor, REST → WebSockets/gRPC). Switching
+technologies is only justified when the migration itself exposes a deeper architectural trade-off worth measuring and
+writing about.
 
-## 5. AI Relationship
+---
 
-> **AI is my co-pilot and senior pair-programmer; I am the gatekeeper of the architecture.**
+## 5. AI & Agentic Governance
 
-- **Shared execution, personal direction**: Agents propose solutions, write boilerplate, and draft code. I steer the
-  intent, choose the trade-offs, and guard the core data paths.
-- **Pragmatic understanding**: I don't need to memorize every line of peripheral plumbing, but I must understand the
-  core mechanics and explain why the system works the way it does.
-- **Trust through verification**: Generated code is an unverified hypothesis until proven by automated tests or working
-  flows.
-- **A playground for agentic workflows**: How to guide, constrain, and automate verification for AI agents inside this
-  codebase is an active subject of study.
+> **AI is the execution engine; I am the systems architect and governor.**
+
+- **Constrained Autonomy**: Agents do not invent architecture. They operate inside strict module boundaries, type
+  invariants, and contract schemas defined by me.
+- **Build the Verification Lever**: Whenever an agent struggles to verify its work or repeats a mistake, the solution is
+  not longer prompts — it is building a better deterministic tool (linter rule, headless test runner, or structured JSON
+  CLI output).
+- **Mandatory Agent Planning Protocol**: Whenever an AI agent proposes an implementation plan in this repository, the
+  plan must explicitly state:
+    1. **Core Mechanic & Trade-off**: Which state lifecycle, failure mode, or communication invariant is being solved,
+       and what was traded off?
+    2. **Contract & Boundary Impact**: How does this change affect the client–server schema and module boundaries?
+    3. **Deterministic Verification Step**: What exact automated test or CLI command will prove this change works
+       end-to-end without manual UI clicking?
 
 ---
 
