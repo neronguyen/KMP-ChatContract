@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chat System Context (C4 Level 1)",
+    "output": "docs/architecture/interactive/c4-system-context.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "git@github.com:neronguyen/KMP-NeroChatBackend.git",
+      "link_mode": "local-only",
+      "revision": "fbe62fac32064a428d721f72577476ab8a5ce038"
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "icon": "person",
+      "label": "User",
+      "sublabel": "Registered chat user",
+      "pos": [
+        40,
+        50
+      ],
+      "size": [
+        155,
+        66
+      ],
+      "sources": [
+        {
+          "path": "chat/src/main/kotlin/io/github/neronguyenvn/nerochat/chat/api/websocket/ChatWebSocketHandler.kt",
+          "line": 54,
+          "end_line": 71
+        }
+      ]
+    },
+    {
+      "id": "chat_system",
+      "type": "backend",
+      "label": "Chat System",
+      "sublabel": "Account & real-time messaging",
+      "tag": "Software System",
+      "pos": [
+        420,
+        50
+      ],
+      "size": [
+        190,
+        68
+      ],
+      "sources": [
+        {
+          "path": "app/src/main/kotlin/io/github/neronguyenvn/nerochat/ChatApp.kt",
+          "line": 1,
+          "end_line": 13
+        },
+        {
+          "path": "settings.gradle.kts",
+          "line": 34,
+          "end_line": 62
+        }
+      ]
+    },
+    {
+      "id": "mail_system",
+      "type": "external",
+      "label": "Email System",
+      "sublabel": "Transactional email delivery",
+      "tag": "External System",
+      "pos": [
+        820,
+        50
+      ],
+      "size": [
+        175,
+        66
+      ],
+      "sources": [
+        {
+          "path": "notification/src/main/kotlin/io/github/neronguyenvn/nerochat/notification/service/EmailService.kt",
+          "line": 30,
+          "end_line": 57
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user_to_chat",
+      "from": "user",
+      "to": "chat_system",
+      "label": "Registers & exchanges messages",
+      "variant": "emphasis"
+    },
+    {
+      "id": "chat_to_mail",
+      "from": "chat_system",
+      "to": "mail_system",
+      "label": "Sends verification & reset emails"
+    },
+    {
+      "id": "mail_to_user",
+      "from": "mail_system",
+      "to": "user",
+      "label": "Delivers emails to",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "System Scope",
+      "items": [
+        "Chat System provides user registration, account verification, password recovery, and real-time messaging across direct and group rooms"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "External Dependencies",
+      "items": [
+        "Delegates transactional email delivery (account verification links and password-reset tokens) to an external Email System"
+      ]
+    }
+  ]
+}
