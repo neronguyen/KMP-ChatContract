@@ -20,9 +20,9 @@ count.
 I collaborate with AI agents as high-speed executors, but I retain 100% architectural ownership through a strict
 three-stage loop:
 
-1. **Build (Core over Plumbing)**: I own the critical paths — system boundaries, wire contracts, concurrency, and state
-   lifecycles. AI agents generate peripheral plumbing, boilerplate, and code from strict schemas (OpenAPI / Protobuf /
-   Kotlin contracts).
+1. **Build (Core over Plumbing)**: I own the critical paths — system boundaries, wire contracts, sequence flows,
+   concurrency, and state lifecycles. AI agents generate peripheral plumbing, boilerplate, and code from strict schemas
+   (OpenAPI / Protobuf / Kotlin contracts).
 2. **Verify (Deterministic Harness over Manual Checks)**: Generated code is an unverified hypothesis. Every critical
    flow must transition from observable runtime behavior into an automated, headless verification harness (CLI levers,
    contract tests, E2E pipelines) so agents can self-verify without human babysitting.
