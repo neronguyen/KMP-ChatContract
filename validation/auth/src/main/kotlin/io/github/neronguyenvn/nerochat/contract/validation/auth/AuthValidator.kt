@@ -100,11 +100,73 @@ object AuthValidator {
         return emptyList()
     }
 
+    private val OTP_REGEX = Regex("^\\d{6}$")
+
+    /**
+     * Returns `EmptyOtpCode` for null or blank input, `InvalidOtpCode` if
+     * it is not a 6-digit numeric string, or `null` if valid.
+     */
+    fun validateOtpCode(code: String?): AuthValidationError? {
+        if (code.isNullOrBlank()) return AuthValidationError.EmptyOtpCode
+        if (!OTP_REGEX.matches(code)) return AuthValidationError.InvalidOtpCode
+        return null
+    }
+
+    /**
+     * Checks email format and 6-digit OTP code.
+     * Returns at most one error per field in email, code order, or an empty list.
+     */
+    fun validateVerifyEmail(
+        email: String?,
+        code: String?,
+    ): List<AuthValidationError.VerifyEmail> {
+        val errors = mutableListOf<AuthValidationError.VerifyEmail>()
+        if (email.isNullOrBlank()) {
+            errors.add(AuthValidationError.EmptyEmail)
+        } else if (!EmailValidator.isValidEmail(email)) {
+            errors.add(AuthValidationError.InvalidEmail)
+        }
+
+        validateOtpCode(code)?.let {
+            if (it is AuthValidationError.VerifyEmail) errors.add(it)
+        }
+        return errors
+    }
+
+    /**
+     * Checks email format, 6-digit OTP code, and [PasswordValidator.isValidPassword].
+     * Returns at most one error per field in email, code, password order, or an empty list.
+     */
+    fun validateResetPassword(
+        email: String?,
+        code: String?,
+        newPassword: String?,
+    ): List<AuthValidationError.ResetPassword> {
+        val errors = mutableListOf<AuthValidationError.ResetPassword>()
+        if (email.isNullOrBlank()) {
+            errors.add(AuthValidationError.EmptyEmail)
+        } else if (!EmailValidator.isValidEmail(email)) {
+            errors.add(AuthValidationError.InvalidEmail)
+        }
+
+        validateOtpCode(code)?.let {
+            if (it is AuthValidationError.ResetPassword) errors.add(it)
+        }
+
+        if (newPassword.isNullOrBlank()) {
+            errors.add(AuthValidationError.EmptyNewPassword)
+        } else if (!PasswordValidator.isValidPassword(newPassword)) {
+            errors.add(AuthValidationError.InvalidNewPassword)
+        }
+        return errors
+    }
+
     /**
      * Checks that [token] is nonblank and [newPassword] satisfies [PasswordValidator.isValidPassword].
      * Returns at most one error per field in token, password order, or an empty list.
      * Null and blank inputs produce the corresponding empty-field errors.
      */
+    @Deprecated("Use validateResetPassword(email, code, newPassword)", ReplaceWith("validateResetPassword(email, code, newPassword)"))
     fun validateResetPassword(
         token: String?,
         newPassword: String?,

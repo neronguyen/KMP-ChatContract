@@ -31,12 +31,15 @@ sealed interface AuthValidationError : ValidationError {
     /** Validation errors for password change. */
     sealed interface ChangePassword : AuthValidationError
 
-    data object EmptyEmail : Email, Register, Login {
+    /** Validation errors for email verification. */
+    sealed interface VerifyEmail : AuthValidationError
+
+    data object EmptyEmail : Email, Register, Login, VerifyEmail, ResetPassword {
         override val field: String = "email"
         override val message: String = "Email must not be blank"
     }
 
-    data object InvalidEmail : Email, Register, Login {
+    data object InvalidEmail : Email, Register, Login, VerifyEmail, ResetPassword {
         override val field: String = "email"
         override val message: String = "Invalid email format"
     }
@@ -62,6 +65,17 @@ sealed interface AuthValidationError : ValidationError {
         override val message: String = "Refresh token must not be blank"
     }
 
+    data object EmptyOtpCode : VerifyEmail, ResetPassword {
+        override val field: String = "code"
+        override val message: String = "OTP code must not be blank"
+    }
+
+    data object InvalidOtpCode : VerifyEmail, ResetPassword {
+        override val field: String = "code"
+        override val message: String = "OTP code must be 6 digits"
+    }
+
+    @Deprecated("Replaced by EmptyOtpCode", ReplaceWith("EmptyOtpCode"))
     data object EmptyResetToken : ResetPassword {
         override val field: String = "token"
         override val message: String = "Token must not be blank"

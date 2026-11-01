@@ -93,9 +93,58 @@ class AuthValidatorTest {
     }
 
     @Test
+    fun testValidateOtpCode() {
+        assertNull(AuthValidator.validateOtpCode("123456"))
+        assertNull(AuthValidator.validateOtpCode("000000"))
+
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode(null))
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode(""))
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode("   "))
+        assertEquals(AuthValidationError.InvalidOtpCode, AuthValidator.validateOtpCode("12345"))
+        assertEquals(AuthValidationError.InvalidOtpCode, AuthValidator.validateOtpCode("1234567"))
+        assertEquals(AuthValidationError.InvalidOtpCode, AuthValidator.validateOtpCode("12a456"))
+    }
+
+    @Test
+    fun testValidateVerifyEmail() {
+        val valid = AuthValidator.validateVerifyEmail("user@example.com", "123456")
+        assertTrue(valid.isEmpty())
+
+        val invalid = AuthValidator.validateVerifyEmail("bad-email", "abc")
+        assertEquals(2, invalid.size)
+        assertTrue(invalid.contains(AuthValidationError.InvalidEmail))
+        assertTrue(invalid.contains(AuthValidationError.InvalidOtpCode))
+
+        val empty = AuthValidator.validateVerifyEmail("", "")
+        assertEquals(2, empty.size)
+        assertTrue(empty.contains(AuthValidationError.EmptyEmail))
+        assertTrue(empty.contains(AuthValidationError.EmptyOtpCode))
+    }
+
+    @Test
+    fun testValidateResetPasswordWithOtp() {
+        val valid = AuthValidator.validateResetPassword("user@example.com", "123456", "newPassword1")
+        assertTrue(valid.isEmpty())
+
+        val errors = AuthValidator.validateResetPassword("not-email", "12", "weak")
+        assertEquals(3, errors.size)
+        assertTrue(errors.contains(AuthValidationError.InvalidEmail))
+        assertTrue(errors.contains(AuthValidationError.InvalidOtpCode))
+        assertTrue(errors.contains(AuthValidationError.InvalidNewPassword))
+
+        val emptyErrors = AuthValidator.validateResetPassword("", "", "")
+        assertEquals(3, emptyErrors.size)
+        assertTrue(emptyErrors.contains(AuthValidationError.EmptyEmail))
+        assertTrue(emptyErrors.contains(AuthValidationError.EmptyOtpCode))
+        assertTrue(emptyErrors.contains(AuthValidationError.EmptyNewPassword))
+    }
+
+    @Test
     fun testValidateResetPassword() {
+        @Suppress("DEPRECATION")
         assertTrue(AuthValidator.validateResetPassword("token123", "newPassword1").isEmpty())
 
+        @Suppress("DEPRECATION")
         val errors = AuthValidator.validateResetPassword("", "weak")
         assertEquals(2, errors.size)
         assertTrue(errors.contains(AuthValidationError.EmptyResetToken))

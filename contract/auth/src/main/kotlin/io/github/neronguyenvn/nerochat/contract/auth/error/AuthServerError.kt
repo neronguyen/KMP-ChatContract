@@ -32,13 +32,21 @@ object AuthServerError {
     }
 
     sealed interface VerifyEmail : ServerError {
-        companion object : ErrorContract<VerifyEmail>(listOf(InvalidToken))
+        companion object : ErrorContract<VerifyEmail>(
+            listOf(
+                InvalidToken,
+                OtpExpired,
+                MaxAttemptsExceeded,
+            )
+        )
     }
 
     sealed interface ResetPassword : ServerError {
         companion object : ErrorContract<ResetPassword>(
             listOf(
                 InvalidToken,
+                OtpExpired,
+                MaxAttemptsExceeded,
                 SamePassword,
             )
         )
@@ -68,6 +76,14 @@ object AuthServerError {
 
     data object InvalidToken : RefreshToken, Logout, VerifyEmail, ResetPassword {
         override val code = ErrorCode("AuthServerError.InvalidToken")
+    }
+
+    data object OtpExpired : VerifyEmail, ResetPassword {
+        override val code = ErrorCode("AuthServerError.OtpExpired")
+    }
+
+    data object MaxAttemptsExceeded : VerifyEmail, ResetPassword {
+        override val code = ErrorCode("AuthServerError.MaxAttemptsExceeded")
     }
 
     data object UserNotFound : RefreshToken, ChangePassword {

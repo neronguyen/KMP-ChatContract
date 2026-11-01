@@ -1,6 +1,8 @@
 AuthServerError.EmailNotVerified
 AuthServerError.InvalidCredentials
 AuthServerError.InvalidToken
+AuthServerError.MaxAttemptsExceeded
+AuthServerError.OtpExpired
 AuthServerError.SamePassword
 AuthServerError.UserAlreadyExists
 AuthServerError.UserNotFound

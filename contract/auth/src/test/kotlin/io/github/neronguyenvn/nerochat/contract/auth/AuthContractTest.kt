@@ -85,6 +85,14 @@ class AuthContractTest {
             null -> "unknown"
         }
         assertEquals("wrong password", changePasswordMessage)
+
+        val verifyEmailError: AuthServerError.VerifyEmail? =
+            AuthServerError.VerifyEmail.fromCode(AuthServerError.MaxAttemptsExceeded.code)
+        assertEquals(AuthServerError.MaxAttemptsExceeded, verifyEmailError)
+
+        val resetPasswordError: AuthServerError.ResetPassword? =
+            AuthServerError.ResetPassword.fromCode(AuthServerError.OtpExpired.code)
+        assertEquals(AuthServerError.OtpExpired, resetPasswordError)
     }
 
     @Test
@@ -115,6 +123,21 @@ class AuthContractTest {
     }
 
     @Test
+    fun `VerifyEmailRequest serializes and validates correctly`() {
+        val req = VerifyEmailRequest("user@example.com", "123456")
+        val jsonStr = json.encodeToString(req)
+        val deserialized = json.decodeFromString<VerifyEmailRequest>(jsonStr)
+        assertEquals(req, deserialized)
+        assertTrue(req.validate().isEmpty())
+
+        val invalid = VerifyEmailRequest("not-an-email", "abc")
+        assertEquals(2, invalid.validate().size)
+
+        val empty = VerifyEmailRequest("", "")
+        assertEquals(2, empty.validate().size)
+    }
+
+    @Test
     fun `EmailRequest, RefreshTokenRequest, ResetPasswordRequest, ChangePasswordRequest validate correctly`() {
         assertTrue(EmailRequest("user@example.com").validate().isEmpty())
         assertEquals(1, EmailRequest("").validate().size)
@@ -122,8 +145,8 @@ class AuthContractTest {
         assertTrue(RefreshTokenRequest("refresh-token").validate().isEmpty())
         assertEquals(1, RefreshTokenRequest("").validate().size)
 
-        assertTrue(ResetPasswordRequest("token-123", "password123").validate().isEmpty())
-        assertEquals(2, ResetPasswordRequest("", "pass").validate().size)
+        assertTrue(ResetPasswordRequest("user@example.com", "123456", "password123").validate().isEmpty())
+        assertEquals(3, ResetPasswordRequest("", "", "pass").validate().size)
 
         assertTrue(ChangePasswordRequest("oldPass123", "newPass123").validate().isEmpty())
         assertEquals(2, ChangePasswordRequest("", "").validate().size)
@@ -153,9 +176,15 @@ class AuthContractTest {
             login.toString()
         )
 
-        val reset = ResetPasswordRequest("secret-token", "secret-new-password")
+        val verify = VerifyEmailRequest("verify@example.com", "123456")
         assertEquals(
-            "ResetPasswordRequest(token=[REDACTED], newPassword=[REDACTED])",
+            "VerifyEmailRequest(email=verify@example.com, code=[REDACTED])",
+            verify.toString()
+        )
+
+        val reset = ResetPasswordRequest("reset@example.com", "654321", "secret-new-password")
+        assertEquals(
+            "ResetPasswordRequest(email=reset@example.com, code=[REDACTED], newPassword=[REDACTED])",
             reset.toString()
         )
 
