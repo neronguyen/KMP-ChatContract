@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chat System Containers (C4 Level 2)",
+    "output": "docs/architecture/interactive/c4-containers.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "git@github.com:neronguyen/KMP-NeroChatBackend.git",
+      "link_mode": "local-only",
+      "revision": "fbe62fac32064a428d721f72577476ab8a5ce038"
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "icon": "person",
+      "label": "User",
+      "sublabel": "Registered chat user",
+      "pos": [
+        40,
+        230
+      ],
+      "size": [
+        145,
+        64
+      ],
+      "sources": [
+        {
+          "path": "chat/src/main/kotlin/io/github/neronguyenvn/nerochat/chat/api/websocket/ChatWebSocketHandler.kt",
+          "line": 54,
+          "end_line": 71
+        }
+      ]
+    },
+    {
+      "id": "shared_contract",
+      "type": "cloud",
+      "label": "Shared Contract",
+      "sublabel": "Kotlin Multi-Module",
+      "tag": "Compile-Time Artifact",
+      "pos": [
+        320,
+        60
+      ],
+      "size": [
+        165,
+        66
+      ],
+      "sources": [
+        {
+          "path": "settings.gradle.kts",
+          "line": 34,
+          "end_line": 55
+        },
+        {
+          "path": "gradle/libs.versions.toml",
+          "line": 41,
+          "end_line": 46
+        }
+      ]
+    },
+    {
+      "id": "android_app",
+      "type": "frontend",
+      "label": "Android App",
+      "sublabel": "Kotlin, Android",
+      "pos": [
+        320,
+        230
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "sources": [
+        {
+          "path": "chat/src/main/kotlin/io/github/neronguyenvn/nerochat/chat/api/websocket/WebSocketConfig.kt",
+          "line": 14,
+          "end_line": 18
+        },
+        {
+          "path": "app/src/main/kotlin/io/github/neronguyenvn/nerochat/api/security/SecurityConfig.kt",
+          "line": 44,
+          "end_line": 55
+        }
+      ]
+    },
+    {
+      "id": "backend_api",
+      "type": "backend",
+      "label": "Backend Server",
+      "sublabel": "Kotlin, Spring Boot",
+      "pos": [
+        640,
+        230
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "sources": [
+        {
+          "path": "app/src/main/kotlin/io/github/neronguyenvn/nerochat/ChatApp.kt",
+          "line": 1,
+          "end_line": 13
+        },
+        {
+          "path": "settings.gradle.kts",
+          "line": 58,
+          "end_line": 62
+        }
+      ]
+    },
+    {
+      "id": "redis_cache",
+      "type": "database",
+      "label": "Cache",
+      "sublabel": "Redis",
+      "pos": [
+        970,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "app/src/main/kotlin/io/github/neronguyenvn/nerochat/infra/caching/RedisConfig.kt",
+          "line": 12,
+          "end_line": 36
+        },
+        {
+          "path": "app/src/main/resources/application.yaml",
+          "line": 28,
+          "end_line": 44
+        }
+      ]
+    },
+    {
+      "id": "postgres_db",
+      "type": "database",
+      "label": "Database",
+      "sublabel": "PostgreSQL",
+      "pos": [
+        970,
+        230
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "app/src/main/resources/application.yaml",
+          "line": 8,
+          "end_line": 26
+        }
+      ]
+    },
+    {
+      "id": "message_broker",
+      "type": "messagebus",
+      "label": "Message Broker",
+      "sublabel": "RabbitMQ",
+      "pos": [
+        970,
+        400
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "common/src/main/kotlin/io/github/neronguyenvn/nerochat/infra/messagequeue/RabbitMqConfig.kt",
+          "line": 14,
+          "end_line": 84
+        },
+        {
+          "path": "app/src/main/resources/application.yaml",
+          "line": 49,
+          "end_line": 76
+        }
+      ]
+    },
+    {
+      "id": "mail_system",
+      "type": "external",
+      "label": "Email System",
+      "sublabel": "SMTP Server",
+      "pos": [
+        640,
+        540
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "sources": [
+        {
+          "path": "notification/src/main/kotlin/io/github/neronguyenvn/nerochat/notification/service/EmailService.kt",
+          "line": 100,
+          "end_line": 119
+        },
+        {
+          "path": "app/src/main/resources/application.yaml",
+          "line": 78,
+          "end_line": 92
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Chat System",
+      "wraps": [
+        "shared_contract",
+        "android_app",
+        "backend_api",
+        "redis_cache",
+        "postgres_db",
+        "message_broker"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user_to_android",
+      "from": "user",
+      "to": "android_app",
+      "label": "Uses",
+      "variant": "emphasis"
+    },
+    {
+      "id": "contract_to_android",
+      "from": "shared_contract",
+      "to": "android_app",
+      "label": "Shared DTOs & validators",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "contract_to_backend",
+      "from": "shared_contract",
+      "to": "backend_api",
+      "label": "Shared DTOs & validators",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "android_to_backend",
+      "from": "android_app",
+      "to": "backend_api",
+      "label": "JSON/HTTPS & WSS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "backend_to_redis",
+      "from": "backend_api",
+      "to": "redis_cache",
+      "label": "Rate limits & cache [RESP]"
+    },
+    {
+      "id": "backend_to_postgres",
+      "from": "backend_api",
+      "to": "postgres_db",
+      "label": "Reads & writes [JDBC]"
+    },
+    {
+      "id": "backend_to_broker",
+      "from": "backend_api",
+      "to": "message_broker",
+      "label": "Domain events [AMQP]",
+      "variant": "dashed"
+    },
+    {
+      "id": "backend_to_mail",
+      "from": "backend_api",
+      "to": "mail_system",
+      "label": "Sends emails [SMTP]",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Application & Contract Containers",
+      "items": [
+        "Android App provides mobile UI, local offline persistence, and real-time socket sync",
+        "Backend Server handles stateless authentication, REST endpoints, and WebSocket sessions",
+        "Shared Contract compiles into both containers to enforce identical wire DTOs, error codes, and validations"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Data & Messaging Containers",
+      "items": [
+        "PostgreSQL stores users, refresh tokens, chat rooms, participants, and messages",
+        "Redis backs distributed rate-limiting locks and caches recent message slices",
+        "RabbitMQ routes asynchronous domain events across internal backend modules"
+      ]
+    }
+  ]
+}
