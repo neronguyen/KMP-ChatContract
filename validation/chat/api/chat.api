@@ -1,0 +1,146 @@
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError : io/github/neronguyenvn/nerochat/contract/validation/ValidationError {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$AddParticipants : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateDirectRoom : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateGroupRoom : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyFirstMessage : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateDirectRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyFirstMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyMessageContent : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyMessageContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyParticipantIds : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$AddParticipants {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptyParticipantIds;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptySearchEmail : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$EmptySearchEmail;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidGroupParticipantId : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateGroupRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidGroupParticipantId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidMessageId : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidMessageId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidParticipantId : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$AddParticipants {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidParticipantId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidRoomId : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidRoomId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidSearchEmail : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidSearchEmail;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidTargetUserId : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateDirectRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$InvalidTargetUserId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$MissingDirectRecipient : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateDirectRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$MissingDirectRecipient;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SelfParticipantNotAllowed : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SelfParticipantNotAllowed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$TooFewGroupParticipants : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$CreateGroupRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$TooFewGroupParticipants;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$WebSocket : io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidator {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidator;
+	public final fun validateAddParticipants (Ljava/util/List;)Ljava/util/List;
+	public final fun validateDirectRoom (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public final fun validateGroupRoom (Ljava/util/List;)Ljava/util/List;
+	public final fun validateNewMessage (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public static synthetic fun validateNewMessage$default (Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
+	public final fun validateSearchEmail (Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant;
+	public static synthetic fun validateSearchEmail$default (Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidator;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/validation/chat/ChatValidationError$SearchParticipant;
+}
+

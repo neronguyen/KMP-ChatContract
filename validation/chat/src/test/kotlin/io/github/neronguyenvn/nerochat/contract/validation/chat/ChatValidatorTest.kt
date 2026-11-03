@@ -78,11 +78,13 @@ class ChatValidatorTest {
         val uuid1 = "123e4567-e89b-12d3-a456-426614174001"
         val uuid2 = "123e4567-e89b-12d3-a456-426614174002"
 
-        // participantIds >= 2
+        // participantIds >= 2 distinct IDs
         assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid2)).isEmpty())
 
-        // Duplicate IDs count as separate entries and are accepted if valid UUIDs
-        assertTrue(ChatValidator.validateGroupRoom(listOf(uuid1, uuid1)).isEmpty())
+        // Duplicate IDs must be rejected because distinct count < 2
+        val duplicateList = ChatValidator.validateGroupRoom(listOf(uuid1, uuid1))
+        assertEquals(1, duplicateList.size)
+        assertTrue(duplicateList.contains(ChatValidationError.TooFewGroupParticipants))
 
         val nullList = ChatValidator.validateGroupRoom(null)
         assertEquals(1, nullList.size)
@@ -120,5 +122,44 @@ class ChatValidatorTest {
         val invalid = ChatValidator.validateAddParticipants(listOf("invalid-uuid"))
         assertEquals(1, invalid.size)
         assertTrue(invalid.contains(ChatValidationError.InvalidParticipantId))
+    }
+
+    @Test
+    fun testValidateNewMessage() {
+        val validRoomId = "123e4567-e89b-12d3-a456-426614174001"
+        val validMessageId = "123e4567-e89b-12d3-a456-426614174002"
+
+        // Valid with and without messageId
+        assertTrue(ChatValidator.validateNewMessage(validRoomId, "Hello world", validMessageId).isEmpty())
+        assertTrue(ChatValidator.validateNewMessage(validRoomId, "Hello world", null).isEmpty())
+
+        // Invalid room ID
+        val invalidRoom = ChatValidator.validateNewMessage("bad-room", "Hello", validMessageId)
+        assertEquals(listOf(ChatValidationError.InvalidRoomId), invalidRoom)
+
+        val nullRoom = ChatValidator.validateNewMessage(null, "Hello", validMessageId)
+        assertEquals(listOf(ChatValidationError.InvalidRoomId), nullRoom)
+
+        // Empty content
+        val emptyContent = ChatValidator.validateNewMessage(validRoomId, "", validMessageId)
+        assertEquals(listOf(ChatValidationError.EmptyMessageContent), emptyContent)
+
+        val blankContent = ChatValidator.validateNewMessage(validRoomId, "   ", validMessageId)
+        assertEquals(listOf(ChatValidationError.EmptyMessageContent), blankContent)
+
+        // Invalid message ID
+        val invalidMsgId = ChatValidator.validateNewMessage(validRoomId, "Hello", "not-a-uuid")
+        assertEquals(listOf(ChatValidationError.InvalidMessageId), invalidMsgId)
+
+        // Multiple errors
+        val allErrors = ChatValidator.validateNewMessage(null, "", "bad-id")
+        assertEquals(
+            listOf(
+                ChatValidationError.InvalidRoomId,
+                ChatValidationError.EmptyMessageContent,
+                ChatValidationError.InvalidMessageId,
+            ),
+            allErrors
+        )
     }
 }

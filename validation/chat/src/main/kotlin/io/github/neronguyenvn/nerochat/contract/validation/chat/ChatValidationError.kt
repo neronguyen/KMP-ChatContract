@@ -22,6 +22,9 @@ sealed interface ChatValidationError : ValidationError {
     /** Validation errors for adding participants to a group (`AddChatParticipantRequest`). */
     sealed interface AddParticipants : ChatValidationError
 
+    /** Validation errors for WebSocket client messages (`WsClientMessage.NewMessage`). */
+    sealed interface WebSocket : ChatValidationError
+
     data object EmptySearchEmail : SearchParticipant {
         override val field: String = "email"
         override val message: String = "Search email must not be blank"
@@ -70,5 +73,20 @@ sealed interface ChatValidationError : ValidationError {
     data object InvalidParticipantId : AddParticipants {
         override val field: String = "userIds"
         override val message: String = "Participant ID must be a valid UUID"
+    }
+
+    data object EmptyMessageContent : WebSocket {
+        override val field: String = "content"
+        override val message: String = "Message content must not be blank"
+    }
+
+    data object InvalidRoomId : WebSocket {
+        override val field: String = "roomId"
+        override val message: String = "Room ID must be a valid UUID"
+    }
+
+    data object InvalidMessageId : WebSocket {
+        override val field: String = "messageId"
+        override val message: String = "Message ID must be a valid UUID"
     }
 }

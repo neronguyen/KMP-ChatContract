@@ -77,9 +77,16 @@ jobs:
           - common
           - auth
           - chat
+          - io.github.neronguyenvn.nerochat.contract.common
+          - io.github.neronguyenvn.nerochat.contract.auth
+          - io.github.neronguyenvn.nerochat.contract.chat
+          - io.github.neronguyenvn.nerochat.validation.common
+          - io.github.neronguyenvn.nerochat.validation.auth
+          - io.github.neronguyenvn.nerochat.validation.chat
     steps:
       - name: Prune older versions of ${{ matrix.package-name }} (keep current + previous)
         uses: actions/delete-package-versions@v5
+        continue-on-error: true
         with:
           package-name: ${{ matrix.package-name }}
           package-type: 'maven'

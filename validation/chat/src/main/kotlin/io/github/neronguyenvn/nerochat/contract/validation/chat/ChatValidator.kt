@@ -49,14 +49,14 @@ object ChatValidator {
     }
 
     /**
-     * Returns a list containing `TooFewGroupParticipants` for a null list or fewer than two entries;
+     * Returns a list containing `TooFewGroupParticipants` for a null list or fewer than two distinct entries;
      * otherwise contains `InvalidGroupParticipantId` if any entry fails [UuidValidator.isValidUuid].
-     * Returns an empty list if valid. Duplicate IDs count as separate entries.
+     * Returns an empty list if valid.
      */
     fun validateGroupRoom(
         participantIds: List<String>?,
     ): List<ChatValidationError.CreateGroupRoom> {
-        if (participantIds == null || participantIds.size < 2) {
+        if (participantIds == null || participantIds.toSet().size < 2) {
             return listOf(ChatValidationError.TooFewGroupParticipants)
         }
         for (id in participantIds) {
@@ -84,5 +84,27 @@ object ChatValidator {
             }
         }
         return emptyList()
+    }
+
+    /**
+     * Validates a WebSocket new message payload.
+     * Returns errors for blank content, invalid room UUID, or invalid client-provided message UUID (if present).
+     */
+    fun validateNewMessage(
+        roomId: String?,
+        content: String?,
+        messageId: String? = null,
+    ): List<ChatValidationError.WebSocket> {
+        val errors = mutableListOf<ChatValidationError.WebSocket>()
+        if (roomId.isNullOrBlank() || !UuidValidator.isValidUuid(roomId)) {
+            errors.add(ChatValidationError.InvalidRoomId)
+        }
+        if (content.isNullOrBlank()) {
+            errors.add(ChatValidationError.EmptyMessageContent)
+        }
+        if (messageId != null && !UuidValidator.isValidUuid(messageId)) {
+            errors.add(ChatValidationError.InvalidMessageId)
+        }
+        return errors
     }
 }

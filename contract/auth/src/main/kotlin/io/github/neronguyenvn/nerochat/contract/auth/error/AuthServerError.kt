@@ -4,6 +4,15 @@ import io.github.neronguyenvn.nerochat.contract.error.ErrorCode
 import io.github.neronguyenvn.nerochat.contract.error.ErrorContract
 import io.github.neronguyenvn.nerochat.contract.error.ServerError
 
+/**
+ * Domain-specific server error catalog for authentication flows.
+ *
+ * Anti-enumeration invariant:
+ * Endpoints for `POST /api/auth/resend-verification` and `POST /api/auth/forgot-password`
+ * deliberately return `204 No Content` and never return domain [AuthServerError] codes
+ * to prevent user enumeration attacks. They only fail with generic [io.github.neronguyenvn.nerochat.contract.error.CommonServerError]
+ * if request structure validation fails or an internal server error occurs.
+ */
 object AuthServerError {
     sealed interface Register : ServerError {
         companion object : ErrorContract<Register>(listOf(UserAlreadyExists))

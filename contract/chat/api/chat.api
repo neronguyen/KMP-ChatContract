@@ -1,0 +1,605 @@
+public final class io/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest : io/github/neronguyenvn/nerochat/contract/validation/Validatable {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest;Ljava/util/List;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUserIds ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun validate ()Ljava/util/List;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/AddChatParticipantRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getRoomId ()Ljava/lang/String;
+	public final fun getSenderId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto$Companion;
+	public fun <init> (Ljava/util/List;Z)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Z
+	public final fun copy (Ljava/util/List;Z)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto;Ljava/util/List;ZILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasMore ()Z
+	public final fun getMessages ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatMessageSliceDto$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getProfilePictureUrl ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;Lkotlin/time/Instant;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;Lkotlin/time/Instant;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public final fun component7 ()Lkotlin/time/Instant;
+	public final fun copy (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;Lkotlin/time/Instant;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;Lkotlin/time/Instant;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreator ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLastActivityAt ()Lkotlin/time/Instant;
+	public final fun getLastMessage ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getParticipants ()Ljava/util/List;
+	public final fun getType ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatRoomDto$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatRoomType : java/lang/Enum {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType$Companion;
+	public static final field DIRECT Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+	public static final field GROUP Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+	public static fun values ()[Lio/github/neronguyenvn/nerochat/contract/chat/ChatRoomType;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/ChatRoomType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest : io/github/neronguyenvn/nerochat/contract/validation/Validatable {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getTargetUserId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun validate ()Ljava/util/List;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/CreateDirectChatRoomRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest : io/github/neronguyenvn/nerochat/contract/validation/Validatable {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest$Companion;
+	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/List;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getParticipantIds ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun validate ()Ljava/util/List;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/CreateGroupChatRoomRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage {
+	public static final field CLASS_DISCRIMINATOR Ljava/lang/String;
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$Companion;
+	public static final field NEW_MESSAGE Ljava/lang/String;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public static final synthetic fun write$Self (Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage : io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage, io/github/neronguyenvn/nerochat/contract/validation/Validatable {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getMessageId ()Ljava/lang/String;
+	public final fun getRoomId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun validate ()Ljava/util/List;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsClientMessage$NewMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field CLASS_DISCRIMINATOR Ljava/lang/String;
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Companion;
+	public static final field ERROR Ljava/lang/String;
+	public static final field MESSAGE_DELETED Ljava/lang/String;
+	public static final field NEW_MESSAGE Ljava/lang/String;
+	public static final field PARTICIPANT_JOINED Ljava/lang/String;
+	public static final field PARTICIPANT_LEFT Ljava/lang/String;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public static final synthetic fun write$Self (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error : io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error$Companion;
+	public fun <init> (Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-NTW1o38 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy-Q9k7eko (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error;
+	public static synthetic fun copy-Q9k7eko$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError-NTW1o38 ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getMessageId ()Ljava/lang/String;
+	public final fun getRoomId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$Error$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted : io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessageId ()Ljava/lang/String;
+	public final fun getRoomId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$MessageDeleted$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage : io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage$Companion;
+	public fun <init> (Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;)V
+	public final fun component1 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public final fun copy (Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage;Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatMessageDto;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$NewMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined : io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined;Ljava/lang/String;Ljava/util/List;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddedBy ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun getNewUsers ()Ljava/util/List;
+	public final fun getRoomId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantJoined$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft : io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun component3 ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun copy (Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft;Ljava/lang/String;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKickedBy ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun getLeftUser ()Lio/github/neronguyenvn/nerochat/contract/chat/ChatParticipantDto;
+	public final fun getRoomId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/WsServerEvent$ParticipantLeft$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ChatParticipantNotFound : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$CreateRoom, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetParticipant, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$LeaveRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ChatParticipantNotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ChatRoomNotFound : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetRoom, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$LeaveRoom, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ChatRoomNotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$CreateRoom : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$CreateRoom$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$CreateRoom$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DeleteMessage : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DeleteMessage$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DeleteMessage$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DuplicateMessageId : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DuplicateMessageId;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetMessages : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetMessages$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetMessages$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetParticipant : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetParticipant$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetParticipant$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetRoom : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetRoom$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetRoom$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidChatRoomSize : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$CreateRoom {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidChatRoomSize;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidJson : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidJson;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidPayload : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$InvalidPayload;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$LeaveRoom : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$LeaveRoom$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$LeaveRoom$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$MessageNotFound : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DeleteMessage {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$MessageNotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$MessageSendFailed : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$MessageSendFailed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$NotMessageSender : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$DeleteMessage {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$NotMessageSender;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ParticipantAlreadyInRoom : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ParticipantAlreadyInRoom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ParticipantNotInRoom : io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$AddParticipants, io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$GetMessages {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$ParticipantNotInRoom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket : io/github/neronguyenvn/nerochat/contract/error/ServerError {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket$Companion;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/chat/error/ChatServerError$WebSocket$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+

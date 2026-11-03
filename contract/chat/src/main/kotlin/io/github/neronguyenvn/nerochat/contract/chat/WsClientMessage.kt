@@ -1,5 +1,8 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
+import io.github.neronguyenvn.nerochat.contract.validation.Validatable
+import io.github.neronguyenvn.nerochat.contract.validation.chat.ChatValidationError
+import io.github.neronguyenvn.nerochat.contract.validation.chat.ChatValidator
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,7 +19,14 @@ sealed class WsClientMessage {
         val roomId: String,
         val content: String,
         val messageId: String? = null,
-    ) : WsClientMessage()
+    ) : WsClientMessage(), Validatable<ChatValidationError.WebSocket> {
+        override fun validate(): List<ChatValidationError.WebSocket> =
+            ChatValidator.validateNewMessage(
+                roomId = roomId,
+                content = content,
+                messageId = messageId,
+            )
+    }
 
     companion object {
         const val CLASS_DISCRIMINATOR = "type"
