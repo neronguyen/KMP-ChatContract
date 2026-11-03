@@ -19,19 +19,21 @@ Every implementation plan must satisfy the **Mandatory Agent Planning Protocol**
 
 ### 2.1 Allowed Dependency Graph
 ```text
-:contract:auth ──api──> :contract:common ──api──> :validation:common
-      │                                                  ▲
-      └──api──> :validation:auth ──────────api───────────┘
+:contract:common (zero internal deps)
 
-:contract:chat ──api──> :contract:common ──api──> :validation:common
-      │                                                  ▲
-      └──api──> :validation:chat ──────────api───────────┘
+:contract:auth ──api──> :contract:common
+      │
+      └──api──> :validation:auth ──api──> :validation:common
+
+:contract:chat ──api──> :contract:common
+      │
+      └──api──> :validation:chat ──api──> :validation:common
 ```
 
+- `:contract:common`: Zero internal dependencies. Shared error models (`ErrorCode`, `ServerError`, `ErrorContract`, `CommonServerError`, `ApiErrorDto`).
 - `:validation:common`: Zero internal dependencies. Base validation primitives (`ValidationError`, `Validatable`, `EmailValidator`, `UuidValidator`).
 - `:validation:auth`: Depends on `:validation:common`. Request and form validators (`AuthValidator`, `PasswordValidator`, `AuthValidationError`).
 - `:validation:chat`: Depends on `:validation:common`. Chat validators (`ChatValidator`, `ChatValidationError`).
-- `:contract:common`: Depends on `:validation:common`. Shared error models (`ErrorCode`, `ServerError`, `ErrorContract`, `CommonServerError`, `ApiErrorDto`).
 - `:contract:auth`: Depends on `:contract:common` and `:validation:auth`. Auth wire DTOs and `AuthServerError` sealed interfaces.
 - `:contract:chat`: Depends on `:contract:common` and `:validation:chat`. Chat wire DTOs, WebSocket frame types (`WsClientMessage`, `WsServerEvent`), and `ChatServerError` sealed interfaces.
 
@@ -53,6 +55,8 @@ All agent verification must be performed using these verified-green commands:
 |---|---|
 | Run all checks & tests | `./gradlew check --rerun-tasks` |
 | Run all unit tests | `./gradlew test --rerun-tasks` |
+| Check binary compatibility | `./gradlew apiCheck` |
+| Dump public binary API baseline | `./gradlew apiDump` |
 | List runnable tasks | `./gradlew tasks --all` |
 
 *Note: `./gradlew` commands require access to host JDK 21+ (`toolchainVersion=21`). Never run publish or deployment commands.*
