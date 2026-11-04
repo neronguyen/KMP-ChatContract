@@ -6,3 +6,7 @@ build/
 .kotlin/
 local.properties
 .archify/
+
+# Archify local delivery sidecars
+*.delivery.json
+*.delivery-*.json

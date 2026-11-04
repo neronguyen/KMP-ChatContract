@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "[AS-IS] Single-Flight Token Refresh & HTTP 401 Interception",
+    "output": "docs/architecture/interactive/flows/token-refresh.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "client", "type": "frontend", "label": "Data Repository", "sublabel": "e.g. ChatRoomRepo" },
+    { "id": "interceptor", "type": "security", "label": "AuthInterceptor", "sublabel": "Bearer Attachment" },
+    { "id": "backend", "type": "backend", "label": "Backend REST API", "sublabel": "Spring Controllers" },
+    { "id": "authenticator", "type": "security", "label": "TokenAuthenticator", "sublabel": "synchronized(this)" },
+    { "id": "auth_repo", "type": "security", "label": "AuthRepository", "sublabel": "refreshMutex" }
+  ],
+  "segments": [
+    { "from": 150, "to": 260, "label": "Initial Authenticated Request & 401 Rejection" },
+    { "from": 270, "to": 430, "label": "Single-Flight Concurrent Refresh Coordination" },
+    { "from": 440, "to": 540, "label": "Token Rotation & Original Request Replay" }
+  ],
+  "messages": [
+    { "id": "api-call", "from": "client", "to": "interceptor", "y": 165, "label": "GET /api/chat/rooms", "variant": "emphasis" },
+    { "id": "attach-token", "from": "interceptor", "to": "backend", "y": 195, "label": "GET /api/chat/rooms (Bearer expired_access_token)", "variant": "default" },
+    { "id": "res-401", "from": "backend", "to": "authenticator", "y": 225, "label": "401 Unauthorized (expired token)", "variant": "return" },
+    { "id": "lock-auth", "from": "authenticator", "to": "auth_repo", "y": 265, "label": "refreshToken() [responseCount <= 3]", "variant": "security" },
+    { "id": "send-refresh", "from": "auth_repo", "to": "backend", "y": 295, "label": "POST /api/auth/refresh-token (RefreshTokenRequest)", "variant": "emphasis" },
+    { "id": "refresh-ok", "from": "backend", "to": "auth_repo", "y": 335, "label": "200 OK (AuthenticatedUserDto: new tokens)", "variant": "return" },
+    { "id": "save-tokens", "from": "auth_repo", "to": "authenticator", "y": 375, "label": "persistTokens() & return new access_token", "variant": "return" },
+    { "id": "replay-req", "from": "authenticator", "to": "backend", "y": 420, "label": "GET /api/chat/rooms (Bearer new_access_token)", "variant": "emphasis" },
+    { "id": "api-success", "from": "backend", "to": "client", "y": 460, "label": "200 OK (List<ChatRoomDto>)", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "client", "from": 165, "to": 470 },
+    { "participant": "interceptor", "from": 165, "to": 200 },
+    { "participant": "backend", "from": 195, "to": 230 },
+    { "participant": "authenticator", "from": 225, "to": 430 },
+    { "participant": "auth_repo", "from": 265, "to": 380 },
+    { "participant": "backend", "from": 295, "to": 340 },
+    { "participant": "backend", "from": 420, "to": 465 }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Double-Check Lock Pattern",
+      "items": [
+        "TokenAuthenticator acquires synchronized(this) upon 401",
+        "If token changed while waiting on lock, it replays immediately with new token",
+        "Guards against thundering herd when multiple requests fail 401 simultaneously"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Refresh Mutex & Replay Limit",
+      "items": [
+        "AuthRepositoryImpl wraps refreshToken in Mutex to enforce single HTTP flight",
+        "Max 3 refresh retries per request chain before failing permanently",
+        "Refresh failure clears tokens in DataStore and emits AuthState.Unauthenticated"
+      ]
+    }
+  ]
+}

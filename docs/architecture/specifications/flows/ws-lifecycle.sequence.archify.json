@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "[PLANNED] WebSocket Lifecycle, 1008 Auth Failure & Backoff",
+    "output": "docs/architecture/interactive/flows/ws-lifecycle.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "ui", "type": "external", "label": "UI / User", "sublabel": "Compose UI" },
+    { "id": "rcm", "type": "frontend", "label": "ConnectionManager", "sublabel": "Realtime Manager" },
+    { "id": "ws", "type": "frontend", "label": "WebSocketClient", "sublabel": "OkHttp Client" },
+    { "id": "auth", "type": "security", "label": "AuthRepository", "sublabel": "Token DataSource" },
+    { "id": "backend", "type": "backend", "label": "Backend WS", "sublabel": "Spring /ws/chat" }
+  ],
+  "segments": [
+    { "from": 150, "to": 260, "label": "Initial Connect & 1008 Expired Rejection" },
+    { "from": 270, "to": 400, "label": "Single-Flight Token Refresh & Backoff" },
+    { "from": 410, "to": 510, "label": "Reconnected Session & Ping / Pong" },
+    { "from": 520, "to": 590, "label": "Background Grace & Teardown" }
+  ],
+  "messages": [
+    { "id": "app-start", "from": "ui", "to": "rcm", "y": 165, "label": "initialize(appScope)", "variant": "emphasis" },
+    { "id": "ws-connect", "from": "rcm", "to": "ws", "y": 195, "label": "connect()", "variant": "default" },
+    { "id": "upgrade-req", "from": "ws", "to": "backend", "y": 225, "label": "HTTP Upgrade (Bearer access_token)", "variant": "emphasis" },
+    { "id": "close-1008", "from": "backend", "to": "ws", "y": 255, "label": "1008 POLICY_VIOLATION (expired)", "variant": "return" },
+    { "id": "ws-failed", "from": "ws", "to": "rcm", "y": 285, "label": "emit SocketConnectionState.Failed", "variant": "return" },
+    { "id": "trigger-refresh", "from": "rcm", "to": "auth", "y": 315, "label": "refresh() [single-flight mutex]", "variant": "security" },
+    { "id": "tokens-updated", "from": "auth", "to": "rcm", "y": 345, "label": "new access_token saved", "variant": "return" },
+    { "id": "reconnect", "from": "rcm", "to": "ws", "y": 380, "label": "connect() [retryAttempt = 1 after backoff]", "variant": "default" },
+    { "id": "upgrade-ok", "from": "ws", "to": "backend", "y": 420, "label": "HTTP Upgrade (new token)", "variant": "emphasis" },
+    { "id": "ws-101", "from": "backend", "to": "ws", "y": 450, "label": "101 Switching Protocols", "variant": "return" },
+    { "id": "ws-connected", "from": "ws", "to": "rcm", "y": 480, "label": "Connected (retryAttempt = 0)", "variant": "return" },
+    { "id": "ws-ping", "from": "backend", "to": "ws", "y": 505, "label": "PingMessage / Pong (30s interval)", "variant": "dashed" },
+    { "id": "app-background", "from": "ui", "to": "rcm", "y": 535, "label": "onStop() (ProcessLifecycle backgrounded)", "variant": "default" },
+    { "id": "ws-disconnect", "from": "rcm", "to": "ws", "y": 575, "label": "disconnect() [1000 Normal Closure after 30s grace]", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "rcm", "from": 165, "to": 580 },
+    { "participant": "ws", "from": 195, "to": 260 },
+    { "participant": "backend", "from": 225, "to": 255 },
+    { "participant": "auth", "from": 315, "to": 345 },
+    { "participant": "ws", "from": 380, "to": 580 },
+    { "participant": "backend", "from": 420, "to": 510 }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Exponential Backoff & Jitter",
+      "items": [
+        "Formula: min(1000ms * 2^attempt, 30_000ms) + random(0..1000ms)",
+        "Attempt counter resets to 0 upon SocketConnectionState.Connected",
+        "Superseded sockets isolated by strict object identity checks"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "1008 POLICY_VIOLATION Handling (Track A)",
+      "items": [
+        "Spring backend closes with 1008 when handshake JWT is expired",
+        "ConnectionManager intercepts 1008, refreshes tokens, and reconnects",
+        "Unauthenticated state bypasses backoff and disconnects immediately"
+      ]
+    }
+  ]
+}

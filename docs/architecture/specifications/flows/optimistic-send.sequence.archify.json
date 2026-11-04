@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "[AS-IS] Optimistic Send, Idempotency & Server Reconciliation",
+    "output": "docs/architecture/interactive/flows/optimistic-send.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "ui", "type": "external", "label": "Conversation UI", "sublabel": "Compose Screen" },
+    { "id": "repo", "type": "frontend", "label": "ChatMessageRepo", "sublabel": "UUIDv7 Generator" },
+    { "id": "ws", "type": "frontend", "label": "WebSocketClient", "sublabel": "OkHttp Frames" },
+    { "id": "backend", "type": "backend", "label": "Backend WS Handler", "sublabel": "Spring TextWS" },
+    { "id": "sync", "type": "frontend", "label": "RealtimeSyncManager", "sublabel": "Ack Reconciler" }
+  ],
+  "segments": [
+    { "from": 150, "to": 260, "label": "Client-Assigned UUIDv7 & Optimistic SENDING" },
+    { "from": 270, "to": 390, "label": "WebSocket Transmission & Server Idempotency" },
+    { "from": 400, "to": 510, "label": "Authoritative Broadcast & Status Reconciliation (SENT)" }
+  ],
+  "messages": [
+    { "id": "ui-send", "from": "ui", "to": "repo", "y": 165, "label": "sendMessage(roomId, content)", "variant": "emphasis" },
+    { "id": "gen-uuid", "from": "repo", "to": "ui", "y": 195, "label": "display optimistic message (UUIDv7, SENDING)", "variant": "default" },
+    { "id": "send-frame", "from": "repo", "to": "ws", "y": 235, "label": "sendMessage(WsClientMessage.NewMessage)", "variant": "emphasis" },
+    { "id": "ws-text", "from": "ws", "to": "backend", "y": 275, "label": "JSON text frame [type: 'new_message', messageId, content]", "variant": "emphasis" },
+    { "id": "broadcast", "from": "backend", "to": "sync", "y": 325, "label": "WsServerEvent.NewMessage (echoes UUIDv7, createdAt)", "variant": "return" },
+    { "id": "reconcile", "from": "sync", "to": "ui", "y": 365, "label": "upsertIncomingOrAckedMessage (status: SENT)", "variant": "return" },
+    { "id": "retry-send", "from": "ui", "to": "repo", "y": 420, "label": "retryMessage(messageId) [if FAILED, reuses SAME UUIDv7]", "variant": "default" },
+    { "id": "retry-frame", "from": "repo", "to": "backend", "y": 460, "label": "WsClientMessage.NewMessage (same messageId -> idempotent replay)", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "ui", "from": 165, "to": 470 },
+    { "participant": "repo", "from": 165, "to": 245 },
+    { "participant": "ws", "from": 235, "to": 285 },
+    { "participant": "backend", "from": 275, "to": 335 },
+    { "participant": "sync", "from": 325, "to": 375 },
+    { "participant": "repo", "from": 420, "to": 470 },
+    { "participant": "backend", "from": 460, "to": 470 }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "UUIDv7 Monotonic Sorting & Idempotency",
+      "items": [
+        "Client generates time-sortable UUIDv7 before network transmission",
+        "Backend uses Persistable<UUID> (EntityManager.persist) to avoid accidental merge",
+        "Retrying with the same messageId replays the broadcast without duplicate DB rows"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Failure Recovery & State Reconcile",
+      "items": [
+        "If WS disconnects, markSendingMessagesAsFailed transitions all SENDING to FAILED",
+        "Room @Upsert atomically updates local SENDING row to SENT upon server broadcast",
+        "Mismatched room/sender for existing messageId returns DuplicateMessageId ErrorCode"
+      ]
+    }
+  ]
+}

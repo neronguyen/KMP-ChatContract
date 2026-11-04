@@ -72,8 +72,11 @@ writing about.
     1. **Core Mechanic & Trade-off**: Which state lifecycle, failure mode, or communication invariant is being solved,
        and what was traded off?
     2. **Contract & Boundary Impact**: How does this change affect the client–server schema and module boundaries?
-    3. **Deterministic Verification Step**: What exact automated test or CLI command will prove this change works
-       end-to-end without manual UI clicking?
+    3. **To-Be Flow & Lifecycle Spec**: For any change touching a state lifecycle, failure mode, or communication flow,
+       draft or update the sequence/state specification marked as `[PLANNED]` before writing code, and flip it to
+       `[AS-IS]` only after deterministic verification passes.
+    4. **Deterministic Verification Step**: What exact automated test or CLI command will assert every transition in the
+       `[PLANNED]` flow end-to-end without manual UI clicking?
 
 ---
 
