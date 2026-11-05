@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "[PLANNED] WebSocket Lifecycle, 1008 Auth Failure & Backoff",
+    "title": "[AS-IS] WebSocket Lifecycle, 1008 Auth Failure & Backoff",
     "output": "docs/architecture/interactive/flows/ws-lifecycle.html",
     "column_fit": "spread",
     "animation": "trace",
