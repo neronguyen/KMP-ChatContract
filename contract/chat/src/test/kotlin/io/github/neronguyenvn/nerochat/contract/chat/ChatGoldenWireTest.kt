@@ -67,6 +67,23 @@ class ChatGoldenWireTest {
     }
 
     @Test
+    fun `ChatMessageDto soft-deleted tombstone matches golden wire format`() {
+        val deletedMsg = ChatMessageDto(
+            id = "018f3a2b-8a7e-7000-8000-000000000010",
+            roomId = "018f3a2b-8a7e-7000-8000-000000000020",
+            senderId = "018f3a2b-8a7e-7000-8000-000000000001",
+            content = "",
+            createdAt = Instant.parse("2026-11-03T20:00:00Z"),
+            deletedAt = Instant.parse("2026-11-03T20:05:00Z"),
+        )
+        val expected = """{"id":"018f3a2b-8a7e-7000-8000-000000000010","roomId":"018f3a2b-8a7e-7000-8000-000000000020","senderId":"018f3a2b-8a7e-7000-8000-000000000001","content":"","createdAt":"2026-11-03T20:00:00Z","deletedAt":"2026-11-03T20:05:00Z"}"""
+        assertEquals(expected, json.encodeToString(deletedMsg))
+        val decoded = json.decodeFromString<ChatMessageDto>(expected)
+        assertEquals(deletedMsg, decoded)
+        assertEquals(true, decoded.isDeleted)
+    }
+
+    @Test
     fun `ChatRoomDto matches golden wire format`() {
         val creator = ChatParticipantDto(
             userId = "018f3a2b-8a7e-7000-8000-000000000001",

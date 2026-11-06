@@ -12,4 +12,8 @@ data class ChatMessageDto(
     val senderId: String,
     val content: String,
     val createdAt: Instant,
-)
+    val deletedAt: Instant? = null,
+) {
+    val isDeleted: Boolean
+        get() = deletedAt != null
+}
