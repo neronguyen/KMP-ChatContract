@@ -61,14 +61,20 @@ To satisfy Step 3 (`To-Be Flow & Lifecycle Spec`) of the Planning Protocol:
 
 All agent verification must be performed using these verified-green commands:
 
-| Task / Purpose | Verified Command |
-|---|---|
-| Run all checks & tests | `./gradlew check --rerun-tasks` |
-| Run all unit tests | `./gradlew test --rerun-tasks` |
-| Check binary compatibility | `./gradlew apiCheck` |
-| Dump public binary API baseline | `./gradlew apiDump` |
-| List runnable tasks | `./gradlew tasks --all` |
+| Task / Purpose | Tier | Verified Command |
+|---|---|---|
+| **Fast Inner-Loop Feedback** | Tier 1 (Iterative) | `./scripts/verify.sh fast` |
+| **Strict Clean Verification Gate** | Tier 2 (Pre-Commit / Gate) | `./scripts/verify.sh clean` |
+| Fast unit tests across modules | Direct Gradle | `./gradlew test` |
+| Check binary compatibility | Direct Gradle | `./gradlew apiCheck` |
+| Dump public binary API baseline | Direct Gradle | `./gradlew apiDump` |
+| List runnable tasks | Utility | `./gradlew tasks --all` |
 
-*Note: `./gradlew` commands require access to host JDK 21+ (`toolchainVersion=21`). Never run publish or deployment commands.*
+> [!IMPORTANT]
+> **Verification Tier Policy**:
+> - Agents may use **Tier 1 (`fast`)** for rapid iterative feedback during development loops.
+> - Agents **MUST** run and pass **Tier 2 (`clean`)** before committing any changes or flipping any flow spec from `[PLANNED]` to `[AS-IS]`.
+
+*Note: `./scripts/verify.sh` automatically configures JDK 21+ (`toolchainVersion=21`). Never run publish or deployment commands.*
 
 

@@ -69,12 +69,14 @@ rules, and WebSocket message models for the end-to-end chat project.
 ## System Verification
 
 ```bash
-# Run all checks, golden snapshot tests, and reflection completeness tests
+# Fast cached verification (Tier 1 - Inner loop)
+./scripts/verify.sh fast
+
+# Full clean verification gate (Tier 2 - Pre-commit)
+./scripts/verify.sh clean
+
+# Direct Gradle commands
 ./gradlew check
-
-# Run all unit tests across all 6 modules
-./gradlew test --rerun-tasks
-
-# Check binary compatibility baselines
+./gradlew test
 ./gradlew apiCheck
 ```
