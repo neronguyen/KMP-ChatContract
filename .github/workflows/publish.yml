@@ -55,15 +55,15 @@ jobs:
           echo "Resolved version: $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Run checks and tests
-        run: ./gradlew check
+      - name: Run clean verification gate
+        run: ./scripts/verify.sh clean
 
       - name: Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
           VERSION: ${{ steps.get_version.outputs.version }}
-        run: ./gradlew publish "-Pversion=$VERSION"
+        run: ./gradlew publish "-Pversion=$VERSION" --no-daemon
 
   cleanup:
     needs: publish

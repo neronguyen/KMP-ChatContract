@@ -75,6 +75,6 @@ All agent verification must be performed using these verified-green commands:
 > - Agents may use **Tier 1 (`fast`)** for rapid iterative feedback during development loops.
 > - Agents **MUST** run and pass **Tier 2 (`clean`)** before committing any changes or flipping any flow spec from `[PLANNED]` to `[AS-IS]`.
 
-*Note: `./scripts/verify.sh` automatically configures JDK 21+ (`toolchainVersion=21`). Never run publish or deployment commands.*
+*Note: `./scripts/verify.sh` is the Single Source of Truth for both Local/Sandbox and GitHub Actions CI (`CI=true`). It automatically resolves JDK 21+ via a 3-tier fallback, manages isolated `GRADLE_USER_HOME=/tmp/gradle-ro-home` with `GRADLE_RO_DEP_CACHE` for offline sandbox runs, and runs `check` (including `apiCheck` and unit tests). Never run publish or deployment commands.*
 
 
