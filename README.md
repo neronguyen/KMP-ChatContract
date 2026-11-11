@@ -51,8 +51,8 @@ rules, and WebSocket message models for the end-to-end chat project.
   - [validation:common](./validation/common/README.md) - Core validation primitives (`Validatable`, `ValidationError`, `EmailValidator`, `UuidValidator`).
   - [validation:auth](./validation/auth/README.md) - Authentication input validators (`AuthValidator`, `PasswordValidator`).
   - [validation:chat](./validation/chat/README.md) - Chat input validators (`ChatValidator`, `ChatValidationError`).
-- [docs/architecture/flows](./docs/architecture/flows/README.md) - Master SSOT registry for cross-repository sequence and lifecycle flows.
-- [docs/designs](./docs/designs/SITEMAP.md) - Design document index.
+- [docs](./docs/README.md) - Unified C4 architecture, cross-repository wire flow specifications, and EGM technical
+  design registry.
 
 ## Global Invariants
 

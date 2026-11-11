@@ -1,27 +1,18 @@
 # Agent Instructions — KMP-ChatContract
 
-## 1. Philosophy & Governance Gate
-Before proposing any plan or writing code, read and strictly follow:
-1. `docs/PHILOSOPHY.md` (especially Section 3: Decision Filter & Boundary Rules and Section 5: AI & Agentic Governance).
-2. Architecture specifications:
-   - Level 1 System Context: `docs/architecture/specifications/system-context.archify.json` (Viewer: `docs/architecture/interactive/c4-system-context.html`)
-   - Level 2 Containers: `docs/architecture/specifications/containers.archify.json` (Viewer: `docs/architecture/interactive/c4-containers.html`)
-3. Baseline Audit Snapshot: `docs/audit/2026-11-baseline-contract.md`
+## 1. Philosophy & Documentation Governance Gate
 
-Every implementation plan must satisfy the **Mandatory Agent Planning Protocol** defined in `docs/PHILOSOPHY.md` Section 5 before execution (read it; it is not restated here).
+Before proposing any plan or writing code, read and follow:
 
-### 1.1 Design-First Flow Gate (Tooling Binding for Protocol Step 3)
-To satisfy Step 3 (`To-Be Flow & Lifecycle Spec`) of the Planning Protocol:
-1. Draft a Mermaid sketch in the implementation plan for review, then author the canonical spec in `docs/architecture/specifications/flows/<name>.<type>.archify.json` (`<type>` = `sequence` | `lifecycle`) and register it in `docs/architecture/flows/README.md`.
-2. Mark `meta.title` and the registry row `[PLANNED]` before writing code.
-3. **Completion Invariant (No Dangling `[PLANNED]`)**: After Step 4 verification passes, flip `[PLANNED]` → `[AS-IS]` in both the `.archify.json` spec and `docs/architecture/flows/README.md`, re-render interactive HTML and image assets, and verify that no in-scope flow remains `[PLANNED]`.
-4. Render and verify the interactive HTML diagram via:
-   `node ~/.gemini/config/skills/archify/bin/archify.mjs deliver <type> <input.json> <output.html> --quality showcase --json && node ~/.gemini/config/skills/archify/bin/archify.mjs check <output.html> --json`
-5. **Static Image Assets**: For diagrams embedded in `README.md` or markdown documentation, export and update dark and light static image assets in `docs/architecture/assets/<name>.png` and `docs/architecture/assets/<name>.light.png`.
-
-### 1.2 Module Contracts & Design Registry (EGM)
-1. **Design Registry**: Approved technical design documents live in `docs/designs/` and are indexed in `docs/designs/SITEMAP.md`. In an execution session, follow the approved design's implementation plan and verify any impacted flows against Section 1.1.
-2. **Module Contract Invariant**: Every Gradle module maintains a machine-verifiable contract in its `README.md` (`Interface`, `Invariants`, `Side Effects`, `Verification`). Before modifying a module, inspect its `README.md`. Any change to public symbols, invariants, side effects, or dependencies must update that module's `README.md` (and parent blueprint if boundaries change) in the same changeset.
+1. **Global Agent Rules**: `~/.gemini/config/AGENTS.md` (Git sign-off/attribution, unified EGM + Archify lifecycle,
+   post-implementation scaffolding pruning, and Archify/Chrome CLI commands).
+2. **Project Philosophy**: [`docs/PHILOSOPHY.md`](docs/PHILOSOPHY.md) (especially Section 3: Decision Filter & Boundary
+   Rules and Section 5: AI & Agentic Governance).
+3. **Unified Repository Documentation Index**: [`docs/README.md`](docs/README.md) (Single index for C4 Level 1/2 specs,
+   cross-repository wire flow specs, and EGM design specs in `docs/designs/`).
+4. **Module Contract Invariant**: Every Gradle module maintains a machine-verifiable contract in its
+   `<module>/README.md` (`Interface`, `Invariants`, `Side Effects`, `Verification`). Inspect a module's `README.md`
+   before modifying it, and update it (plus root `README.md` if topology changes) in the same changeset.
 
 ---
 
@@ -59,8 +50,6 @@ To satisfy Step 3 (`To-Be Flow & Lifecycle Spec`) of the Planning Protocol:
 
 ## 3. Verified Development & Verification Commands
 
-All agent verification must be performed using these verified-green commands:
-
 | Task / Purpose | Tier | Verified Command |
 |---|---|---|
 | **Fast Inner-Loop Feedback** | Tier 1 (Iterative) | `./scripts/verify.sh fast` |
@@ -72,9 +61,6 @@ All agent verification must be performed using these verified-green commands:
 
 > [!IMPORTANT]
 > **Verification Tier Policy**:
-> - Agents may use **Tier 1 (`fast`)** for rapid iterative feedback during development loops.
-> - Agents **MUST** run and pass **Tier 2 (`clean`)** before committing any changes or flipping any flow spec from `[PLANNED]` to `[AS-IS]`.
-
-*Note: `./scripts/verify.sh` is the Single Source of Truth for both Local/Sandbox and GitHub Actions CI (`CI=true`). It automatically resolves JDK 21+ via a 3-tier fallback, manages isolated `GRADLE_USER_HOME=/tmp/gradle-ro-home` with `GRADLE_RO_DEP_CACHE` for offline sandbox runs, and runs `check` (including `apiCheck` and unit tests). Never run publish or deployment commands.*
-
-
+> - Use **Tier 1 (`fast`)** for rapid iterative feedback during development loops.
+> - **MUST** run and pass **Tier 2 (`clean`)** before committing any changes or flipping any flow spec from `[PLANNED]`
+    to `[AS-IS]`.
