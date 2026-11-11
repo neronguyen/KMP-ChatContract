@@ -31,6 +31,9 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Verify Architecture Diagrams Freshness
+        run: ./scripts/sync-archify.sh --check
+
       - name: Run clean verification gate
         run: ./scripts/verify.sh clean
 
