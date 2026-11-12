@@ -25,18 +25,21 @@ sealed interface AuthValidationError : ValidationError {
     /** Validation errors for token refresh. */
     sealed interface RefreshToken : AuthValidationError
 
+    /** Validation errors for email verification. */
+    sealed interface VerifyEmail : AuthValidationError
+
     /** Validation errors for password reset. */
     sealed interface ResetPassword : AuthValidationError
 
     /** Validation errors for password change. */
     sealed interface ChangePassword : AuthValidationError
 
-    data object EmptyEmail : Email, Register, Login {
+    data object EmptyEmail : Email, Register, Login, VerifyEmail, ResetPassword {
         override val field: String = "email"
         override val message: String = "Email must not be blank"
     }
 
-    data object InvalidEmail : Email, Register, Login {
+    data object InvalidEmail : Email, Register, Login, VerifyEmail, ResetPassword {
         override val field: String = "email"
         override val message: String = "Invalid email format"
     }
@@ -62,9 +65,19 @@ sealed interface AuthValidationError : ValidationError {
         override val message: String = "Refresh token must not be blank"
     }
 
-    data object EmptyResetToken : ResetPassword {
-        override val field: String = "token"
-        override val message: String = "Token must not be blank"
+    data object EmptyOtpCode : VerifyEmail, ResetPassword {
+        override val field: String = "code"
+        override val message: String = "Verification code must not be blank"
+    }
+
+    data object InvalidOtpLength : VerifyEmail, ResetPassword {
+        override val field: String = "code"
+        override val message: String = "Verification code must be exactly 6 digits"
+    }
+
+    data object NonNumericOtp : VerifyEmail, ResetPassword {
+        override val field: String = "code"
+        override val message: String = "Verification code must contain only numbers"
     }
 
     data object EmptyOldPassword : ChangePassword {

@@ -10,7 +10,8 @@ Authentication wire DTOs, request payloads implementing `Validatable`, and seale
 - `[LoginRequest.kt:LoginRequest]`: Self-validating login wire payload (`email`, `password`).
 - `[RefreshTokenRequest.kt:RefreshTokenRequest]`: Self-validating token refresh payload (`refreshToken`).
 - `[EmailRequest.kt:EmailRequest]`: Self-validating verification/password-reset email request payload (`email`).
-- `[ResetPasswordRequest.kt:ResetPasswordRequest]`: Self-validating password reset payload (`token`, `newPassword`).
+- `[VerifyEmailRequest.kt:VerifyEmailRequest]`: Self-validating email verification payload (`email`, `code`).
+- `[ResetPasswordRequest.kt:ResetPasswordRequest]`: Self-validating password reset payload (`email`, `code`, `newPassword`).
 - `[ChangePasswordRequest.kt:ChangePasswordRequest]`: Self-validating password change payload (`oldPassword`, `newPassword`).
 - `[AuthServerError.kt:AuthServerError]`: Per-endpoint error hierarchies for `Register`, `Login`, `RefreshToken`, `Logout`, `VerifyEmail`, `ResetPassword`, `ChangePassword`.
 

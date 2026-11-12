@@ -16,7 +16,7 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyEmail : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Email, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Register {
+public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyEmail : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Email, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Register, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyEmail;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getField ()Ljava/lang/String;
@@ -43,6 +43,15 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyOtpCode : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyOtpCode;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyPassword : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Password, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Register {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyPassword;
 	public fun equals (Ljava/lang/Object;)Z
@@ -61,16 +70,7 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyResetToken : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword {
-	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$EmptyResetToken;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getField ()Ljava/lang/String;
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidEmail : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Email, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Register {
+public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidEmail : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Email, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Register, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidEmail;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getField ()Ljava/lang/String;
@@ -81,6 +81,15 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 
 public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidNewPassword : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ChangePassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidNewPassword;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidOtpLength : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$InvalidOtpLength;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getField ()Ljava/lang/String;
 	public fun getMessage ()Ljava/lang/String;
@@ -100,6 +109,15 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Login : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError {
 }
 
+public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$NonNumericOtp : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword, io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$NonNumericOtp;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getField ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Password : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError {
 }
 
@@ -112,6 +130,9 @@ public abstract interface class io/github/neronguyenvn/nerochat/contract/validat
 public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$ResetPassword : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError {
 }
 
+public abstract interface class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$VerifyEmail : io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError {
+}
+
 public final class io/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidator {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidator;
 	public final fun validateChangePassword (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
@@ -119,10 +140,12 @@ public final class io/github/neronguyenvn/nerochat/contract/validation/auth/Auth
 	public final fun validateEmail (Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Email;
 	public final fun validateEmailRequest (Ljava/lang/String;)Ljava/util/List;
 	public final fun validateLogin (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public final fun validateOtpCode (Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError;
 	public final fun validatePassword (Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/validation/auth/AuthValidationError$Password;
 	public final fun validateRefreshToken (Ljava/lang/String;)Ljava/util/List;
 	public final fun validateRegister (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
-	public final fun validateResetPassword (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public final fun validateResetPassword (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public final fun validateVerifyEmail (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
 }
 
 public final class io/github/neronguyenvn/nerochat/contract/validation/auth/PasswordValidator {

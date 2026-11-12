@@ -7,15 +7,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResetPasswordRequest(
-    val token: String,
+    val email: String,
+    val code: String,
     val newPassword: String,
 ) : Validatable<AuthValidationError.ResetPassword> {
     /**
      * Returns the errors from [AuthValidator.validateResetPassword], or an empty list if valid.
      */
     override fun validate(): List<AuthValidationError.ResetPassword> =
-        AuthValidator.validateResetPassword(token = token, newPassword = newPassword)
+        AuthValidator.validateResetPassword(email = email, code = code, newPassword = newPassword)
 
     override fun toString(): String =
-        "ResetPasswordRequest(token=[REDACTED], newPassword=[REDACTED])"
+        "ResetPasswordRequest(email=$email, code=[REDACTED], newPassword=[REDACTED])"
 }

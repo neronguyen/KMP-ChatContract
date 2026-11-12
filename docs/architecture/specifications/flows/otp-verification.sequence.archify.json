@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "[PLANNED] Numeric OTP Verification & Lockout Lifecycle",
+    "output": "docs/architecture/interactive/flows/otp-verification.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "client", "type": "frontend", "label": "Android Client", "sublabel": "OtpInputField & VM" },
+    { "id": "backend", "type": "backend", "label": "Backend API", "sublabel": "AuthController" },
+    { "id": "mq", "type": "messagebus", "label": "RabbitMQ", "sublabel": ":notification exchange" },
+    { "id": "otp_svc", "type": "security", "label": "RedissonOtpService", "sublabel": "RLock & Salted Hash" },
+    { "id": "redis", "type": "database", "label": "Redis (Redisson)", "sublabel": "Buckets, Locks & Counters" },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "sublabel": "User & Account Entity" }
+  ],
+  "segments": [
+    { "from": 150, "to": 360, "label": "Registration & 6-Digit OTP Dispatch" },
+    { "from": 370, "to": 500, "label": "RLock Concurrency & Atomic Code Check" },
+    { "from": 510, "to": 715, "label": "Reconciliation vs. Lockout Threshold" }
+  ],
+  "messages": [
+    { "id": "ui-reg", "from": "client", "to": "backend", "y": 165, "label": "POST /api/auth/register (RegisterRequest)", "variant": "emphasis" },
+    { "id": "db-save", "from": "backend", "to": "db", "y": 200, "label": "persist User (isEmailVerified = false)", "variant": "default" },
+    { "id": "gen-otp", "from": "backend", "to": "otp_svc", "y": 235, "label": "generateAndStoreOtp(verify, email)", "variant": "emphasis" },
+    { "id": "redis-set", "from": "otp_svc", "to": "redis", "y": 270, "label": "set hash (TTL=180s) & attempts=0", "variant": "default" },
+    { "id": "mq-pub", "from": "backend", "to": "mq", "y": 305, "label": "publish UserEvent.Created(otpCode)", "variant": "emphasis" },
+    { "id": "reg-ok", "from": "backend", "to": "client", "y": 340, "label": "200 OK (UserDto) -> Nav to OTP screen", "variant": "return" },
+    { "id": "submit-otp", "from": "client", "to": "backend", "y": 380, "label": "POST /api/auth/verify-email (code, email)", "variant": "emphasis" },
+    { "id": "verify-call", "from": "backend", "to": "otp_svc", "y": 415, "label": "verifyOtp(verify, email, code)", "variant": "emphasis" },
+    { "id": "redis-rlock", "from": "otp_svc", "to": "redis", "y": 450, "label": "RLock.tryLock(\"auth:otp:lock:...\", 2s lease)", "variant": "security" },
+    { "id": "get-code", "from": "otp_svc", "to": "redis", "y": 485, "label": "Check lockout bucket & fetch salted hash", "variant": "default" },
+    { "id": "match-ok", "from": "otp_svc", "to": "db", "y": 520, "label": "[Match] user.isEmailVerified = true", "variant": "default" },
+    { "id": "del-keys", "from": "otp_svc", "to": "redis", "y": 555, "label": "[Match] delete code & attempts keys", "variant": "default" },
+    { "id": "mismatch-inc", "from": "otp_svc", "to": "redis", "y": 590, "label": "[Mismatch] increment attempts (renew 180s)", "variant": "default" },
+    { "id": "lockout-set", "from": "otp_svc", "to": "redis", "y": 625, "label": "[Attempts >= 3] set lockout=true (TTL=300s)", "variant": "security" },
+    { "id": "rel-lock", "from": "otp_svc", "to": "redis", "y": 660, "label": "RLock.unlock()", "variant": "security" },
+    { "id": "http-res", "from": "backend", "to": "client", "y": 695, "label": "200 OK / 400 InvalidCode / 429 MaxAttempts", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "client", "from": 165, "to": 345 },
+    { "participant": "backend", "from": 165, "to": 345 },
+    { "participant": "otp_svc", "from": 235, "to": 275 },
+    { "participant": "client", "from": 380, "to": 700 },
+    { "participant": "backend", "from": 380, "to": 700 },
+    { "participant": "otp_svc", "from": 415, "to": 665 },
+    { "participant": "redis", "from": 450, "to": 665 }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "RLock Lease & Concurrency Guard",
+      "items": [
+        "verifyOtp acquires RLock with a 2-second lease time before checking Redis keys",
+        "Serializes concurrent HTTP requests per email:flow to prevent attempt ceiling race bypass",
+        "Auto-releases after 2 seconds to guarantee resilience against unhandled node crashes"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Lockout Threshold & Anti-Enumeration",
+      "items": [
+        "3 failed verification attempts trigger immediate 5-minute (300s) lockout bucket",
+        "Code and attempt keys are deleted immediately upon entering lockout state",
+        "Resend endpoints return uniform HTTP 204 No Content to prevent user account enumeration"
+      ]
+    }
+  ]
+}

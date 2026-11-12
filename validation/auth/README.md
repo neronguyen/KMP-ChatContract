@@ -4,9 +4,9 @@
 Authentication and credential validation rules implementing `Validatable` for login, registration, password updates, and token operations.
 
 ## Interface
-- `[AuthValidator.kt:AuthValidator]`: Central singleton validator for registration, login, refresh token, password reset, and password change requests.
+- `[AuthValidator.kt:AuthValidator]`: Central singleton validator for registration, login, refresh token, email verification, password reset, and password change requests.
 - `[PasswordValidator.kt:PasswordValidator]`: Password complexity and minimum length enforcement (`MIN_PASSWORD_LENGTH = 10`).
-- `[AuthValidationError.kt:AuthValidationError]`: Sealed hierarchy of authentication validation errors (`EmptyEmail`, `InvalidEmail`, `EmptyPassword`, `InvalidPassword`, `EmptyDisplayName`, `EmptyRefreshToken`, `EmptyResetToken`, `InvalidNewPassword`, `EmptyOldPassword`, `EmptyNewPassword`).
+- `[AuthValidationError.kt:AuthValidationError]`: Sealed hierarchy of authentication validation errors (`EmptyEmail`, `InvalidEmail`, `EmptyPassword`, `InvalidPassword`, `EmptyDisplayName`, `EmptyRefreshToken`, `EmptyOtpCode`, `InvalidOtpLength`, `NonNumericOtp`, `InvalidNewPassword`, `EmptyOldPassword`, `EmptyNewPassword`).
 
 ## Invariants
 - Depends exclusively on `:validation:common`.

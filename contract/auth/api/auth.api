@@ -179,14 +179,16 @@ public final class io/github/neronguyenvn/nerochat/contract/auth/RegisterRequest
 
 public final class io/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest : io/github/neronguyenvn/nerochat/contract/validation/Validatable {
 	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;
-	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/auth/ResetPasswordRequest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
 	public final fun getNewPassword ()Ljava/lang/String;
-	public final fun getToken ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public fun validate ()Ljava/util/List;
@@ -240,6 +242,36 @@ public final class io/github/neronguyenvn/nerochat/contract/auth/UserDto$Compani
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class io/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest : io/github/neronguyenvn/nerochat/contract/validation/Validatable {
+	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest;
+	public static synthetic fun copy$default (Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun validate ()Ljava/util/List;
+}
+
+public final synthetic class io/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/auth/VerifyEmailRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError;
 }
@@ -251,8 +283,24 @@ public abstract interface class io/github/neronguyenvn/nerochat/contract/auth/er
 public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ChangePassword$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
 }
 
+public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$CodeExpired : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ResetPassword, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$CodeExpired;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$EmailNotVerified : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Login {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$EmailNotVerified;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidCode : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ResetPassword, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidCode;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getCode-NTW1o38 ()Ljava/lang/String;
 	public fun hashCode ()I
@@ -267,7 +315,7 @@ public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServe
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Logout, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$RefreshToken, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ResetPassword, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
+public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Logout, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$RefreshToken {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getCode-NTW1o38 ()Ljava/lang/String;
@@ -287,6 +335,14 @@ public abstract interface class io/github/neronguyenvn/nerochat/contract/auth/er
 }
 
 public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Logout$Companion : io/github/neronguyenvn/nerochat/contract/error/ErrorContract {
+}
+
+public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$MaxAttemptsExceeded : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ResetPassword, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
+	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$MaxAttemptsExceeded;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCode-NTW1o38 ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$RefreshToken : io/github/neronguyenvn/nerochat/contract/error/ServerError {
