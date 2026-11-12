@@ -5364,11 +5364,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         </g>
         </g>
 
-        <g data-edge-from="otp_svc" data-edge-to="redis" data-edge-label="[Attempts &gt;= 3] set lockout=true (TTL=900s)" data-edge-key="13" data-edge-id="lockout-set">
+        <g data-edge-from="otp_svc" data-edge-to="redis" data-edge-label="[Attempts &gt;= 3] set lockout=true (TTL=300s)" data-edge-key="13" data-edge-id="lockout-set">
           <path data-composition-edge-from="otp_svc" data-composition-edge-to="redis" data-composition-edge-id="lockout-set" data-composition-points="579.8,625;716.4,625" d="M 579.8 625 L 716.4 625" class="a-security" data-animate="edge" style="--step:12" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
         <g data-detail="context">
           <rect x="500.19999999999993" y="605" width="295.8" height="18" rx="3" class="c-mask"/>
-          <text x="648.0999999999999" y="615" class="t-edge-security" font-size="11" text-anchor="middle">[Attempts &gt;= 3] set lockout=true (TTL=900s)</text>
+          <text x="648.0999999999999" y="615" class="t-edge-security" font-size="11" text-anchor="middle">[Attempts &gt;= 3] set lockout=true (TTL=300s)</text>
         </g>
         </g>
 
@@ -5693,7 +5693,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           <h3>Lockout Threshold &amp; Anti-Enumeration</h3>
         </div>
         <ul>
-          <li>3 failed verification attempts trigger immediate 15-minute (900s) lockout bucket</li>
+          <li>3 failed verification attempts trigger immediate 5-minute (300s) lockout bucket</li>
           <li>Code and attempt keys are deleted immediately upon entering lockout state</li>
           <li>Resend endpoints return uniform HTTP 204 No Content to prevent user account enumeration</li>
         </ul>

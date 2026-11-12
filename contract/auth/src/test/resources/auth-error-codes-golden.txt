@@ -1,4 +1,3 @@
-AuthServerError.AccountAlreadyVerified
 AuthServerError.CodeExpired
 AuthServerError.EmailNotVerified
 AuthServerError.InvalidCode

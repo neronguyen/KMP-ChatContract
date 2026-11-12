@@ -35,7 +35,7 @@
     { "id": "match-ok", "from": "otp_svc", "to": "db", "y": 520, "label": "[Match] user.isEmailVerified = true", "variant": "default" },
     { "id": "del-keys", "from": "otp_svc", "to": "redis", "y": 555, "label": "[Match] delete code & attempts keys", "variant": "default" },
     { "id": "mismatch-inc", "from": "otp_svc", "to": "redis", "y": 590, "label": "[Mismatch] increment attempts (renew 180s)", "variant": "default" },
-    { "id": "lockout-set", "from": "otp_svc", "to": "redis", "y": 625, "label": "[Attempts >= 3] set lockout=true (TTL=900s)", "variant": "security" },
+    { "id": "lockout-set", "from": "otp_svc", "to": "redis", "y": 625, "label": "[Attempts >= 3] set lockout=true (TTL=300s)", "variant": "security" },
     { "id": "rel-lock", "from": "otp_svc", "to": "redis", "y": 660, "label": "RLock.unlock()", "variant": "security" },
     { "id": "http-res", "from": "backend", "to": "client", "y": 695, "label": "200 OK / 400 InvalidCode / 429 MaxAttempts", "variant": "return" }
   ],
@@ -62,7 +62,7 @@
       "dot": "rose",
       "title": "Lockout Threshold & Anti-Enumeration",
       "items": [
-        "3 failed verification attempts trigger immediate 15-minute (900s) lockout bucket",
+        "3 failed verification attempts trigger immediate 5-minute (300s) lockout bucket",
         "Code and attempt keys are deleted immediately upon entering lockout state",
         "Resend endpoints return uniform HTTP 204 No Content to prevent user account enumeration"
       ]

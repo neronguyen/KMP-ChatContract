@@ -66,7 +66,7 @@ database tables and background cleanup jobs.
 * **G3 (Hardened Brute-Force & Abuse Defense):**
     - Enforce a strict **3-minute (180s)** validity window per generated OTP.
     - Enforce a hard ceiling of **3 failed attempts** per OTP. On the 3rd failed attempt, invalidate the OTP immediately
-      and trigger a **15-minute (900s)** lockout on that email.
+      and trigger a **5-minute (300s)** lockout on that email.
     - Enforce exponential resend cooldown (`60s` → `300s` → `3600s`) via `EmailRateLimitingService`.
     - Enforce distributed IP rate limiting via `@IpRateLimiting` on all verification and reset endpoints.
     - Store salted SHA-256 hashes of OTP codes in Redis with application pepper to protect server logs and memory dumps.
@@ -133,7 +133,7 @@ database tables and background cleanup jobs.
     1. The 1st and 2nd incorrect attempts increment the Redisson attempt counter (with 180s TTL renewal) and return
        `400 Bad Request` with `AuthServerError.InvalidCode`.
     2. The 3rd incorrect attempt immediately deletes the OTP code key, resets the attempt counter, sets
-       `auth:otp:lockout:verify:alice@example.com` (`RBucket<Boolean>` = `true`) with 15-minute (900s) TTL, and returns
+       `auth:otp:lockout:verify:alice@example.com` (`RBucket<Boolean>` = `true`) with 5-minute (300s) TTL, and returns
        `429 Too Many Requests` with `AuthServerError.MaxAttemptsExceeded`.
     3. Any subsequent verification attempt within 15 minutes returns `429 Too Many Requests`.
     4. Any resend verification attempt (`POST /api/auth/resend-verification`) within 15 minutes silently returns
@@ -170,8 +170,7 @@ database tables and background cleanup jobs.
 │                   KMP-ChatContract (Pure Kotlin SSOT)                  │
 │  - VerifyEmailRequest(email, code) & ResetPasswordRequest(email, ...)   │
 │  - AuthValidator (validateVerifyEmail, validateResetPassword)          │
-│  - AuthServerError: InvalidCode, CodeExpired, MaxAttemptsExceeded,     │
-│    AccountAlreadyVerified                                              │
+│  - AuthServerError: InvalidCode, CodeExpired, MaxAttemptsExceeded     │
 │  - Golden Snapshots: auth-error-codes-golden.txt                       │
 └──────────────────────────────────┬─────────────────────────────────────┘
                                    │ Wire DTOs & Error Hierarchy
@@ -196,7 +195,7 @@ All OTP operational state is isolated from the relational database and organized
 |:-----------------------------------|:-------------------|:-----------------------------------|:-------------------------|:--------------------------------------------------------------------------------------|
 | `auth:otp:code:{type}:{email}`     | `RBucket<String>`  | Salted SHA-256 hash of 6-digit OTP | `180s` (3 min)           | Hard expiry on TTL or deleted upon verification / lockout                             |
 | `auth:otp:attempts:{type}:{email}` | `RAtomicLong`      | Failed attempt count (`0..3`)      | `180s` (3 min)           | Explicitly renewed on increment (`expire(180s)`); deleted upon verification / lockout |
-| `auth:otp:lockout:{type}:{email}`  | `RBucket<Boolean>` | `true`                             | `900s` (15 min)          | Automatic expiration; presence blocks verification and resend                         |
+| `auth:otp:lockout:{type}:{email}`  | `RBucket<Boolean>` | `true`                             | `300s` (5 min)           | Automatic expiration; presence blocks verification and resend                         |
 | `auth:otp:lock:{type}:{email}`     | `RLock`            | Distributed lock lease (`2s`)      | Auto-released            | Guards concurrent check-and-increment operations against race conditions              |
 | `rate_limit:email:{email}`         | `RBucket<String>`  | Resend backoff flag (`1`)          | `60s` / `300s` / `3600s` | Controlled by existing `EmailRateLimitingService`                                     |
 | `attempt_count:email:{email}`      | `RAtomicLong`      | Total resends in 24h window        | `24 hours`               | Controlled by existing `EmailRateLimitingService`                                     |
@@ -211,23 +210,21 @@ To prevent concurrent brute-force race conditions where parallel HTTP requests a
 1. `RedissonOtpService.verifyOtp` acquires `RLock("auth:otp:lock:$type:$email")` with a 2-second lease time.
 2. If `auth:otp:lockout:$type:$email` exists, immediately return `AuthServerError.MaxAttemptsExceeded` (HTTP 429).
 3. If `auth:otp:code:$type:$email` does not exist:
-    - Query `userRepository.findByEmail(email)`. If `type == verify` and `user?.isEmailVerified == true`, return
-      `AuthServerError.AccountAlreadyVerified` (HTTP 400).
-    - Otherwise, return `AuthServerError.CodeExpired` (HTTP 400).
+    - Return `AuthServerError.CodeExpired` (HTTP 400). (Do NOT query `userRepository.findByEmail(email)` to strictly prevent Account Enumeration attacks).
 4. Hash the incoming code with application pepper and email salt (`sha256Hex("$email:$rawCode:$pepper")`) and perform a
    constant-time comparison against the stored hash (`MessageDigest.isEqual`).
 5. **On Success**:
-    - For `verify`: execute PostgreSQL update `user.isEmailVerified = true`.
-    - For `reset`: execute semantic check `passwordEncoder.matches(newPassword, user.hashedPassword)` (throwing
-      `SamePasswordException` if true). Then update password hash and call
-      `refreshTokenRepository.deleteByUserId(user.id)`.
-    - Atomically delete `auth:otp:code:...` and `auth:otp:attempts:...`.
+    - `RedissonOtpService` signals verification success.
+    - Relational updates execute in Spring's `@Transactional` boundary:
+        - For `verify`: `EmailVerificationService` sets `user.isEmailVerified = true` in PostgreSQL and publishes `UserEvent.Verified`.
+        - For `reset`: `PasswordResetService` validates `passwordEncoder.matches(newPassword, user.hashedPassword)` (throwing `SamePasswordException` if true), updates password hash, and executes `refreshTokenRepository.deleteByUserId(user.id)`.
+    - Upon successful transaction commit, delete `auth:otp:code:...` and `auth:otp:attempts:...` from Redis. If the DB transaction fails, Redis keys are preserved for user retry.
 6. **On Mismatch**:
     - Increment `RAtomicLong("auth:otp:attempts:$type:$email")` and call `.expire(Duration.ofSeconds(180))`.
     - If the new attempt count $\ge 3$:
         - Delete `auth:otp:code:...` and `auth:otp:attempts:...`.
-        - Set `auth:otp:lockout:$type:$email` (`RBucket<Boolean>` = `true`) with 15-minute (900s) TTL.
-        - Return `AuthServerError.MaxAttemptsExceeded` (HTTP 429).
+        - Set `auth:otp:lockout:$type:$email` (`RBucket<Boolean>` = `true`) with 5-minute (300s) TTL.
+        - Return `AuthServerError.MaxAttemptsExceeded` (HTTP 429) with standard `Retry-After: <remaining_seconds>` header.
     - If the count $< 3$:
         - Return `AuthServerError.InvalidCode` (HTTP 400) indicating incorrect code.
 
@@ -345,7 +342,7 @@ To prevent concurrent brute-force race conditions where parallel HTTP requests a
     * A 10-minute window combined with 5 attempts is too permissive for a small $10^6$ keyspace, leaving the system
       vulnerable to distributed brute-force enumeration.
 * **Reason for Rejection**: *Rejected by author: 10 minutes creates an unnecessarily large vulnerability window.
-  Shortening TTL to 3 minutes and capping failed attempts at 3 with an immediate 15-minute lockout provides robust
+  Shortening TTL to 3 minutes and capping failed attempts at 3 with an immediate 5-minute lockout provides robust
   brute-force defense, while asynchronous RabbitMQ email delivery and invalidate-on-resend handle legitimate delivery
   latency.*
 
@@ -432,11 +429,11 @@ The implementation is executed in three strictly sequenced phases following the 
 * **Type / Scope**: Sealed ServerError hierarchy (`contract:auth`).
 * **Proposed Changes**:
     - Under `sealed interface VerifyEmail : AuthServerError`: Add `data object InvalidCode`, `data object CodeExpired`,
-      `data object MaxAttemptsExceeded`, `data object AccountAlreadyVerified`. Register in companion
-      `ErrorContract<VerifyEmail>`.
+      `data object MaxAttemptsExceeded`. Register in companion `ErrorContract<VerifyEmail>`. Remove `InvalidToken` from
+      `VerifyEmail` hierarchy.
     - Under `sealed interface ResetPassword : AuthServerError`: Add `data object InvalidCode`,
       `data object CodeExpired`, `data object MaxAttemptsExceeded`. Register in companion
-      `ErrorContract<ResetPassword>`.
+      `ErrorContract<ResetPassword>`. Remove `InvalidToken` from `ResetPassword` hierarchy.
 
 #### 6. `contract/auth/src/test/resources/auth-error-codes-golden.txt` & `contract/chat/src/test/resources/error-codes-golden.txt` (Modify)
 
@@ -472,7 +469,7 @@ The implementation is executed in three strictly sequenced phases following the 
 * **Proposed Changes**: Implement zero-padded OTP generation
   (`String.format("%06d", SecureRandom().nextInt(1_000_000))`), peppered SHA-256 hashing, storage in `RBucket<String>`
   with 180s TTL, attempt counting via `RAtomicLong` with explicit 180s renewal, lockout via `RBucket<Boolean>` (`true`)
-  with 900s TTL, and concurrency protection via `RLock`.
+  with 300s (5 min) TTL, and concurrency protection via `RLock` (`waitTime = 2s`, `leaseTime = 2s`). In `generateAndStoreOtp(type, email)`: if `lockout` key is present, suppress generation (silent return for anti-enumeration); otherwise store new code hash with 180s TTL and explicitly reset/delete `attempts` counter to 0 so fresh code receives 3 attempts.
 
 #### 11. `user/src/main/kotlin/io/github/neronguyenvn/nerochat/user/service/EmailVerificationService.kt` (Modify)
 
@@ -501,9 +498,9 @@ The implementation is executed in three strictly sequenced phases following the 
 
 * **Type / Scope**: Controller Advice (`:user`).
 * **Proposed Changes**: Add handlers for `OtpExpiredException` (maps to `AuthServerError.CodeExpired`, HTTP 400),
-  `MaxAttemptsExceededException` (maps to `AuthServerError.MaxAttemptsExceeded`, HTTP 429),
-  `AccountAlreadyVerifiedException` (maps to `AuthServerError.AccountAlreadyVerified`, HTTP 400), and
-  `InvalidTokenException` (maps to `AuthServerError.InvalidCode`, HTTP 400).
+  `MaxAttemptsExceededException` (maps to `AuthServerError.MaxAttemptsExceeded`, HTTP 429, populating `Retry-After: <seconds>` header),
+  and a new domain exception `InvalidOtpException` (maps to `AuthServerError.InvalidCode`, HTTP 400).
+  Preserve `InvalidTokenException` (maps to `AuthServerError.InvalidToken`, HTTP 401) exclusively for JWT refresh token and logout flows.
 
 #### 15. `user/src/main/kotlin/io/github/neronguyenvn/nerochat/user/infra/database/model/AuthTokenEntity.kt` & `repository/AuthTokenRepository.kt` (Delete)
 
@@ -549,13 +546,13 @@ The implementation is executed in three strictly sequenced phases following the 
 
 * **Type / Scope**: Domain Error Hierarchy (`:core:model`).
 * **Proposed Changes**: Under sealed hierarchies `AuthError.VerifyEmail` and `AuthError.ResetPassword`, add
-  `InvalidCode`, `CodeExpired`, `MaxAttemptsExceeded`, `AccountAlreadyVerified`.
+  `InvalidCode`, `CodeExpired`, `MaxAttemptsExceeded(val retryAfterSeconds: Long?)`.
 
 #### 22. `core/data/src/main/kotlin/io/github/neronguyen/chat/core/data/mapper/AuthErrorMapper.kt` (Modify)
 
 * **Type / Scope**: Data Layer Mapper (`:core:data`).
-* **Proposed Changes**: Map contract `AuthServerError.InvalidCode`, `CodeExpired`, `MaxAttemptsExceeded`,
-  `AccountAlreadyVerified` to domain `AuthError` equivalents.
+* **Proposed Changes**: Map contract `AuthServerError.InvalidCode`, `CodeExpired`, `MaxAttemptsExceeded`
+  to domain `AuthError` equivalents, extracting `Retry-After` header when available.
 
 #### 23. `core/network/src/main/kotlin/io/github/neronguyen/chat/core/network/retrofit/RetrofitAuthNetwork.kt` & `AuthNetworkDataSource.kt` (Modify)
 
@@ -629,7 +626,7 @@ The implementation is executed in three strictly sequenced phases following the 
 1. **Happy Path Registration**: Submit registration $\to$ read generated OTP from Redis $\to$ submit OTP $\to$ assert
    `user.isEmailVerified == true` and client navigates to `LoginScreen` with success banner.
 2. **Brute-Force Lockout**: Issue 3 invalid codes $\to$ assert 3rd response is `429 MaxAttemptsExceeded` $\to$ assert
-   Redis `lockout` key exists with $\le 900s$ TTL $\to$ assert 4th request returns 429 without checking code.
+   Redis `lockout` key exists with $\le 300s$ TTL $\to$ assert 4th request returns 429 without checking code.
 3. **Password Oracle Immunity**: Submit incorrect OTP with matching old password $\to$ assert endpoint returns
    `400 InvalidCode`, not `400 SamePassword`.
 4. **Resend Anti-Enumeration**: Request resend on locked-out email $\to$ assert response is `204 No Content` without

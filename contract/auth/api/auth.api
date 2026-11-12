@@ -276,14 +276,6 @@ public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServe
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError;
 }
 
-public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$AccountAlreadyVerified : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
-	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$AccountAlreadyVerified;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getCode-NTW1o38 ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public abstract interface class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ChangePassword : io/github/neronguyenvn/nerochat/contract/error/ServerError {
 	public static final field Companion Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ChangePassword$Companion;
 }
@@ -323,7 +315,7 @@ public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServe
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Logout, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$RefreshToken, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$ResetPassword, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$VerifyEmail {
+public final class io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken : io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$Logout, io/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$RefreshToken {
 	public static final field INSTANCE Lio/github/neronguyenvn/nerochat/contract/auth/error/AuthServerError$InvalidToken;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getCode-NTW1o38 ()Ljava/lang/String;

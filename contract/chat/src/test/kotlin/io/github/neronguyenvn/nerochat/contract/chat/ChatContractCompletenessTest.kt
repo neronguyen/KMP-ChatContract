@@ -72,7 +72,7 @@ class ChatContractCompletenessTest {
 
         val allCodes = commonCodes + authCodes + chatCodes
         assertEquals(allCodes.size, allCodes.distinct().size, "All error codes must be globally unique")
-        assertEquals(27, allCodes.size, "Expected exactly 27 error codes across the entire system")
+        assertEquals(26, allCodes.size, "Expected exactly 26 error codes across the entire system")
     }
 
     @Test
