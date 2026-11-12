@@ -30,6 +30,6 @@ design documents.
 
 ## 3. Technical Design Documents (EGM)
 
-| Design Document                   | Date | Status | Target Modules | Linked Archify Specs | Summary                       |
-|-----------------------------------|------|--------|----------------|----------------------|-------------------------------|
-| *(No active feature designs yet)* | —    | —      | —              | —                    | Unified registry initialized. |
+| Design Document                                                                          | Date       | Status  | Target Modules                                                 | Linked Archify Specs                                                                                       | Summary                                                                              |
+|------------------------------------------------------------------------------------------|------------|---------|----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| [**6-Digit OTP Email Verification & Password Reset**](designs/otp-email-verification.md) | 2026-11-12 | `Draft` | `:contract:auth`, `:validation:auth`, `:user`, `:feature:auth` | [`otp-verification` (Planned)](./architecture/specifications/flows/otp-verification.sequence.archify.json) | Cross-repo migration from email deep links to 6-digit OTP backed purely by Redisson. |
