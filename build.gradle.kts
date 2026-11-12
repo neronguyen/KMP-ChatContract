@@ -10,7 +10,7 @@ plugins {
 
 val contractVersion: String = providers.gradleProperty("version").orNull
     ?.takeIf { it != "unspecified" }
-    ?: "0.1.0"
+    ?: "0.6.0"
 
 group = "io.github.neronguyenvn.nerochat.contract"
 version = contractVersion
