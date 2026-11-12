@@ -122,8 +122,11 @@ class AuthContractTest {
         assertTrue(RefreshTokenRequest("refresh-token").validate().isEmpty())
         assertEquals(1, RefreshTokenRequest("").validate().size)
 
-        assertTrue(ResetPasswordRequest("token-123", "password123").validate().isEmpty())
-        assertEquals(2, ResetPasswordRequest("", "pass").validate().size)
+        assertTrue(VerifyEmailRequest("alice@example.com", "123456").validate().isEmpty())
+        assertEquals(2, VerifyEmailRequest("", "12").validate().size)
+
+        assertTrue(ResetPasswordRequest("alice@example.com", "123456", "password123").validate().isEmpty())
+        assertEquals(3, ResetPasswordRequest("", "pass", "weak").validate().size)
 
         assertTrue(ChangePasswordRequest("oldPass123", "newPass123").validate().isEmpty())
         assertEquals(2, ChangePasswordRequest("", "").validate().size)
@@ -153,9 +156,15 @@ class AuthContractTest {
             login.toString()
         )
 
-        val reset = ResetPasswordRequest("secret-token", "secret-new-password")
+        val verify = VerifyEmailRequest("alice@example.com", "123456")
         assertEquals(
-            "ResetPasswordRequest(token=[REDACTED], newPassword=[REDACTED])",
+            "VerifyEmailRequest(email=alice@example.com, code=[REDACTED])",
+            verify.toString()
+        )
+
+        val reset = ResetPasswordRequest("alice@example.com", "123456", "secret-new-password")
+        assertEquals(
+            "ResetPasswordRequest(email=alice@example.com, code=[REDACTED], newPassword=[REDACTED])",
             reset.toString()
         )
 

@@ -101,18 +101,60 @@ object AuthValidator {
     }
 
     /**
-     * Checks that [token] is nonblank and [newPassword] satisfies [PasswordValidator.isValidPassword].
-     * Returns at most one error per field in token, password order, or an empty list.
-     * Null and blank inputs produce the corresponding empty-field errors.
+     * Validates that [code] is a 6-digit numeric string.
+     * Returns `EmptyOtpCode` if null or blank, `InvalidOtpLength` if length != 6,
+     * `NonNumericOtp` if it contains non-digit characters, or `null` if valid.
+     */
+    fun validateOtpCode(code: String?): AuthValidationError? {
+        if (code.isNullOrBlank()) return AuthValidationError.EmptyOtpCode
+        if (code.length != 6) return AuthValidationError.InvalidOtpLength
+        if (!code.all { it in '0'..'9' }) return AuthValidationError.NonNumericOtp
+        return null
+    }
+
+    /**
+     * Checks email format and 6-digit OTP code for email verification.
+     * Returns at most one error per field in email, code order, or an empty list.
+     */
+    fun validateVerifyEmail(
+        email: String?,
+        code: String?,
+    ): List<AuthValidationError.VerifyEmail> {
+        val errors = mutableListOf<AuthValidationError.VerifyEmail>()
+        if (email.isNullOrBlank()) {
+            errors.add(AuthValidationError.EmptyEmail)
+        } else if (!EmailValidator.isValidEmail(email)) {
+            errors.add(AuthValidationError.InvalidEmail)
+        }
+
+        when (val otpError = validateOtpCode(code)) {
+            is AuthValidationError.VerifyEmail -> errors.add(otpError)
+            else -> {}
+        }
+        return errors
+    }
+
+    /**
+     * Checks email format, 6-digit OTP code, and [PasswordValidator.isValidPassword] for password reset.
+     * Returns at most one error per field in email, code, new-password order, or an empty list.
      */
     fun validateResetPassword(
-        token: String?,
+        email: String?,
+        code: String?,
         newPassword: String?,
     ): List<AuthValidationError.ResetPassword> {
         val errors = mutableListOf<AuthValidationError.ResetPassword>()
-        if (token.isNullOrBlank()) {
-            errors.add(AuthValidationError.EmptyResetToken)
+        if (email.isNullOrBlank()) {
+            errors.add(AuthValidationError.EmptyEmail)
+        } else if (!EmailValidator.isValidEmail(email)) {
+            errors.add(AuthValidationError.InvalidEmail)
         }
+
+        when (val otpError = validateOtpCode(code)) {
+            is AuthValidationError.ResetPassword -> errors.add(otpError)
+            else -> {}
+        }
+
         if (newPassword.isNullOrBlank()) {
             errors.add(AuthValidationError.EmptyNewPassword)
         } else if (!PasswordValidator.isValidPassword(newPassword)) {

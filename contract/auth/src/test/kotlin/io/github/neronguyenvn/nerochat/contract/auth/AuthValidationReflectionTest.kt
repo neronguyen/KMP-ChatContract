@@ -48,6 +48,7 @@ class AuthValidationReflectionTest {
             AuthValidationError.Login::class to LoginRequest::class,
             AuthValidationError.Email::class to EmailRequest::class,
             AuthValidationError.RefreshToken::class to RefreshTokenRequest::class,
+            AuthValidationError.VerifyEmail::class to VerifyEmailRequest::class,
             AuthValidationError.ResetPassword::class to ResetPasswordRequest::class,
             AuthValidationError.ChangePassword::class to ChangePasswordRequest::class,
         )

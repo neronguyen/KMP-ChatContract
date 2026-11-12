@@ -1,6 +1,10 @@
+AuthServerError.AccountAlreadyVerified
+AuthServerError.CodeExpired
 AuthServerError.EmailNotVerified
+AuthServerError.InvalidCode
 AuthServerError.InvalidCredentials
 AuthServerError.InvalidToken
+AuthServerError.MaxAttemptsExceeded
 AuthServerError.SamePassword
 AuthServerError.UserAlreadyExists
 AuthServerError.UserNotFound

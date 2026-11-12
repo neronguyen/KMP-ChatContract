@@ -231,52 +231,13 @@ To prevent concurrent brute-force race conditions where parallel HTTP requests a
     - If the count $< 3$:
         - Return `AuthServerError.InvalidCode` (HTTP 400) indicating incorrect code.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Alice
-    participant App as Android Client
-    participant AuthCtrl as AuthController
-    participant OtpSvc as RedissonOtpService
-    participant Redis as Redis (Redisson)
-    participant DB as PostgreSQL
-    participant MQ as RabbitMQ (:notification)
+> **Interactive Viewer**: [`docs/architecture/interactive/flows/otp-verification.html`](../architecture/interactive/flows/otp-verification.html) · **Spec**: [`otp-verification.sequence.archify.json`](../architecture/specifications/flows/otp-verification.sequence.archify.json)
 
-    Note over User, App: 1. Registration & OTP Dispatch
-    User->>App: Submits Registration
-    App->>AuthCtrl: POST /api/auth/register
-    AuthCtrl->>DB: Save User (isEmailVerified=false)
-    AuthCtrl->>OtpSvc: generateAndStoreOtp(verify, email)
-    OtpSvc->>Redis: Set code (hash, TTL=180s) & attempts=0
-    AuthCtrl->>MQ: Publish UserEvent.Created(userId, email, otpCode)
-    AuthCtrl-->>App: 200 OK (UserDto)
-    App->>App: Navigate to VerifyEmailScreen (cooldown=60s)
-    MQ-->>User: Async Email with 6-digit OTP
-
-    Note over User, App: 2. Verification & Redisson Lock
-    User->>App: Enters/Pastes 6 digits
-    App->>AuthCtrl: POST /api/auth/verify-email (email, code)
-    AuthCtrl->>OtpSvc: verifyOtp(verify, email, code)
-    OtpSvc->>Redis: Acquire RLock("auth:otp:lock:verify:email")
-    OtpSvc->>Redis: Check Lockout & Get Hashed Code
-    alt Code Matches
-        OtpSvc->>DB: user.isEmailVerified = true
-        OtpSvc->>Redis: Delete code & attempts keys
-        OtpSvc->>Redis: Release RLock
-        AuthCtrl-->>App: 200 OK (Unit)
-        App->>App: Navigate to LoginScreen (Success Banner)
-    else Code Mismatches (Attempt < 3)
-        OtpSvc->>Redis: Increment attempts counter (renew 180s TTL)
-        OtpSvc->>Redis: Release RLock
-        AuthCtrl-->>App: 400 Bad Request (InvalidCode)
-        App->>User: Inline Error: "Invalid verification code"
-    else Code Mismatches (Attempt = 3)
-        OtpSvc->>Redis: Delete code & Set Lockout (TTL=900s)
-        OtpSvc->>Redis: Release RLock
-        AuthCtrl-->>App: 429 Too Many Requests (MaxAttemptsExceeded)
-        App->>User: Inline Error: "Too many failed attempts. Try again in 15 minutes."
-    end
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../architecture/assets/otp-verification.png">
+  <source media="(prefers-color-scheme: light)" srcset="../architecture/assets/otp-verification.light.png">
+  <img alt="Numeric OTP Verification & Lockout Lifecycle Sequence" src="../architecture/assets/otp-verification.png">
+</picture>
 
 ### 4. Client-Side Presentation & Lifecycle Architecture
 

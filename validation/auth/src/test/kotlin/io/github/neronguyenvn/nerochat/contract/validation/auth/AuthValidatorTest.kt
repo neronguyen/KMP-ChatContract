@@ -93,12 +93,40 @@ class AuthValidatorTest {
     }
 
     @Test
-    fun testValidateResetPassword() {
-        assertTrue(AuthValidator.validateResetPassword("token123", "newPassword1").isEmpty())
+    fun testValidateOtpCode() {
+        assertNull(AuthValidator.validateOtpCode("123456"))
+        assertNull(AuthValidator.validateOtpCode("000000"))
+        assertNull(AuthValidator.validateOtpCode("999999"))
 
-        val errors = AuthValidator.validateResetPassword("", "weak")
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode(null))
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode(""))
+        assertEquals(AuthValidationError.EmptyOtpCode, AuthValidator.validateOtpCode("   "))
+
+        assertEquals(AuthValidationError.InvalidOtpLength, AuthValidator.validateOtpCode("12345"))
+        assertEquals(AuthValidationError.InvalidOtpLength, AuthValidator.validateOtpCode("1234567"))
+
+        assertEquals(AuthValidationError.NonNumericOtp, AuthValidator.validateOtpCode("12a456"))
+        assertEquals(AuthValidationError.NonNumericOtp, AuthValidator.validateOtpCode("abcdef"))
+    }
+
+    @Test
+    fun testValidateVerifyEmail() {
+        assertTrue(AuthValidator.validateVerifyEmail("alice@example.com", "123456").isEmpty())
+
+        val errors = AuthValidator.validateVerifyEmail("", "12")
         assertEquals(2, errors.size)
-        assertTrue(errors.contains(AuthValidationError.EmptyResetToken))
+        assertTrue(errors.contains(AuthValidationError.EmptyEmail))
+        assertTrue(errors.contains(AuthValidationError.InvalidOtpLength))
+    }
+
+    @Test
+    fun testValidateResetPasswordWithOtp() {
+        assertTrue(AuthValidator.validateResetPassword("alice@example.com", "123456", "newPassword1").isEmpty())
+
+        val errors = AuthValidator.validateResetPassword("invalid-email", "abc", "weak")
+        assertEquals(3, errors.size)
+        assertTrue(errors.contains(AuthValidationError.InvalidEmail))
+        assertTrue(errors.contains(AuthValidationError.InvalidOtpLength))
         assertTrue(errors.contains(AuthValidationError.InvalidNewPassword))
     }
 

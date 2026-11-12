@@ -48,12 +48,24 @@ class AuthGoldenWireTest {
     }
 
     @Test
+    fun `VerifyEmailRequest matches golden wire format`() {
+        val req = VerifyEmailRequest(
+            email = "alice@example.com",
+            code = "123456",
+        )
+        val expected = """{"email":"alice@example.com","code":"123456"}"""
+        assertEquals(expected, json.encodeToString(req))
+        assertEquals(req, json.decodeFromString<VerifyEmailRequest>(expected))
+    }
+
+    @Test
     fun `ResetPasswordRequest matches golden wire format`() {
         val req = ResetPasswordRequest(
-            token = "reset-token-67890",
+            email = "alice@example.com",
+            code = "123456",
             newPassword = "NewPassword123!",
         )
-        val expected = """{"token":"reset-token-67890","newPassword":"NewPassword123!"}"""
+        val expected = """{"email":"alice@example.com","code":"123456","newPassword":"NewPassword123!"}"""
         assertEquals(expected, json.encodeToString(req))
         assertEquals(req, json.decodeFromString<ResetPasswordRequest>(expected))
     }
