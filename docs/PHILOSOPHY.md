@@ -6,12 +6,12 @@
 
 ## 1. Core Claim
 
-> **Chat is a personal systems lab for mastering how client–server communication really works — by building it,
-verifying it deterministically, and explaining it publicly.**
+> **Chat is a personal systems engineering lab for mastering how distributed client–server communication and client UI
+> architecture really work — by building them, verifying them deterministically, and explaining them publicly.**
 
 It is not a commercial product. Success is measured by architectural clarity, deterministic verification, and the
-engineering artifacts produced (production-grade codebase, public case studies, and resume proof-of-work) — not user
-count.
+engineering artifacts produced (production-grade codebase, public case studies, and engineering proof-of-work) — not
+user count.
 
 ---
 
@@ -34,8 +34,8 @@ three-stage loop:
 
 ## 3. Decision Filter & Boundary Rules
 
-> **Does this deepen my mastery of distributed client–server mechanics, and can I deterministically verify and explain
-it?**
+> **Does this deepen my mastery of distributed client–server mechanics or client UI architecture, and can I
+> deterministically verify and explain it?**
 
 - **Expose the Mechanics (Abstraction Ceiling)**: Use foundational transport and storage primitives (e.g., Spring Boot,
   OkHttp/Ktor, raw WebSockets/gRPC, PostgreSQL, Room). Strictly ban black-box BaaS or chat SDKs (Firebase, Sendbird,
@@ -43,10 +43,16 @@ it?**
 - **Schema as Single Source of Truth**: Client–server contracts must be explicit, versioned, and compile-safe. Never
   hand-write duplicate DTOs across Android and Spring Boot; all wire models must derive from a unified contract
   definition.
-- **Compound Engineering Value**: Prioritize problems that teach transferable systems engineering (idempotency,
-  offline-first sync, cursor pagination, reconnection backoff, automated agent harnesses).
-- **Reject Cosmetic Bloat**: UI polish, animations, and clone features that do not stress-test the architecture or
-  contribute to the core technical narrative do not pass.
+- **Compound Engineering Value**: Prioritize problems that teach transferable systems and client architecture
+  engineering (idempotency, offline-first sync, cursor pagination, reconnection backoff, declarative UI state stability,
+  and automated verification harnesses).
+- **Intentional UI Engineering Over Cosmetic Feature Creep**:
+    - *Invest in Client UI Architecture*: Treat state hoisting, rendering stability, list/scroll
+      invariants, window/IME boundary handling, state-driven transitions (`SENDING` → `SENT` / `FAILED`, sync banners),
+      tokenized design systems, and automated UI verification (static boundary rules, component previews, headless
+      semantics tests, screenshot regression) as first-class engineering problems.
+    - *Reject Clone Bloat & Pixel Procrastination*: Ban repetitive CRUD screens, clone features that teach no new
+      systems or client architecture mechanics, and unbounded manual pixel-tweaking outside code-driven verification.
 
 ---
 
