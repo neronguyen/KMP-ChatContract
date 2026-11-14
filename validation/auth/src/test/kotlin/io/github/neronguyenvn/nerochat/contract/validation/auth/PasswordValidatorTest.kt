@@ -23,5 +23,8 @@ class PasswordValidatorTest {
         assertFalse(PasswordValidator.isValidPassword("Short1"))
         assertFalse(PasswordValidator.isValidPassword("NoDigitsHere!"))
         assertFalse(PasswordValidator.isValidPassword("12345678901"))
+        // Surrogate pairs count as 1 code point each (Pass1234 + 1 emoji = 9 code points < 10)
+        assertFalse(PasswordValidator.isValidPassword("Pass1234🚀"))
+        assertTrue(PasswordValidator.isValidPassword("Pass1234🚀🎉"))
     }
 }

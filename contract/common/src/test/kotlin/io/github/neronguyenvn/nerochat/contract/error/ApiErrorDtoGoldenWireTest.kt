@@ -1,12 +1,12 @@
 package io.github.neronguyenvn.nerochat.contract.error
 
-import kotlinx.serialization.json.Json
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApiErrorDtoGoldenWireTest {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = ContractJson
 
     @Test
     fun `ApiErrorDto serializes to golden wire json format`() {
@@ -14,7 +14,7 @@ class ApiErrorDtoGoldenWireTest {
             error = CommonServerError.BadRequest,
             message = "Invalid request",
         )
-        val expectedJson = """{"error":"CommonServerError.BadRequest","message":"Invalid request"}"""
+        val expectedJson = """{"error":"CommonServerError.BadRequest","message":"Invalid request","fieldErrors":{}}"""
 
         val actualJson = json.encodeToString(dto)
         assertEquals(expectedJson, actualJson)

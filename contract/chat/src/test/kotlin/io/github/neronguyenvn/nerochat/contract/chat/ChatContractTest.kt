@@ -1,8 +1,8 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
 import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -12,9 +12,7 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class)
 class ChatContractTest {
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
+    private val json = ContractJson
 
     @Test
     fun `ChatRoomDto serializes and deserializes correctly`() {

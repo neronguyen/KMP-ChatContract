@@ -14,7 +14,7 @@ object PasswordValidator {
      */
     fun isValidPassword(password: String?): Boolean {
         if (password.isNullOrBlank()) return false
-        val codePoints = password.codePointCount(0, password.length)
+        val codePoints = countUnicodeCodePoints(password)
         if (codePoints < MIN_PASSWORD_LENGTH) return false
 
         var hasLetter = false
@@ -25,5 +25,20 @@ object PasswordValidator {
             if (hasLetter && hasDigit) return true
         }
         return false
+    }
+
+    private fun countUnicodeCodePoints(input: String): Int {
+        var count = 0
+        var i = 0
+        while (i < input.length) {
+            val ch = input[i]
+            if (ch.isHighSurrogate() && i + 1 < input.length && input[i + 1].isLowSurrogate()) {
+                i += 2
+            } else {
+                i += 1
+            }
+            count++
+        }
+        return count
     }
 }

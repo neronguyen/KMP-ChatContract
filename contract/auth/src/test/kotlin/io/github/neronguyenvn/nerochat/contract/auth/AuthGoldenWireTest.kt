@@ -1,12 +1,12 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
-import kotlinx.serialization.json.Json
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AuthGoldenWireTest {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = ContractJson
 
     @Test
     fun `RegisterRequest matches golden wire format`() {

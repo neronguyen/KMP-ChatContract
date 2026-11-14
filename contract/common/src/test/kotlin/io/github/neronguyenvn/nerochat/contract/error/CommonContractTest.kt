@@ -1,13 +1,13 @@
 package io.github.neronguyenvn.nerochat.contract.error
 
-import kotlinx.serialization.json.Json
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class CommonContractTest {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = ContractJson
 
     @Test
     fun testApiErrorDtoSerialization() {

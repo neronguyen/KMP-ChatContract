@@ -1,15 +1,15 @@
 package io.github.neronguyenvn.nerochat.contract.auth
 
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import io.github.neronguyenvn.nerochat.contract.auth.error.AuthServerError
 import io.github.neronguyenvn.nerochat.contract.error.ApiErrorDto
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AuthContractTest {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = ContractJson
 
     @Test
     fun `UserDto serializes and deserializes correctly`() {

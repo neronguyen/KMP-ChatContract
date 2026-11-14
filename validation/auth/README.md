@@ -10,7 +10,7 @@ Authentication and credential validation rules implementing `Validatable` for lo
 
 ## Invariants
 - Depends exclusively on `:validation:common`.
-- Passwords must be at least 10 characters containing at least one digit and one letter.
+- Passwords must be at least 10 Unicode code points (counted with pure Kotlin surrogate-pair handling) containing at least one digit and one letter.
 - Email inputs are validated against `EmailValidator.isValidEmail` (whitespace is not permitted).
 
 ## Side Effects

@@ -9,7 +9,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("reflect"))
@@ -17,4 +17,11 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    dependsOn(
+        ":contract:auth:compileKotlin",
+        ":contract:chat:compileKotlin",
+        ":validation:common:compileKotlin",
+        ":validation:auth:compileKotlin",
+        ":validation:chat:compileKotlin",
+    )
 }

@@ -4,6 +4,7 @@
 Shared error primitives, flat wire error models, and catalog contracts for type-safe client-server error handling.
 
 ## Interface
+- `[ContractJson.kt:ContractJson]`: Shared `Json` instance (`ignoreUnknownKeys = true`, `explicitNulls = false`, `encodeDefaults = true`) and `applyContractDefaults()` for client-server HTTP/WebSocket wire serialization.
 - `[ErrorCode.kt:ErrorCode]`: Flat `@JvmInline value class` serializing error codes as flat strings (`"Namespace.Code"`).
 - `[ServerError.kt:ServerError]`: Base interface for all singleton server error codes (`code: ErrorCode`).
 - `[ErrorContract.kt:ErrorContract]`: Reflection-free error catalog providing `fromCode(code: String): ServerError?`.

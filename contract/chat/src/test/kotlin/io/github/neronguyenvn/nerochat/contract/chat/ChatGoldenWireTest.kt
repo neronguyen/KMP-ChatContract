@@ -1,7 +1,7 @@
 package io.github.neronguyenvn.nerochat.contract.chat
 
+import io.github.neronguyenvn.nerochat.contract.ContractJson
 import io.github.neronguyenvn.nerochat.contract.chat.error.ChatServerError
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.ExperimentalTime
@@ -10,7 +10,7 @@ import kotlin.time.Instant
 @OptIn(ExperimentalTime::class)
 class ChatGoldenWireTest {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = ContractJson
 
     @Test
     fun `CreateDirectChatRoomRequest matches golden wire format`() {

@@ -11,7 +11,7 @@ kotlin {
 dependencies {
     api(projects.contract.common)
     api(projects.validation.chat)
-    implementation(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.serialization.json)
 
     testImplementation(projects.contract.auth)
     testImplementation(kotlin("test"))
