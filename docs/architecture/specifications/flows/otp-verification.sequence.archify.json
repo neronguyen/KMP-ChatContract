@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "[PLANNED] Numeric OTP Verification & Lockout Lifecycle",
+    "title": "[AS-IS] Numeric OTP Verification & Lockout Lifecycle",
     "output": "docs/architecture/interactive/flows/otp-verification.html",
     "column_fit": "spread",
     "animation": "trace",
