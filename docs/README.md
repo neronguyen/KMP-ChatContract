@@ -4,8 +4,9 @@ This is the unified documentation index for `KMP-ChatContract`, serving as the *
 Level 1/2 architecture, cross-repository client–server wire flows, and Elephant-and-Goldfish Model (EGM) technical
 design documents.
 
-> **Governance & Authoring Rules**: Follow global agent lifecycle rules in `~/.gemini/config/AGENTS.md`, architectural
-> philosophy in [`PHILOSOPHY.md`](./PHILOSOPHY.md), and repository boundary invariants in [`../AGENTS.md`](../AGENTS.md).
+> **Governance & Authoring Rules**: Follow global git rules in `~/.gemini/config/AGENTS.md`, ecosystem lifecycle
+> governance in [`GOVERNANCE.md`](./GOVERNANCE.md), architectural philosophy in [`PHILOSOPHY.md`](./PHILOSOPHY.md), and
+> repository boundary invariants in [`../AGENTS.md`](../AGENTS.md).
 
 ---
 

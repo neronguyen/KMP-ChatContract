@@ -4,13 +4,13 @@
 
 Before proposing any plan or writing code, read and follow:
 
-1. **Global Agent Rules**: `~/.gemini/config/AGENTS.md` (Git sign-off/attribution, unified EGM + Archify lifecycle,
-   post-implementation scaffolding pruning, and Archify/Chrome CLI commands).
-2. **Project Philosophy**: [`docs/PHILOSOPHY.md`](docs/PHILOSOPHY.md) (especially Section 3: Decision Filter & Boundary
+1. **Global Agent Rules**: `~/.gemini/config/AGENTS.md` (Git commit sign-off, `Assisted-by:` attribution, and Conventional Commits).
+2. **Ecosystem Governance**: [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md) (EGM applicability gate, unified EGM + Archify `[PLANNED]` → `[AS-IS]` lifecycle, post-implementation scaffolding pruning, and Archify CLI).
+3. **Project Philosophy**: [`docs/PHILOSOPHY.md`](docs/PHILOSOPHY.md) (especially Section 3: Decision Filter & Boundary
    Rules and Section 5: AI & Agentic Governance).
-3. **Unified Repository Documentation Index**: [`docs/README.md`](docs/README.md) (Single index for C4 Level 1/2 specs,
+4. **Unified Repository Documentation Index**: [`docs/README.md`](docs/README.md) (Single index for C4 Level 1/2 specs,
    cross-repository wire flow specs, and EGM design specs in `docs/designs/`).
-4. **Module Contract Invariant**: Every Gradle module maintains a machine-verifiable contract in its
+5. **Module Contract Invariant**: Every Gradle module maintains a machine-verifiable contract in its
    `<module>/README.md` (`Interface`, `Invariants`, `Side Effects`, `Verification`). Inspect a module's `README.md`
    before modifying it, and update it (plus root `README.md` if topology changes) in the same changeset.
 
