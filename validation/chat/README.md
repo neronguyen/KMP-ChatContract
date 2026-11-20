@@ -1,7 +1,7 @@
 # validation:chat
 
 ## Overview
-Chat message, room creation, and participant validation rules implementing `Validatable` for direct messaging, group rooms, and WebSocket frames.
+Chat message, room creation, and participant validation rules returning `ChatValidationError` (`ValidationError`), consumed by `Validatable` request and WebSocket DTOs in `:contract:chat`.
 
 ## Interface
 - `[ChatValidator.kt:ChatValidator]`: Central singleton validator for direct/group room requests, participant additions, search, and message frames.

@@ -5,7 +5,7 @@ Pure Kotlin validation primitives and interfaces providing the foundation for cr
 
 ## Interface
 - `[EmailValidator.kt:EmailValidator]`: Email format regex validation and string normalization.
-- `[UuidValidator.kt:UuidValidator]`: UUID v4/v7 regex format verification.
+- `[UuidValidator.kt:UuidValidator]`: Canonical 8-4-4-4-12 hex UUID regex format verification (version-agnostic).
 - `[ValidationError.kt:Validatable]`: Core contract interface for self-validating requests (`validate(): List<ValidationError>`).
 - `[ValidationError.kt:ValidationError]`: Base interface for field-level validation errors (`field`, `message`).
 

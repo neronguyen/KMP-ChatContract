@@ -1,7 +1,7 @@
 # validation:auth
 
 ## Overview
-Authentication and credential validation rules implementing `Validatable` for login, registration, password updates, and token operations.
+Authentication and credential validation rules returning `AuthValidationError` (`ValidationError`), consumed by `Validatable` request DTOs in `:contract:auth` for login, registration, password updates, and token operations.
 
 ## Interface
 - `[AuthValidator.kt:AuthValidator]`: Central singleton validator for registration, login, refresh token, email verification, password reset, and password change requests.

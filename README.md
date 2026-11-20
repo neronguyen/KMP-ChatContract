@@ -16,8 +16,8 @@ rules, and WebSocket message models for the end-to-end chat project.
 | Repository | Role | C4 Architecture Level | Tech Stack |
 |:---|:---|:---|:---|
 | **[KMP-ChatContract](https://github.com/neronguyen/KMP-ChatContract)** *(this repo)* | Compile-time wire schema, error contracts, and shared validators | **Level 1** (System Context) & **Level 2** (Containers) | Pure Kotlin 2.4, `kotlinx.serialization` |
-| **[KMP-ChatBackend](https://github.com/neronguyen/KMP-NeroChatBackend)** | Modular monolith REST & WebSocket server | **Level 3** (Backend Components) | Kotlin, Spring Boot 4, PostgreSQL, Redis (Redisson), RabbitMQ |
-| **[Android-ChatApp](https://github.com/neronguyen/Android-NeroChatApp)** | Native Android client with offline-first persistence and real-time sync | **Level 3** (Android Components) | Jetpack Compose, Navigation 3, Retrofit, OkHttp, Room, DataStore, Hilt, Arrow |
+| **[KMP-ChatBackend](https://github.com/neronguyen/KMP-ChatBackend)** | Modular monolith REST & WebSocket server | **Level 3** (Backend Components) | Kotlin, Spring Boot 4, PostgreSQL, Redis (Redisson), RabbitMQ |
+| **[Android-ChatApp](https://github.com/neronguyen/Android-ChatApp)** | Native Android client with offline-first persistence and real-time sync | **Level 3** (Android Components) | Jetpack Compose, Navigation 3, Retrofit, OkHttp, Room, DataStore, Hilt, Arrow |
 
 ### System Architecture (C4 Model)
 
@@ -70,7 +70,7 @@ rules, and WebSocket message models for the end-to-end chat project.
 
 ```bash
 # Fast cached verification (Tier 1 - Inner loop)
-./scripts/verify.sh fast
+./scripts/verify.sh
 
 # Full clean verification gate (Tier 2 - Pre-commit)
 ./scripts/verify.sh clean
