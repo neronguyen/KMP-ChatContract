@@ -1,7 +1,6 @@
 [versions]
 kotlin = "2.4.0"
 kotlinx-serialization = "1.11.0"
-contract = "0.0.1"
 binary-compatibility-validator = "0.17.0"
 
 [libraries]

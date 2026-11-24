@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (e.g., 0.1.0)'
+        description: 'Version to publish (e.g., 0.7.0)'
         required: true
-        default: '0.1.0'
+        default: '0.7.0'
 
 jobs:
   publish:
@@ -44,7 +44,7 @@ jobs:
           elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
           else
-            VERSION="0.1.0"
+            VERSION="0.7.0"
           fi
 
           if [[ ! "$VERSION" =~ ^[0-9]+(\.[0-9]+)*(-[a-zA-Z0-9.-]+)?$ ]]; then

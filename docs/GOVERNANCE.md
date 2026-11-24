@@ -52,3 +52,19 @@ When flipping a design document from `Draft` / `In Review` to `Status: Implement
    node ~/.gemini/config/skills/archify/bin/archify.mjs check <output.html> --json
    ```
 3. **Headless Chrome Resolution**: `sync-archify.sh` resolves `flatpak run --filesystem=host com.google.Chrome`, `~/.local/bin/google-chrome`, `google-chrome`, or `chromium`. If none is installed locally, interactive HTML generation still runs, while PNG export requires a Chromium/Chrome binary.
+
+---
+
+## 5. Ticket & Traceability Convention (Linear SSOT)
+
+1. **Canonical ID**: Use the Linear issue key `CHAT-<num>` exclusively across all three repositories
+   (`KMP-ChatContract`, `KMP-ChatBackend`, `Android-ChatApp`). Never embed manual `[P0-1]` or `(A4)` prefixes in issue
+   titles.
+2. **Git Branch** *(identical across all repos touched by a cross-repo issue)*: `<type>/chat-<num>-<short-slug>` (e.g.,
+   `fix/chat-5-ws-cache-heartbeat`, `infra/chat-25-backend-docker`).
+3. **Commit Message**: Conventional Commit + `(CHAT-<num>)` suffix, e.g.,
+   `fix(chat): guard offline room cache (CHAT-5)`.
+4. **Pull Request**: `[CHAT-<num>] <summary>` with `Closes CHAT-<num>` in the PR body (or `Refs CHAT-<num>` on upstream
+   PRs and `Closes CHAT-<num>` on the final downstream PR).
+5. **EGM Design Docs**: Include `| **Linear Ticket** | [CHAT-<num>](https://linear.app/neronguyen/issue/CHAT-<num>) |`
+   in the design document metadata table.
